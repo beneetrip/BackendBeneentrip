@@ -1,0 +1,3 @@
+business_model_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BusinessModelBundle:Default:index }

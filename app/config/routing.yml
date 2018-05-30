@@ -1,3 +1,12 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+mobile_app:
+    resource: "@MobileAppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+business_model:
+    resource: "@BusinessModelBundle/Resources/config/routing.yml"
+    prefix:   /
+
