@@ -1,0 +1,55 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">ID</th>
+	<th class="col-xs-2" data-field="titre" data-sortable="true">Titre</th>
+	<th class="col-xs-2" data-field="categorie" data-sortable="true">description</th>
+	<th class="col-xs-2" data-field="keyword" data-sortable="true">Catégories</th>
+	<th class="col-xs-1" data-field="view" data-sortable="true">Vue</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+
+	<tr>
+		<td>4</td>
+		<td>Paris</td>
+		
+		<td>
+		Capitale de la france 
+		</td>
+		
+		<td>
+		
+		</td>
+		
+		<td> 34 </td>
+		
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="#">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="#" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+{% endblock %}
