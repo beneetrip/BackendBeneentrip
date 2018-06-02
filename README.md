@@ -5,7 +5,7 @@ Beneen Trip application that you can use as the skeleton for your new applicatio
 
 What's inside?
 --------------
-
+    
 The Beneen Trip is configured with the following defaults:
 
   * An AppBundle you can use to start coding;
