@@ -32,6 +32,9 @@ class DefaultController extends Controller
     {
         return $this->render('AdminBundle:Default:table.html.twig', array());
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 7e5a60e474567ea8ae095cfa753778a665439358
 	
 }

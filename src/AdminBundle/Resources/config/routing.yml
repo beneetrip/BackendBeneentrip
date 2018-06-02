@@ -9,6 +9,7 @@ admin_formpage:
 admin_tablepage:
     path:     /admin/table
     defaults: { _controller: AdminBundle:Default:table }
+<<<<<<< HEAD
     
 ajouterUtilisateur:
     path:     /admin/utilisateur/ajouter
@@ -39,3 +40,5 @@ modifierUtilisateur:
     defaults: { _controller: AdminBundle:User:modifier }
     requirements:
               id: \d+
+=======
+>>>>>>> 7e5a60e474567ea8ae095cfa753778a665439358
