@@ -6,7 +6,7 @@
     <title>Admin Benee Trip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="ubuntu" >
+    <meta name="author" content="Paul Eric">
 	
 	<!-- Interdiction d'indexation -->
 	<meta name="robots" content="noindex, nofollow" />
@@ -149,9 +149,6 @@
 					{% endblock %}
 				</ul>
 			</div>
-			
-			 {% block fos_user_content %}
-            {% endblock fos_user_content %}
 			
 			{% block content %}
 			

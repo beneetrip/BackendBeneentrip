@@ -1,0 +1,62 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="nomPrenom" data-sortable="true">Nom & Prenom</th>
+	<th class="col-xs-2" data-field="genre" data-sortable="true">Genre</th>
+	<th class="col-xs-2" data-field="age" data-sortable="true">Age</th>
+	<th class="col-xs-2" data-field="email" data-sortable="true">Email</th>
+	<th class="col-xs-1" data-field="type" data-sortable="true">Type Utilisateur</th>
+   <th class="col-xs-1" data-field="photo" data-sortable="false">Photo</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listeUsers is defined %} 
+{% for user in listeUsers %}
+	<tr>
+		<td>{{ user.id }}</td>
+		<td>{{ user.nomComplet }}</td>
+		<td>{{ user.genre }}</td>
+		<td>{{ user.age }}</td>
+		<td>{{ user.email }}</td>
+		<td>{{ user.typeUtilisateur }}</td>
+		<td>{{ user.photo }}</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendreUtilisateur',{'id': user.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerUtilisateur',{'id': user.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

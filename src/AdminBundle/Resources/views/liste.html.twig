@@ -1,0 +1,132 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block page %}
+	<li>
+		Activité
+	</li>
+	
+{% endblock %}
+
+
+{% block style %} 
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/admin/bower_components/bootstrap-table-1.11.1/dist/bootstrap-table.css') }}">
+{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="box col-md-12">
+			<div class="box-inner">
+				<div class="box-header well" data-original-title="">
+					<h2><!-- <i class="glyphicon glyphicon-user"></i> Datatable + Responsive --></h2>
+
+					<!-- <div class="box-icon">
+						<a href="#" class="btn btn-setting btn-round btn-default"><i class="glyphicon glyphicon-cog"></i></a>
+						<a href="#" class="btn btn-minimize btn-round btn-default">
+						 <i class="glyphicon glyphicon-chevron-up"></i>
+						</a>
+						<a href="#" class="btn btn-close btn-round btn-default"><i class="glyphicon glyphicon-remove"></i></a>
+					</div> -->
+				</div>
+				<div class="box-content">
+				<!-- <div class="alert alert-info">For help with such table please check <a href="http://datatables.net/" target="_blank">http://datatables.net/</a></div> -->
+
+					{% block contentInfo %}
+							
+						{% endblock %}
+					<div id="toolbar">
+						<!-- <select class="form-control">
+							<option value="">Export Basic</option>
+							<option value="all">Export All</option>
+							<option value="selected">Export Selected</option>
+						</select> -->
+						<button type="button" class="btn btn-default">
+							<i class="glyphicon glyphicon-plus"></i>
+						</button>
+						<button type="button" class="btn btn-default">
+							<i class="glyphicon glyphicon-heart"></i>
+						</button>
+						<button type="button" class="btn btn-default">
+							<i class="glyphicon glyphicon-trash"></i>
+						</button>
+					</div>
+					<table id="myTable" class=""
+					
+						data-classes="table table-hover table-condensed"
+						data-striped="true"
+						data-toggle="table" 
+						data-sort-name="id"
+						data-sort-order="desc"
+						data-search="true"
+						data-show-refresh="false"
+						data-show-toggle="true"
+						data-show-columns="true"
+						data-pagination="true"
+						data-page-size="10"
+						data-page-list="[5, 10, 25, 50]"
+						data-locale="fr-FR"
+						data-show-export="true"
+						data-export-types="['json', 'xml', 'csv', 'excel', 'pdf']"
+						data-toolbar="#toolbar"
+						data-height="800">
+																															
+																														    
+						<thead>
+						<tr>
+						{% block contentTablehead %}
+							
+						{% endblock %}
+						</tr>
+						</thead>
+						<tbody>
+							{% block contentTableBody %}
+							
+							{% endblock %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!--/span-->
+
+    </div><!--/row-->
+
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+
+<script>
+
+
+</script>
+
+
+
+<!-- boostrap table -->
+<script src="{{ asset('bundles/admin/bower_components/bootstrap-table-1.11.1/dist/bootstrap-table.js') }}"></script>
+<!-- importation du fichier de langue -->
+<script src="{{ asset('bundles/admin/bower_components/bootstrap-table-1.11.1/dist/locale/bootstrap-table-fr-FR.js') }}"></script>
+<!-- importation extension export -->
+<script src="{{ asset('bundles/admin/bower_components/bootstrap-table-1.11.1/dist/extensions/export/bootstrap-table-export.js') }}"></script>
+<script src="{{ asset('bundles/admin/bower_components/tableExport.jquery.plugin-master/tableExport.js') }}"></script>
+<!-- importation extension export pdf-->
+<script src="{{ asset('bundles/admin/bower_components/tableExport.jquery.plugin-master/libs/jsPDF/jspdf.min.js') }}"></script>
+<script src="{{ asset('bundles/admin/bower_components/tableExport.jquery.plugin-master/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js') }}"></script>
+
+<!-- <script src="{{ asset('bundles/admin/bower_components/bootstrap-table-1.11.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.js') }}"></script>
+ -->
+<script>
+    var $table = $('#myTable');
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                exportDataType: $(this).val()
+            });
+        });
+    })
+</script>
+{% endblock %}
