@@ -9,8 +9,5 @@ class DefaultController extends Controller
     public function indexAction($name)
     {
         return $this->render('BusinessModelBundle:Default:index.html.twig', array('name' => $name));
-		
-		
-		
     }
 }
