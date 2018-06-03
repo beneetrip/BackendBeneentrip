@@ -1,0 +1,54 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="titre" data-sortable="true">Titre Page</th>
+	<th class="col-xs-2" data-field="contenu" data-sortable="true">Contenu</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listePages is defined %} 
+{% for page in listePages %}
+	<tr>
+		<td>{{ page.id }}</td>
+		<td>{{ page.titrePage }}</td>
+		<td>{{ page.contenu }}</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendrePage',{'id': page.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerPage',{'id': page.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

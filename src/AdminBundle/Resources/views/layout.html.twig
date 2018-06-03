@@ -89,10 +89,12 @@
                     <!-- <li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres</a></li>
                     <li class="divider"></li> -->
 					{% if  app.user.id is defined %}
+					<li><a href="#"><i></i> {{app.user.nomComplet}} </a></li>
+					<li class="divider"></li>
 					<li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres </a></li>
 					<li class="divider"></li>
 					{% endif %}
-					<li><a href=""><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
+					<li><a href="{{ path('fos_user_security_logout') }}"><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
                 </ul>
             </div>
            

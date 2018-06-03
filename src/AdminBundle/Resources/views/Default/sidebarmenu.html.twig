@@ -5,8 +5,8 @@
 <li class="accordion">
 	<a href="#textloi"><i class="glyphicon glyphicon-plus"></i><span> Activité</span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="#">Toutes les Activités</a></li>
-		<li><a href="#">Ajouter une Activité</a></li>
+		<li><a href="{{ path('listeActivites') }}">Toutes les Activités</a></li>
+		<li><a href="{{ path('ajouterActivite') }}">Ajouter une Activité</a></li>
 	</ul>
 </li>
 
@@ -24,8 +24,8 @@
 <li class="accordion">
 	<a href="#page"><i class="fa fa-book"></i><span> Page </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="#">Toutes les Pages</a></li>
-		<li><a href="#">Ajouter une Page</a></li>
+		<li><a href="{{ path('listePages') }}">Toutes les Pages</a></li>
+		<li><a href="{{ path('ajouterPage') }}">Ajouter une Page</a></li>
 	</ul>
 </li>
 
@@ -44,8 +44,8 @@
 <li class="accordion">
 	<a href="#categorie"><i class="fa fa-folder"></i><span> Catégorie</span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="#">Toutes les catégories</a></li>
-		<li><a href="#">Ajouter une catégorie</a></li>
+		<li><a href="{{ path('listeCategories') }}">Toutes les catégories</a></li>
+		<li><a href="{{ path('ajouterCategorie') }}">Ajouter une catégorie</a></li>
 	</ul>
 </li>
 

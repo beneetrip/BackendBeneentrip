@@ -39,3 +39,61 @@ modifierUtilisateur:
     defaults: { _controller: AdminBundle:User:modifier }
     requirements:
               id: \d+
+ajouterCategorie:
+    path:     /admin/categorie/ajouter
+    defaults: { _controller: AdminBundle:Categorie:ajouter }
+
+creerCategorie:
+    path:     /admin/categorie/creer
+    defaults: { _controller: AdminBundle:Categorie:creer }
+    
+listeCategories:
+    path:     /admin/categories
+    defaults: { _controller: AdminBundle:Categorie:liste }
+    
+supprimerCategorie:
+    path:     /admin/categorie/supprimer/{id}
+    defaults: { _controller: AdminBundle:Categorie:supprimer }
+    requirements:
+              id: \d+
+              
+prendreCategorie:
+    path:     /admin/categorie/{id}
+    defaults: { _controller: AdminBundle:Categorie:prendre }
+    requirements:
+              id: \d+
+              
+modifierCategorie:
+    path:     /admin/categorie/modifier/{id}
+    defaults: { _controller: AdminBundle:Categorie:modifier }
+    requirements:
+              id: \d+
+ajouterPage:
+    path:     /admin/page/ajouter
+    defaults: { _controller: AdminBundle:Page:ajouter }
+
+creerPage:
+    path:     /admin/page/creer
+    defaults: { _controller: AdminBundle:Page:creer }
+    
+listePages:
+    path:     /admin/pages
+    defaults: { _controller: AdminBundle:Page:liste }
+    
+supprimerPage:
+    path:     /admin/page/supprimer/{id}
+    defaults: { _controller: AdminBundle:Page:supprimer }
+    requirements:
+              id: \d+
+              
+prendrePage:
+    path:     /admin/page/{id}
+    defaults: { _controller: AdminBundle:Page:prendre }
+    requirements:
+              id: \d+
+              
+modifierPage:
+    path:     /admin/page/modifier/{id}
+    defaults: { _controller: AdminBundle:Page:modifier }
+    requirements:
+              id: \d+

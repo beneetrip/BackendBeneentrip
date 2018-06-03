@@ -1,0 +1,52 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom Categorie</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listeCategories is defined %} 
+{% for categorie in listeCategories %}
+	<tr>
+		<td>{{ categorie.id }}</td>
+		<td>{{ categorie.nom }}</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendreCategorie',{'id': categorie.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerCategorie',{'id': categorie.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}
