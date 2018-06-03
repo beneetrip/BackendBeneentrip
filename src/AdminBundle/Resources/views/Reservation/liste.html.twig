@@ -10,30 +10,28 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="nomPrenom" data-sortable="true">Nom & Prenom</th>
-	<th class="col-xs-2" data-field="genre" data-sortable="true">Genre</th>
-	<th class="col-xs-2" data-field="age" data-sortable="true">Age</th>
-	<th class="col-xs-2" data-field="email" data-sortable="true">Email</th>
-	<th class="col-xs-1" data-field="type" data-sortable="true">Type Utilisateur</th>
-   <th class="col-xs-1" data-field="photo" data-sortable="false">Photo</th>
+	<th class="col-xs-2" data-field="libelleActivite" data-sortable="true">Libelle Activite</th>
+	<th class="col-xs-2" data-field="participants" data-sortable="true">Participants</th>
+	<th class="col-xs-2" data-field="dateCreation" data-sortable="true">Date creation</th>
+	<th class="col-xs-2" data-field="dateModification" data-sortable="true">Date Modification</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
 {% block contentTableBody %}
-{% if listeUsers is defined %} 
-{% for user in listeUsers %}
+{% if listeReservations is defined %} 
+{% for reservation in listeReservations %}
 	<tr>
-		<td>{{ user.id }}</td>
-		<td>{{ user.nomComplet }}</td>
-		<td>{{ user.genre }}</td>
-		<td>{{ user.age }}</td>
-		<td>{{ user.email }}</td>
-		<td>{{ user.typeUtilisateur }}</td>
+		<td>{{ reservation.id }}</td>
+		<td>{{ reservation.activite.libelle }}</td>
 		<td>
-{% if user.photo is not null %} 
-<img src="{{ asset(user.urlPhoto) }}" height="50" width="50" />		
+{% if reservation.utilisateurs is defined %} 
+{% for participant in reservation.utilisateurs %}
+<p>{{participant.nomComplet}}</p>		
+{% endfor %}
 {% endif %}		
 		</td>
+		<td>{{ reservation.dateCreation|date('Y-m-d H:i:s') }}</td>
+		<td>{{ reservation.dateModification|date('Y-m-d H:i:s') }}</td>
 		<td class="center">
 			<div class="btn-group pull-right">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -42,14 +40,14 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-						<a class="" href="{{ path('prendreUtilisateur',{'id': user.id}) }}">
+						<a class="" href="{{ path('prendreReservation',{'id': reservation.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
 							Modifier
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
-						<a class="delete-content" href="{{ path('supprimerUtilisateur',{'id': user.id}) }}" >
+						<a class="delete-content" href="{{ path('supprimerReservation',{'id': reservation.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
 						Supprimer
 					</a>

@@ -2,19 +2,3 @@ services:
 #    admin.example:
 #        class: AdminBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
-
-     admin_user.registration.form.type:
-         class: AdminBundle\Form\Type\UserType
-         arguments: [%fos_user.model.user.class%]
-         tags:
-            - { name: form.type, alias: adminbundle_user }
-
-     admin_categorie.registration.form.type:
-         class: AdminBundle\Form\Type\CategorieType
-         tags:
-            - { name: form.type, alias: adminbundle_categorie }
-     
-     admin_page.registration.form.type:
-         class: AdminBundle\Form\Type\PageType
-         tags:
-            - { name: form.type, alias: adminbundle_page }

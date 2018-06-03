@@ -1,0 +1,64 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="libelle" data-sortable="true">Libelle</th>
+	<th class="col-xs-2" data-field="lieuDestination" data-sortable="true">Lieu destination</th>
+	<th class="col-xs-2" data-field="date" data-sortable="true">Date</th>
+	<th class="col-xs-2" data-field="heure" data-sortable="true">Heure</th>
+	<th class="col-xs-2" data-field="nbParticipants" data-sortable="true">Nombre participants</th>
+	<th class="col-xs-1" data-field="prixIndividu" data-sortable="true">Prix/Individu</th>
+   <th class="col-xs-1" data-field="description" data-sortable="false">Description</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listeActivites is defined %} 
+{% for activite in listeActivites %}
+	<tr>
+		<td>{{ activite.id }}</td>
+		<td>{{ activite.libelle }}</td>
+		<td>{{ activite.lieuDestination }}</td>
+		<td>{{ activite.date|date('Y-m-d') }}</td>
+		<td>{{ activite.heure|date('H:i:s') }}</td>
+		<td>{{ activite.nbParticipants }}</td>
+		<td>{{ activite.prixIndividu }}</td>
+		<td>{{ activite.description }}</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendreActivite',{'id': activite.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerActivite',{'id': activite.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

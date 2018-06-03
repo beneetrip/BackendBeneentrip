@@ -56,7 +56,7 @@ public function getTitrePage()
 return $this->titrePage;
 }
 /**
-* @param string $contenu
+* @param text $contenu
 * @return Page
 */
 public function setContenu($contenu)
@@ -65,7 +65,7 @@ $this->contenu = $contenu;
 return $this;
 }
 /**
-* @return string
+* @return text
 */
 public function getContenu()
 {

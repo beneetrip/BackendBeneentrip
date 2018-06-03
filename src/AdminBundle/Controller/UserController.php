@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
-use AdminBundle\Entity\User;
-use AdminBundle\Form\Type\UserType;
+use BusinessModelBundle\Entity\User;
+use BusinessModelBundle\Form\Type\UserType;
 
 class UserController extends Controller
 {
@@ -17,14 +17,14 @@ class UserController extends Controller
     public function ajouterAction()
     {
 		$user= new User();
-		$form = $this->createForm('adminbundle_user', $user);   
+		$form = $this->createForm('businessmodelbundle_user', $user);   
 		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>'Enregistrer')); 	  	
 	 }
 
 	 public function creerAction()
     {
 		$user= new User();
-		$form = $this->createForm('adminbundle_user', $user); 
+		$form = $this->createForm('businessmodelbundle_user', $user); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -47,7 +47,7 @@ class UserController extends Controller
 	 public function listeAction()
     {
     	     
-		$listeUsers = $this->getDoctrine()->getManager()->getRepository('AdminBundle:User')->myFindAll();
+		$listeUsers = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindAll();
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:User:liste.html.twig',array('listeUsers' => $listeUsers));
     }
@@ -55,26 +55,26 @@ class UserController extends Controller
     public function supprimerAction($id)
     {
     	    
-		$userId=$this->getDoctrine()->getManager()->getRepository('AdminBundle:User')->myFindOne($id);
+		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($userId);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Utilisateur supprimee avec Succes');
-		$listeUsers = $this->getDoctrine()->getManager()->getRepository('AdminBundle:User')->myFindAll();
+		$listeUsers = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindAll();
 		return $this->render('AdminBundle:User:liste.html.twig',array('listeUsers' => $listeUsers));
     }
     
      public function prendreAction($id)
     {
-		$userId=$this->getDoctrine()->getManager()->getRepository('AdminBundle:User')->myFindOne($id);
-		$form = $this->createForm('adminbundle_user', $userId);   
+		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_user', $userId);   
 		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','idUser' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
     {
 		$user= new User();
-		$form = $this->createForm('adminbundle_user', $user); 
+		$form = $this->createForm('businessmodelbundle_user', $user); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -84,8 +84,8 @@ class UserController extends Controller
 		
 		if($form->isValid()) {
 		$em = $this->getDoctrine()->getManager();
-		$userDB=$em->getRepository('AdminBundle:User')->myFindOne($id);
-		$form = $this->createForm('adminbundle_user', $userDB);
+		$userDB=$em->getRepository('BusinessModelBundle:User')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_user', $userDB);
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();

@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminBundle\Entity;
+namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
 * @ORM\Table()
 *
-@ORM\Entity(repositoryClass="AdminBundle\Entity\PageRepository")
+@ORM\Entity(repositoryClass="BusinessModelBundle\Entity\PageRepository")
 */
 class Page
 {
@@ -56,7 +56,7 @@ public function getTitrePage()
 return $this->titrePage;
 }
 /**
-* @param string $contenu
+* @param text $contenu
 * @return Page
 */
 public function setContenu($contenu)
@@ -65,7 +65,7 @@ $this->contenu = $contenu;
 return $this;
 }
 /**
-* @return string
+* @return text
 */
 public function getContenu()
 {

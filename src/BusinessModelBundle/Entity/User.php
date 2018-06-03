@@ -1,13 +1,13 @@
 <?php
 
-namespace AdminBundle\Entity;
+namespace BusinessModelBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="AdminBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\UserRepository")
  * @ORM\Table(name="utilisateurs")
  * @ORM\HasLifecycleCallbacks
  */
@@ -54,6 +54,13 @@ class User extends BaseUser
     * @ORM\Column(name="typeutilisateur", type="string", length=255)
     */
     protected $typeUtilisateur;
+    
+    /**
+     * @var string $urlPhoto
+     *
+     * @ORM\Column(name="urlPhoto", type="string", length=255)
+   */
+    protected $urlPhoto;
     
     
     protected $fichierPhoto;
@@ -203,6 +210,7 @@ class User extends BaseUser
 	}
 	// Le nom du fichier est son nom avec son extension
 	$this->photo = $this->fichierPhoto->getClientOriginalName();
+   $this->urlPhoto = $this->getUploadDir()."/".$this->fichierPhoto->getClientOriginalName();
 	}
 
 	/**
@@ -260,4 +268,28 @@ class User extends BaseUser
 	return __DIR__.'/../../../web/'.$this->getUploadDir();
 	}
 
+
+    /**
+     * Set urlPhoto
+     *
+     * @param string $urlPhoto
+     *
+     * @return User
+     */
+    public function setUrlPhoto($urlPhoto)
+    {
+        $this->urlPhoto = $urlPhoto;
+
+        return $this;
+    }
+
+    /**
+     * Get urlPhoto
+     *
+     * @return string
+     */
+    public function getUrlPhoto()
+    {
+        return $this->urlPhoto;
+    }
 }

@@ -97,3 +97,62 @@ modifierPage:
     defaults: { _controller: AdminBundle:Page:modifier }
     requirements:
               id: \d+
+ajouterActivite:
+    path:     /admin/activite/ajouter
+    defaults: { _controller: AdminBundle:Activite:ajouter }
+
+creerActivite:
+    path:     /admin/activite/creer
+    defaults: { _controller: AdminBundle:Activite:creer }
+    
+listeActivites:
+    path:     /admin/activites
+    defaults: { _controller: AdminBundle:Activite:liste }
+    
+supprimerActivite:
+    path:     /admin/activite/supprimer/{id}
+    defaults: { _controller: AdminBundle:Activite:supprimer }
+    requirements:
+              id: \d+
+              
+prendreActivite:
+    path:     /admin/activite/{id}
+    defaults: { _controller: AdminBundle:Activite:prendre }
+    requirements:
+              id: \d+
+              
+modifierActivite:
+    path:     /admin/activite/modifier/{id}
+    defaults: { _controller: AdminBundle:Activite:modifier }
+    requirements:
+              id: \d+
+              
+ajouterReservation:
+    path:     /admin/reservation/ajouter
+    defaults: { _controller: AdminBundle:Reservation:ajouter }
+
+creerReservation:
+    path:     /admin/reservation/creer
+    defaults: { _controller: AdminBundle:Reservation:creer }
+    
+listeReservations:
+    path:     /admin/reservations
+    defaults: { _controller: AdminBundle:Reservation:liste }
+    
+supprimerReservation:
+    path:     /admin/reservation/supprimer/{id}
+    defaults: { _controller: AdminBundle:Reservation:supprimer }
+    requirements:
+              id: \d+
+              
+prendreReservation:
+    path:     /admin/reservation/{id}
+    defaults: { _controller: AdminBundle:Reservation:prendre }
+    requirements:
+              id: \d+
+              
+modifierReservation:
+    path:     /admin/reservation/modifier/{id}
+    defaults: { _controller: AdminBundle:Reservation:modifier }
+    requirements:
+              id: \d+
