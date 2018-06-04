@@ -4,7 +4,6 @@ namespace AdminBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 
 class UserType extends BaseType
@@ -28,8 +27,8 @@ class UserType extends BaseType
         array('Administrateur', 'Touriste','Guide'),
         array('Administrateur','Touriste','Guide'))
       ));
-        $builder->add('fichierPhoto',FileType::class,array('required' =>false));
-        //$builder->add('photo','text', array('required' =>false));
+        $builder->add('fichierPhoto','file',array('required' =>false));
+        $builder->add('enabled');
     }
 
     public function getName()

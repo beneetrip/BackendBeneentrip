@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminBundle\Form\Type;
+namespace BusinessModelBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
@@ -28,12 +28,12 @@ class UserType extends BaseType
         array('Administrateur','Touriste','Guide'))
       ));
         $builder->add('fichierPhoto','file',array('required' =>false));
-        //$builder->add('photo','text', array('required' =>false));
+        $builder->add('enabled');
     }
 
     public function getName()
     {
-        return 'adminbundle_user';
+        return 'businessmodelbundle_user';
     }
 
     

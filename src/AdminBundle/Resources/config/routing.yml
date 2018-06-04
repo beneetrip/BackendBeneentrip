@@ -9,7 +9,6 @@ admin_formpage:
 admin_tablepage:
     path:     /admin/table
     defaults: { _controller: AdminBundle:Default:table }
-<<<<<<< HEAD
     
 ajouterUtilisateur:
     path:     /admin/utilisateur/ajouter
@@ -40,5 +39,120 @@ modifierUtilisateur:
     defaults: { _controller: AdminBundle:User:modifier }
     requirements:
               id: \d+
-=======
->>>>>>> 7e5a60e474567ea8ae095cfa753778a665439358
+ajouterCategorie:
+    path:     /admin/categorie/ajouter
+    defaults: { _controller: AdminBundle:Categorie:ajouter }
+
+creerCategorie:
+    path:     /admin/categorie/creer
+    defaults: { _controller: AdminBundle:Categorie:creer }
+    
+listeCategories:
+    path:     /admin/categories
+    defaults: { _controller: AdminBundle:Categorie:liste }
+    
+supprimerCategorie:
+    path:     /admin/categorie/supprimer/{id}
+    defaults: { _controller: AdminBundle:Categorie:supprimer }
+    requirements:
+              id: \d+
+              
+prendreCategorie:
+    path:     /admin/categorie/{id}
+    defaults: { _controller: AdminBundle:Categorie:prendre }
+    requirements:
+              id: \d+
+              
+modifierCategorie:
+    path:     /admin/categorie/modifier/{id}
+    defaults: { _controller: AdminBundle:Categorie:modifier }
+    requirements:
+              id: \d+
+ajouterPage:
+    path:     /admin/page/ajouter
+    defaults: { _controller: AdminBundle:Page:ajouter }
+
+creerPage:
+    path:     /admin/page/creer
+    defaults: { _controller: AdminBundle:Page:creer }
+    
+listePages:
+    path:     /admin/pages
+    defaults: { _controller: AdminBundle:Page:liste }
+    
+supprimerPage:
+    path:     /admin/page/supprimer/{id}
+    defaults: { _controller: AdminBundle:Page:supprimer }
+    requirements:
+              id: \d+
+              
+prendrePage:
+    path:     /admin/page/{id}
+    defaults: { _controller: AdminBundle:Page:prendre }
+    requirements:
+              id: \d+
+              
+modifierPage:
+    path:     /admin/page/modifier/{id}
+    defaults: { _controller: AdminBundle:Page:modifier }
+    requirements:
+              id: \d+
+ajouterActivite:
+    path:     /admin/activite/ajouter
+    defaults: { _controller: AdminBundle:Activite:ajouter }
+
+creerActivite:
+    path:     /admin/activite/creer
+    defaults: { _controller: AdminBundle:Activite:creer }
+    
+listeActivites:
+    path:     /admin/activites
+    defaults: { _controller: AdminBundle:Activite:liste }
+    
+supprimerActivite:
+    path:     /admin/activite/supprimer/{id}
+    defaults: { _controller: AdminBundle:Activite:supprimer }
+    requirements:
+              id: \d+
+              
+prendreActivite:
+    path:     /admin/activite/{id}
+    defaults: { _controller: AdminBundle:Activite:prendre }
+    requirements:
+              id: \d+
+              
+modifierActivite:
+    path:     /admin/activite/modifier/{id}
+    defaults: { _controller: AdminBundle:Activite:modifier }
+    requirements:
+              id: \d+
+              
+ajouterReservation:
+    path:     /admin/reservation/ajouter
+    defaults: { _controller: AdminBundle:Reservation:ajouter }
+
+creerReservation:
+    path:     /admin/reservation/creer
+    defaults: { _controller: AdminBundle:Reservation:creer }
+    
+listeReservations:
+    path:     /admin/reservations
+    defaults: { _controller: AdminBundle:Reservation:liste }
+    
+supprimerReservation:
+    path:     /admin/reservation/supprimer/{id}
+    defaults: { _controller: AdminBundle:Reservation:supprimer }
+    requirements:
+              id: \d+
+              
+prendreReservation:
+    path:     /admin/reservation/{id}
+    defaults: { _controller: AdminBundle:Reservation:prendre }
+    requirements:
+              id: \d+
+              
+modifierReservation:
+    path:     /admin/reservation/modifier/{id}
+    defaults: { _controller: AdminBundle:Reservation:modifier }
+    requirements:
+              id: \d+
