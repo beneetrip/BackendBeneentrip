@@ -88,4 +88,4 @@ fos_user:
         sender_name: "%mailer_user%"
     registration:
         form:
-            type: businessmodelbundle_user
+            type:  businessmodelbundle_user # fos_user_registration

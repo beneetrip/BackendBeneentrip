@@ -37,7 +37,15 @@
 	<a href="#"><i class="glyphicon glyphicon-envelope"></i><span> Messages  </span> <span class="badge bg-red">10</span></a>
 </li> -->
 
-<li><a href="#"><i class="glyphicon glyphicon-picture"></i><span> Galeries </span></a></li>
+<li class="accordion">
+	<a href="#galerie"><i class="glyphicon glyphicon-picture"></i><span> Galerie </span></a>
+	<ul class="nav nav-pills nav-stacked">
+		<li><a href="{{ path('listeImages') }}">Toutes les Images</a></li>
+		<li><a href="{{ path('ajouterImage') }}">Ajouter une Image</a></li>
+	</ul>
+</li>
+
+<!-- <li><a href="#"><i class="glyphicon glyphicon-picture"></i><span> Galeries </span></a></li> -->
 
 
 <li class="nav-header">Organisation du Contenu</li>
@@ -64,5 +72,5 @@
 
 <li class="nav-header hidden-md">Paramètres</li>
 
-<li><a href="#"><i class="fa fa-cog"></i><span> paramètres généraux </span></a></li>
+<li><a href="{{ path('fos_user_change_password') }}"><i class="fa fa-cog"></i><span> paramètres généraux </span></a></li>
 

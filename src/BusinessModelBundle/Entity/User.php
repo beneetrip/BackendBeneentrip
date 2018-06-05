@@ -58,7 +58,7 @@ class User extends BaseUser
     /**
      * @var string $urlPhoto
      *
-     * @ORM\Column(name="urlPhoto", type="string", length=255)
+     * @ORM\Column(name="urlPhoto", type="string", length=255, nullable=true)
    */
     protected $urlPhoto;
     
@@ -260,7 +260,7 @@ class User extends BaseUser
 	public function getUploadDir()
 	{
 	// On retourne le chemin relatif du dossier des images uploadees
-	return 'bundles/admin/upload_images';
+	return 'upload_images';
 	}
 	protected function getUploadRootDir()
 	{

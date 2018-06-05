@@ -1,6 +1,13 @@
 {% extends "AdminBundle::layout.html.twig" %}
 
 
+{% block page %}
+	<li>
+		Reservation
+	</li>
+	
+{% endblock %}
+
 {% block style %} 
 	<link href="{{ asset('bundles/admin/bower_components/Filterable-Multiple-Select-with-Checkboxes-fSelect/fSelect.css') }}" rel="stylesheet">
 	<!-- style for select multiple fil -->

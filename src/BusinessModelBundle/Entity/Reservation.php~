@@ -1,13 +1,13 @@
 <?php
 
-namespace AdminBundle\Entity;
+namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
 * @ORM\Table()
-* @ORM\Entity(repositoryClass="AdminBundle\Entity\ReservationRepository")
+* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ReservationRepository")
 * @ORM\HasLifecycleCallbacks
 */
 class Reservation
@@ -33,12 +33,12 @@ private $dateCreation;
 */
 private $dateModification;
 /**
- * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\User",cascade={"persist"})
+ * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User",cascade={"persist"})
  */
 private $utilisateurs;
 
 /**
- * @ORM\OneToOne(targetEntity="AdminBundle\Entity\Activite",cascade={"persist", "remove"}), mappedBy="reservation")
+ * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"})
  */
 private $activite;
 
@@ -113,11 +113,11 @@ return $this->id;
     /**
      * Add utilisateur
      *
-     * @param \AdminBundle\Entity\User $utilisateur
+     * @param \BusinessModelBundle\Entity\User $utilisateur
      *
      * @return Reservation
      */
-    public function addUtilisateur(\AdminBundle\Entity\User $utilisateur)
+    public function addUtilisateur(\BusinessModelBundle\Entity\User $utilisateur)
     {
         $this->utilisateurs[] = $utilisateur;
 
@@ -127,9 +127,9 @@ return $this->id;
     /**
      * Remove utilisateur
      *
-     * @param \AdminBundle\Entity\User $utilisateur
+     * @param \BusinessModelBundle\Entity\User $utilisateur
      */
-    public function removeUtilisateur(\AdminBundle\Entity\User $utilisateur)
+    public function removeUtilisateur(\BusinessModelBundle\Entity\User $utilisateur)
     {
         $this->utilisateurs->removeElement($utilisateur);
     }
@@ -147,11 +147,11 @@ return $this->id;
     /**
      * Set activite
      *
-     * @param \AdminBundle\Entity\Activite $activite
+     * @param \BusinessModelBundle\Entity\Activite $activite
      *
      * @return Reservation
      */
-    public function setActivite(\AdminBundle\Entity\Activite $activite = null)
+    public function setActivite(\BusinessModelBundle\Entity\Activite $activite = null)
     {
         $this->activite = $activite;
 
@@ -161,7 +161,7 @@ return $this->id;
     /**
      * Get activite
      *
-     * @return \AdminBundle\Entity\Activite
+     * @return \BusinessModelBundle\Entity\Activite
      */
     public function getActivite()
     {

@@ -1,0 +1,100 @@
+<?php
+
+namespace AdminBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use BusinessModelBundle\Entity\Image;
+use BusinessModelBundle\Form\Type\ImageType;
+
+class ImageController extends Controller
+{
+	
+    public function ajouterAction()
+    {
+		$img= new Image();
+		$form = $this->createForm('businessmodelbundle_image', $img);   
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>'Enregistrer')); 	  	
+	 }
+
+	 public function creerAction()
+    {
+		$img= new Image();
+		$form = $this->createForm('businessmodelbundle_image', $img); 
+		$request = $this->get('request');
+		// On vérifie qu'elle est de type POST
+		if ($request->getMethod() == 'POST') {
+		// On fait le lien Requête <-> Formulaire
+		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
+		$form->bind($request);
+		
+		if($form->isValid()) {
+		// On l'enregistre notre objet $user dans la base de
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($img);
+		$em->flush();
+		     $this->get('session')->getFlashBag()->add('info', 'Image creee avec Succes');
+		    }
+		    
+		}  
+		return $this->redirect( $this->generateUrl('ajouterImage') );
+	 }
+	 
+	 public function listeAction()
+    {
+    	     
+		$listeImages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindAll();
+		// L'appel de la vue ne change pas
+		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
+    }
+         
+    public function supprimerAction($id)
+    {
+    	    
+		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
+		$em=$this->getDoctrine()->getManager();
+		$em->remove($imgId);
+		$em->flush();
+		$this->get('session')->getFlashBag()->add('info', 'Image supprimee avec Succes');
+		$listeImages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindAll();
+		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
+    }
+    
+     public function prendreAction($id)
+    {
+		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_image', $imgId);   
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','idImage' => $id)); 	  	
+	 }
+	 
+	 public function modifierAction($id)
+    {
+		$img= new Image();
+		$form = $this->createForm('businessmodelbundle_image', $img);   
+		$request = $this->get('request');
+		// On vérifie qu'elle est de type POST
+		if ($request->getMethod() == 'POST') {
+		// On fait le lien Requête <-> Formulaire
+		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
+		$form->bind($request);
+		
+		if($form->isValid()) {
+		$em = $this->getDoctrine()->getManager();
+		$imgDB=$em->getRepository('BusinessModelBundle:Image')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_image', $imgDB);
+		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
+		$form->bind($request);
+		$em->flush();
+		$this->get('session')->getFlashBag()->add('info', 'Image modifiee avec Succes');
+		    }
+		    
+		}  
+		return $this->redirect( $this->generateUrl('ajouterImage') );
+	 }
+
+
+}

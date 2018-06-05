@@ -27,7 +27,7 @@ security:
                 default_target_path: /admin
 
             logout:       
-                     target: /admin
+                     target: /login
             anonymous:    true
   
     access_control:

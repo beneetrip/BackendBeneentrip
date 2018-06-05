@@ -29,3 +29,9 @@ services:
          class: BusinessModelBundle\Form\Type\ReservationType
          tags:
             - { name: form.type, alias: businessmodelbundle_reservation }
+
+
+     model_image.registration.form.type:
+         class: BusinessModelBundle\Form\Type\ImageType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_image }

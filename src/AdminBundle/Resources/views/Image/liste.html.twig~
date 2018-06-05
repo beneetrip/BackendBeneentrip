@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Reservation
+		Images
 	</li>
 	
 {% endblock %}
@@ -17,16 +17,20 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom Categorie</th>
+	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom</th>
+	<th class="col-xs-2" data-field="image" data-sortable="true">Image</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
 {% block contentTableBody %}
-{% if listeCategories is defined %} 
-{% for categorie in listeCategories %}
+{% if listeImages is defined %} 
+{% for image in listeImages %}
 	<tr>
-		<td>{{ categorie.id }}</td>
-		<td>{{ categorie.nom }}</td>
+		<td>{{ image.id }}</td>
+		<td>{{ image.nom }}</td>
+		<td>
+<img src="{{ asset(image.url) }}" height="100" width="100" />		
+		</td>
 		<td class="center">
 			<div class="btn-group pull-right">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -35,14 +39,14 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-						<a class="" href="{{ path('prendreCategorie',{'id': categorie.id}) }}">
+						<a class="" href="{{ path('prendreImage',{'id': image.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
 							Modifier
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
-						<a class="delete-content" href="{{ path('supprimerCategorie',{'id': categorie.id}) }}" >
+						<a class="delete-content" href="{{ path('supprimerImage',{'id': image.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
 						Supprimer
 					</a>

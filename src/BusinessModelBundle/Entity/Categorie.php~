@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminBundle\Entity;
+namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
 * @ORM\Table()
 *
-@ORM\Entity(repositoryClass="AdminBundle\Entity\CategorieRepository")
+@ORM\Entity(repositoryClass="BusinessModelBundle\Entity\CategorieRepository")
 */
 class Categorie
 {

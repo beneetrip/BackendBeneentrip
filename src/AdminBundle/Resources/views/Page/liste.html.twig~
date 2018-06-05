@@ -1,5 +1,11 @@
 {% extends "AdminBundle::liste.html.twig" %}
 
+{% block page %}
+					<li>
+						<a href="#">Tableau de bord</a>
+					</li>
+{% endblock %}
+
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}

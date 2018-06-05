@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\Activite;
+use BusinessModelBundle\Entity\Image;
 use BusinessModelBundle\Form\Type\ActiviteType;
 
 class ActiviteController extends Controller
@@ -24,6 +25,7 @@ class ActiviteController extends Controller
 	 public function creerAction()
     {
 		$activite= new Activite();
+		$image= new Image();
 		$form = $this->createForm('businessmodelbundle_activite', $activite); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
@@ -37,6 +39,13 @@ class ActiviteController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($activite);
 		$em->flush();
+		
+		 //Je parcours l'objet Activite pour itérer sur les images qui sont passés par le formulaire
+            foreach ($activite->getImages() as $i => $img) {
+                $img->setActivite($activite);//On lie les images a notre activite
+                $em->persist($img);
+            }
+                $em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Activite creee avec Succes');
 		    }
 		    
@@ -60,7 +69,7 @@ class ActiviteController extends Controller
 		$em->remove($activiteId);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Activite supprimee avec Succes');
-		$listePages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
 		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
     }
     
@@ -95,6 +104,15 @@ class ActiviteController extends Controller
 		}  
 		return $this->redirect( $this->generateUrl('ajouterActivite') );
 	 }
+
+    //Fonction speciale permettant de voir les images d'une activite
+    public function voirImagesAction($id)
+    {
+    	$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);     
+		$listeImages = $activiteId->getImages();
+		// L'appel de la vue ne change pas
+		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
+    }
 
 
 }

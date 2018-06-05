@@ -38,7 +38,7 @@ private $dateModification;
 private $utilisateurs;
 
 /**
- * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}), mappedBy="reservation")
+ * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"})
  */
 private $activite;
 

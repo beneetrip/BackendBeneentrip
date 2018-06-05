@@ -126,6 +126,12 @@ modifierActivite:
     defaults: { _controller: AdminBundle:Activite:modifier }
     requirements:
               id: \d+
+
+voirImagesActivite:
+    path:     /admin/activite/{id}/images
+    defaults: { _controller: AdminBundle:Activite:voirImages }
+    requirements:
+              id: \d+
               
 ajouterReservation:
     path:     /admin/reservation/ajouter
@@ -154,5 +160,35 @@ prendreReservation:
 modifierReservation:
     path:     /admin/reservation/modifier/{id}
     defaults: { _controller: AdminBundle:Reservation:modifier }
+    requirements:
+              id: \d+
+
+ajouterImage:
+    path:     /admin/image/ajouter
+    defaults: { _controller: AdminBundle:Image:ajouter }
+
+creerImage:
+    path:     /admin/image/creer
+    defaults: { _controller: AdminBundle:Image:creer }
+    
+listeImages:
+    path:     /admin/images
+    defaults: { _controller: AdminBundle:Image:liste }
+    
+supprimerImage:
+    path:     /admin/image/supprimer/{id}
+    defaults: { _controller: AdminBundle:Image:supprimer }
+    requirements:
+              id: \d+
+              
+prendreImage:
+    path:     /admin/image/{id}
+    defaults: { _controller: AdminBundle:Image:prendre }
+    requirements:
+              id: \d+
+              
+modifierImage:
+    path:     /admin/image/modifier/{id}
+    defaults: { _controller: AdminBundle:Image:modifier }
     requirements:
               id: \d+

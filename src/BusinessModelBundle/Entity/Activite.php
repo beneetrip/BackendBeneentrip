@@ -63,6 +63,14 @@ private $prixIndividu;
 */
 private $description;
 /**
+ * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Categorie",cascade={"persist", "remove"})
+ */
+private $categorie;
+/**
+ * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Image",cascade={"persist", "remove"}, mappedBy="activite")
+ */
+private $images;
+/**
 * @return integer
 */
 public function getId()
@@ -189,5 +197,71 @@ return $this->description;
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set categorie
+     *
+     * @param \BusinessModelBundle\Entity\Categorie $categorie
+     *
+     * @return Activite
+     */
+    public function setCategorie(\BusinessModelBundle\Entity\Categorie $categorie = null)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return \BusinessModelBundle\Entity\Categorie
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add image
+     *
+     * @param \BusinessModelBundle\Entity\Image $image
+     *
+     * @return Activite
+     */
+    public function addImage(\BusinessModelBundle\Entity\Image $image)
+    {
+    	  //$image->setActivite($this);
+        $this->images[] = $image;
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \BusinessModelBundle\Entity\Image $image
+     */
+    public function removeImage(\BusinessModelBundle\Entity\Image $image)
+    {
+    	  //$image->setActivite(null);//On ajoute ceci car on avait une jointure nullable=true
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
     }
 }

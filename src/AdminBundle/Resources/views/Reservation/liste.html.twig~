@@ -1,5 +1,11 @@
 {% extends "AdminBundle::liste.html.twig" %}
 
+{% block page %}
+					<li>
+						<a href="#">Reservation</a>
+					</li>
+{% endblock %}
+
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
@@ -26,12 +32,16 @@
 		<td>
 {% if reservation.utilisateurs is defined %} 
 {% for participant in reservation.utilisateurs %}
-<p>{{participant}}</p>		
+<p>{{participant.nomComplet}}</p>		
 {% endfor %}
 {% endif %}		
 		</td>
 		<td>{{ reservation.dateCreation|date('Y-m-d H:i:s') }}</td>
-		<td>{{ reservation.dateModification|date('Y-m-d H:i:s') }}</td>
+		<td>
+{% if reservation.dateModification is not null %} 
+{{ reservation.dateModification|date('Y-m-d H:i:s') }}
+{% endif %}
+</td>
 		<td class="center">
 			<div class="btn-group pull-right">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
