@@ -1,16 +1,16 @@
 <?php
 
-namespace AdminBundle\Entity;
+namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
 * @ORM\Table()
-* @ORM\Entity(repositoryClass="AdminBundle\Entity\ReservationRepository")
+* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ReservationRepository")
 * @ORM\HasLifecycleCallbacks
 */
-class Reservation
+class Reservation extends ClasseMere
 {
 /**
 * @var integer $id
@@ -20,33 +20,27 @@ class Reservation
 * @ORM\GeneratedValue(strategy="AUTO")
 */
 private $id;
+
 /**
-* @var datetime $dateCreation
-*
-* @ORM\Column(name="dateCreation", type="datetime")
-*/
-private $dateCreation;
-/**
-* @var datetime $dateModification
-*
-* @ORM\Column(name="dateModification", type="datetime", nullable=true)
-*/
-private $dateModification;
-/**
- * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\User",cascade={"persist"})
+ * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
  */
 private $utilisateurs;
 
 /**
- * @ORM\OneToOne(targetEntity="AdminBundle\Entity\Activite",cascade={"persist", "remove"}), mappedBy="reservation")
- */
+* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="reservations")
+* @ORM\JoinColumn(nullable=false)
+*/
 private $activite;
 
-public function __construct()
+
+/**
+ * @ORM\PrePersist()
+ */
+public function createDate()
 {
-$this->dateCreation= new \Datetime;
-//$this->utilisateurs= new \Doctrine\Common\Collections\ArrayCollection();
+$this->setDateCreation(new \Datetime());
 }
+
 /**
  * @ORM\PreUpdate()
  */
@@ -54,6 +48,7 @@ public function updateDate()
 {
 $this->setDateModification(new \Datetime());
 }
+
 /**
 * @return integer
 */
@@ -61,6 +56,72 @@ public function getId()
 {
 return $this->id;
 }
+
+
+    /**
+     * Add utilisateur
+     *
+     * @param \BusinessModelBundle\Entity\User $utilisateur
+     *
+     * @return Reservation
+     */
+    public function addUtilisateur(\BusinessModelBundle\Entity\User $utilisateur)
+    {
+        $this->utilisateurs[] = $utilisateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove utilisateur
+     *
+     * @param \BusinessModelBundle\Entity\User $utilisateur
+     */
+    public function removeUtilisateur(\BusinessModelBundle\Entity\User $utilisateur)
+    {
+        $this->utilisateurs->removeElement($utilisateur);
+    }
+
+    /**
+     * Get utilisateurs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUtilisateurs()
+    {
+        return $this->utilisateurs;
+    }
+
+    /**
+     * Set activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     *
+     * @return Reservation
+     */
+    public function setActivite(\BusinessModelBundle\Entity\Activite $activite = null)
+    {
+        $this->activite = $activite;
+
+        return $this;
+    }
+
+    /**
+     * Get activite
+     *
+     * @return \BusinessModelBundle\Entity\Activite
+     */
+    public function getActivite()
+    {
+        return $this->activite;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->utilisateurs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set dateCreation
@@ -108,63 +169,5 @@ return $this->id;
     public function getDateModification()
     {
         return $this->dateModification;
-    }
-
-    /**
-     * Add utilisateur
-     *
-     * @param \AdminBundle\Entity\User $utilisateur
-     *
-     * @return Reservation
-     */
-    public function addUtilisateur(\AdminBundle\Entity\User $utilisateur)
-    {
-        $this->utilisateurs[] = $utilisateur;
-
-        return $this;
-    }
-
-    /**
-     * Remove utilisateur
-     *
-     * @param \AdminBundle\Entity\User $utilisateur
-     */
-    public function removeUtilisateur(\AdminBundle\Entity\User $utilisateur)
-    {
-        $this->utilisateurs->removeElement($utilisateur);
-    }
-
-    /**
-     * Get utilisateurs
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUtilisateurs()
-    {
-        return $this->utilisateurs;
-    }
-
-    /**
-     * Set activite
-     *
-     * @param \AdminBundle\Entity\Activite $activite
-     *
-     * @return Reservation
-     */
-    public function setActivite(\AdminBundle\Entity\Activite $activite = null)
-    {
-        $this->activite = $activite;
-
-        return $this;
-    }
-
-    /**
-     * Get activite
-     *
-     * @return \AdminBundle\Entity\Activite
-     */
-    public function getActivite()
-    {
-        return $this->activite;
     }
 }

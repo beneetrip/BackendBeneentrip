@@ -35,6 +35,8 @@ class UserController extends Controller
 		if($form->isValid()) {
 		// On l'enregistre notre objet $user dans la base de
 		$em = $this->getDoctrine()->getManager();
+		//On ajoute le privilege parmi les roles des utilisateurs FOSuserBundle
+		$user->addRole($user->getPrivilege());
 		$em->persist($user);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Utilisateur cree avec Succes');
@@ -85,9 +87,13 @@ class UserController extends Controller
 		if($form->isValid()) {
 		$em = $this->getDoctrine()->getManager();
 		$userDB=$em->getRepository('BusinessModelBundle:User')->myFindOne($id);
+		$privilege=$userDB->getPrivilege();
 		$form = $this->createForm('businessmodelbundle_user', $userDB);
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
+		//on supprime l'ancien privilege et on ajoute le nouveau parmi les roles des utilisateurs FOSuserBundle
+		$userDB->removeRole($privilege);
+		$userDB->addRole($userDB->getPrivilege());
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Utilisateur modifiee avec Succes');
 		    }

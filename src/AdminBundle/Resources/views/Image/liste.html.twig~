@@ -1,0 +1,63 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block page %}
+	<li>
+		Images
+	</li>
+	
+{% endblock %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom</th>
+	<th class="col-xs-2" data-field="image" data-sortable="true">Image</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listeImages is defined %} 
+{% for image in listeImages %}
+	<tr>
+		<td>{{ image.id }}</td>
+		<td>{{ image.nom }}</td>
+		<td>
+<img src="{{ asset(image.url) }}" height="100" width="100" />		
+		</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendreImage',{'id': image.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerImage',{'id': image.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

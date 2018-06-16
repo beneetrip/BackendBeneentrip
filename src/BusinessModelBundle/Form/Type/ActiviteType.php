@@ -5,6 +5,7 @@ namespace BusinessModelBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use BusinessModelBundle\Form\Type\ImageType;
 
 class ActiviteType extends AbstractType
 {
@@ -22,6 +23,12 @@ class ActiviteType extends AbstractType
             ->add('nbParticipants')
             ->add('prixIndividu')
             ->add('description')
+            ->add('categorie','entity', array(
+'class'
+=> 'BusinessModelBundle:Categorie',
+'property' => 'nom',
+'multiple' => false))
+->add('images', 'collection', array('type'=> new ImageType(),'allow_add'=>true,'allow_delete' =>true))
         ;
     }
     

@@ -1,5 +1,12 @@
 {% extends "AdminBundle::liste.html.twig" %}
 
+{% block page %}
+	<li>
+		Categorie
+	</li>
+	
+{% endblock %}
+
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}

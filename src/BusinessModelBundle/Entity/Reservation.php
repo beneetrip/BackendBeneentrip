@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 * @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ReservationRepository")
 * @ORM\HasLifecycleCallbacks
 */
-class Reservation
+class Reservation extends ClasseMere
 {
 /**
 * @var integer $id
@@ -20,33 +20,27 @@ class Reservation
 * @ORM\GeneratedValue(strategy="AUTO")
 */
 private $id;
+
 /**
-* @var datetime $dateCreation
-*
-* @ORM\Column(name="dateCreation", type="datetime")
-*/
-private $dateCreation;
-/**
-* @var datetime $dateModification
-*
-* @ORM\Column(name="dateModification", type="datetime", nullable=true)
-*/
-private $dateModification;
-/**
- * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User",cascade={"persist"})
+ * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
  */
 private $utilisateurs;
 
 /**
- * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}), mappedBy="reservation")
- */
+* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="reservations")
+* @ORM\JoinColumn(nullable=false)
+*/
 private $activite;
 
-public function __construct()
+
+/**
+ * @ORM\PrePersist()
+ */
+public function createDate()
 {
-$this->dateCreation= new \Datetime;
-//$this->utilisateurs= new \Doctrine\Common\Collections\ArrayCollection();
+$this->setDateCreation(new \Datetime());
 }
+
 /**
  * @ORM\PreUpdate()
  */
@@ -54,6 +48,7 @@ public function updateDate()
 {
 $this->setDateModification(new \Datetime());
 }
+
 /**
 * @return integer
 */
@@ -62,53 +57,6 @@ public function getId()
 return $this->id;
 }
 
-    /**
-     * Set dateCreation
-     *
-     * @param \DateTime $dateCreation
-     *
-     * @return Reservation
-     */
-    public function setDateCreation($dateCreation)
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreation
-     *
-     * @return \DateTime
-     */
-    public function getDateCreation()
-    {
-        return $this->dateCreation;
-    }
-
-    /**
-     * Set dateModification
-     *
-     * @param \DateTime $dateModification
-     *
-     * @return Reservation
-     */
-    public function setDateModification($dateModification)
-    {
-        $this->dateModification = $dateModification;
-
-        return $this;
-    }
-
-    /**
-     * Get dateModification
-     *
-     * @return \DateTime
-     */
-    public function getDateModification()
-    {
-        return $this->dateModification;
-    }
 
     /**
      * Add utilisateur
@@ -166,5 +114,60 @@ return $this->id;
     public function getActivite()
     {
         return $this->activite;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->utilisateurs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Reservation
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     *
+     * @return Reservation
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
     }
 }

@@ -6,7 +6,7 @@
     <title>Admin Benee Trip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Paul Eric">
+    <meta name="author" content="ubuntu" >
 	
 	<!-- Interdiction d'indexation -->
 	<meta name="robots" content="noindex, nofollow" />
@@ -75,9 +75,18 @@
             <a class="navbar-brand" href="{{ path('admin_homepage')}}"> 
 			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
                 <span>Beneen Strip</span></a>
+					{% if  app.user.id is not defined %}
+ <a class="navbar-brand" href="{{ path('fos_user_security_login')}}"> 
+			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
+                <span>Connexion</span></a>
 
+ <a class="navbar-brand" href="{{ path('fos_user_registration_register')}}"> 
+			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
+                <span>Inscription</span></a>
+					{% endif %}
             <!-- user dropdown starts -->
             <div class="btn-group pull-right">
+					{% if  app.user.id is defined %}
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
 					<span class="hidden-sm hidden-xs"> 
@@ -85,15 +94,17 @@
 					</span>
                     <span class="caret"></span>
                 </button>
+
                 <ul class="dropdown-menu">
                     <!-- <li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres</a></li>
                     <li class="divider"></li> -->
-					{% if  app.user.id is defined %}
-					<li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres </a></li>
+					<li><a href="{{ path('fos_user_profile_edit') }}"><i></i>Salut, {{app.user.nomComplet}} </a></li>
 					<li class="divider"></li>
-					{% endif %}
-					<li><a href=""><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
+					<li><a href="{{ path('fos_user_change_password') }}"><i class=" glyphicon glyphicon-cog"></i> Paramètres </a></li>
+					<li class="divider"></li>
+					<li><a href="{{ path('fos_user_security_logout') }}"><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
                 </ul>
+					{% endif %}
             </div>
            
             <ul class="collapse navbar-collapse nav navbar-nav top-menu">
@@ -115,9 +126,9 @@
 
                     </div>
                     <ul class="nav nav-pills nav-stacked main-menu">
-					
+										{% if  app.user.id is defined %} 
 						{{ render(controller('AdminBundle:Default:sidebarmenu')) }}
-                        
+                        					{% endif %}
 					</ul>
                     <!-- <label id="for-is-ajax" for="is-ajax"><input id="is-ajax" type="checkbox"> Ajax on menu</label> -->
                 </div>
@@ -138,6 +149,7 @@
     <div id="content" class="col-lg-10 col-sm-10">
             <!-- content starts -->
             <div>
+							 {% if  app.user.id is defined %}
 				<ul class="breadcrumb">
 					<li>
 						<a href="#">Accueil</a>
@@ -148,7 +160,11 @@
 					</li>
 					{% endblock %}
 				</ul>
+                        					{% endif %}
 			</div>
+			
+			 {% block fos_user_content %}
+            {% endblock fos_user_content %}
 			
 			{% block content %}
 			
@@ -314,7 +330,18 @@ $( document ).ready( function() {
 </script>
 
 
-{% block javascripts %} {% endblock %}
+{% block javascripts %} 
+
+{# Voici le script en question pour formatter les champs de mot de passe #}
+<script type="text/javascript">
+$(document).ready(function() {
+var $container = $('div#passe');
+for (var i = 0; i < $container.find(':input').length; i++){
+$($container.find(':input')[i]).attr('class','form-control');
+}
+});
+</script>
+{% endblock %}
 
 </body>
 </html>

@@ -126,6 +126,18 @@ modifierActivite:
     defaults: { _controller: AdminBundle:Activite:modifier }
     requirements:
               id: \d+
+
+voirImagesActivite:
+    path:     /admin/activite/{id}/images
+    defaults: { _controller: AdminBundle:Activite:voirImages }
+    requirements:
+              id: \d+
+
+voirDiscussionsActivite:
+    path:     /admin/activite/{id}/discussions
+    defaults: { _controller: AdminBundle:Activite:voirDiscussions }
+    requirements:
+              id: \d+
               
 ajouterReservation:
     path:     /admin/reservation/ajouter
@@ -154,5 +166,65 @@ prendreReservation:
 modifierReservation:
     path:     /admin/reservation/modifier/{id}
     defaults: { _controller: AdminBundle:Reservation:modifier }
+    requirements:
+              id: \d+
+
+ajouterImage:
+    path:     /admin/image/ajouter
+    defaults: { _controller: AdminBundle:Image:ajouter }
+
+creerImage:
+    path:     /admin/image/creer
+    defaults: { _controller: AdminBundle:Image:creer }
+    
+listeImages:
+    path:     /admin/images
+    defaults: { _controller: AdminBundle:Image:liste }
+    
+supprimerImage:
+    path:     /admin/image/supprimer/{id}
+    defaults: { _controller: AdminBundle:Image:supprimer }
+    requirements:
+              id: \d+
+              
+prendreImage:
+    path:     /admin/image/{id}
+    defaults: { _controller: AdminBundle:Image:prendre }
+    requirements:
+              id: \d+
+              
+modifierImage:
+    path:     /admin/image/modifier/{id}
+    defaults: { _controller: AdminBundle:Image:modifier }
+    requirements:
+              id: \d+
+
+ajouterDiscussion:
+    path:     /admin/discussion/ajouter
+    defaults: { _controller: AdminBundle:Discussion:ajouter }
+
+creerDiscussion:
+    path:     /admin/discussion/creer
+    defaults: { _controller: AdminBundle:Discussion:creer }
+    
+listeDiscussions:
+    path:     /admin/discussions
+    defaults: { _controller: AdminBundle:Discussion:liste }
+    
+supprimerDiscussion:
+    path:     /admin/discussion/supprimer/{id}
+    defaults: { _controller: AdminBundle:Discussion:supprimer }
+    requirements:
+              id: \d+
+              
+prendreDiscussion:
+    path:     /admin/discussion/{id}
+    defaults: { _controller: AdminBundle:Discussion:prendre }
+    requirements:
+              id: \d+
+              
+modifierDiscussion:
+    path:     /admin/discussion/modifier/{id}
+    defaults: { _controller: AdminBundle:Discussion:modifier }
     requirements:
               id: \d+
