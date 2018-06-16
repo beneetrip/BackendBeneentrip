@@ -17,19 +17,19 @@ class DiscussionType extends AbstractType
         $builder
             ->add('message')
             ->add('activite','entity', array(
-'class'
-=> 'BusinessModelBundle:Activite',
-'property' => 'libelle',
-'multiple' => false))
+				'class'
+				=> 'BusinessModelBundle:Activite',
+				'property' => 'libelle',
+				'multiple' => false))
 				->add('auteur', 'entity', array(
-'class' => 'BusinessModelBundle:User',
-'property' => 'nomComplet',
-'multiple' => false))
+				'class' => 'BusinessModelBundle:User',
+				'property' => 'nomComplet',
+				'multiple' => false))
             ->add('destinataires', 'entity', array(
-'class' => 'BusinessModelBundle:User',
-'property' => 'nomComplet',
-'multiple' => true))
-        ;
+				'class' => 'BusinessModelBundle:User',
+				'property' => 'nomComplet',
+				'multiple' => true))
+				        ;
     }
     
     /**

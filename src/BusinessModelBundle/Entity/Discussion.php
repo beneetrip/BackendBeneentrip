@@ -5,69 +5,80 @@ namespace BusinessModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
-* @ORM\Table()
-* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\DiscussionRepository")
-* @ORM\HasLifecycleCallbacks
-*/
-class Discussion extends ClasseMere
-{
-/**
-* @var integer $id
-*
-* @ORM\Column(name="id", type="integer")
-* @ORM\Id
-* @ORM\GeneratedValue(strategy="AUTO")
-*/
-private $id;
-/**
-* @var string $message
-*
-* @ORM\Column(name="message", type="text")
-*/
-private $message;
+		/**
+		* @ORM\Table()
+		* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\DiscussionRepository")
+		* @ORM\HasLifecycleCallbacks
+		*/
+		class Discussion extends ClasseMere
+		{
+		
+		
+		/**
+		* @var integer $id
+		*
+		* @ORM\Column(name="id", type="integer")
+		* @ORM\Id
+		* @ORM\GeneratedValue(strategy="AUTO")
+		*/
+		private $id;
+		
+		
+		/**
+		* @var string $message
+		*
+		* @ORM\Column(name="message", type="text")
+		*/
+		private $message;
+		
+		
+		/**
+		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
+		 */
+		private $destinataires;
+		
+		
+		/**
+		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\User",inversedBy="discussions")
+		* @ORM\JoinColumn(nullable=false)
+		*/
+		private $auteur;
+		
+		
+		/**
+		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="discussions")
+		* @ORM\JoinColumn(nullable=false)
+		*/
+		private $activite;
+		
+		
+		/**
+		 * @ORM\PrePersist()
+		 */
+		public function createDate()
+		{
+		$this->setDateCreation(new \Datetime());
+		}
+		
+		
+		/**
+		 * @ORM\PreUpdate()
+		 */
+		public function updateDate()
+		{
+		$this->setDateModification(new \Datetime());
+		}
+		
+		
+		/**
+		* @return integer
+		*/
+		public function getId()
+		{
+		return $this->id;
+		}
 
-/**
- * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
- */
-private $destinataires;
-
-/**
-* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\User",inversedBy="discussions")
-* @ORM\JoinColumn(nullable=false)
-*/
-private $auteur;
-
-/**
-* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="discussions")
-* @ORM\JoinColumn(nullable=false)
-*/
-private $activite;
-
-/**
- * @ORM\PrePersist()
- */
-public function createDate()
-{
-$this->setDateCreation(new \Datetime());
-}
-
-/**
- * @ORM\PreUpdate()
- */
-public function updateDate()
-{
-$this->setDateModification(new \Datetime());
-}
-
-/**
-* @return integer
-*/
-public function getId()
-{
-return $this->id;
-}
-
+    
     /**
      * Constructor
      */

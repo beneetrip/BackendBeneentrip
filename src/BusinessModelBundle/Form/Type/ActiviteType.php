@@ -24,12 +24,12 @@ class ActiviteType extends AbstractType
             ->add('prixIndividu')
             ->add('description')
             ->add('categorie','entity', array(
-'class'
-=> 'BusinessModelBundle:Categorie',
-'property' => 'nom',
-'multiple' => false))
-->add('images', 'collection', array('type'=> new ImageType(),'allow_add'=>true,'allow_delete' =>true))
-        ;
+				'class'
+				=> 'BusinessModelBundle:Categorie',
+				'property' => 'nom',
+				'multiple' => false))
+				->add('images', 'collection', array('type'=> new ImageType(),'allow_add'=>true,'allow_delete' =>true))
+				        ;
     }
     
     /**
