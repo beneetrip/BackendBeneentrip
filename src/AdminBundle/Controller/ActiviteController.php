@@ -113,6 +113,14 @@ class ActiviteController extends Controller
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
     }
+    
+    //Fonction speciale permettant de voir les discussions d'une activite
+    public function voirDiscussionsAction($id)
+    {
+    	$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);     
+		$listeDiscussions = $activiteId->getDiscussions();
+		return $this->render('AdminBundle:Discussion:liste.html.twig',array('listeDiscussions' => $listeDiscussions));
+    }
 
 
 }

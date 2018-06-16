@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
 * @ORM\Table()
-*
-@ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ActiviteRepository")
+*@ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ActiviteRepository")
+* @ORM\HasLifecycleCallbacks
 */
-class Activite
+class Activite extends ClasseMere
 {
 /**
 * @var integer $id
@@ -63,13 +63,42 @@ private $prixIndividu;
 */
 private $description;
 /**
- * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Categorie",cascade={"persist", "remove"})
+ * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Categorie")
+ * @ORM\JoinColumn(nullable=false)
  */
 private $categorie;
 /**
  * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Image",cascade={"persist", "remove"}, mappedBy="activite")
  */
 private $images;
+
+/**
+* @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="activite")
+*/
+private $discussions;
+
+/**
+* @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Reservation",cascade={"persist", "remove"}, mappedBy="activite")
+*/
+private $reservations;
+
+
+/**
+ * @ORM\PrePersist()
+ */
+public function createDate()
+{
+$this->setDateCreation(new \Datetime());
+}
+
+/**
+ * @ORM\PreUpdate()
+ */
+public function updateDate()
+{
+$this->setDateModification(new \Datetime());
+}
+
 /**
 * @return integer
 */
@@ -263,5 +292,121 @@ return $this->description;
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Activite
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     *
+     * @return Activite
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }
+
+    /**
+     * Add discussion
+     *
+     * @param \BusinessModelBundle\Entity\Discussion $discussion
+     *
+     * @return Activite
+     */
+    public function addDiscussion(\BusinessModelBundle\Entity\Discussion $discussion)
+    {
+        $this->discussions[] = $discussion;
+
+        return $this;
+    }
+
+    /**
+     * Remove discussion
+     *
+     * @param \BusinessModelBundle\Entity\Discussion $discussion
+     */
+    public function removeDiscussion(\BusinessModelBundle\Entity\Discussion $discussion)
+    {
+        $this->discussions->removeElement($discussion);
+    }
+
+    /**
+     * Get discussions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDiscussions()
+    {
+        return $this->discussions;
+    }
+
+    /**
+     * Add reservation
+     *
+     * @param \BusinessModelBundle\Entity\Reservation $reservation
+     *
+     * @return Activite
+     */
+    public function addReservation(\BusinessModelBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations[] = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Remove reservation
+     *
+     * @param \BusinessModelBundle\Entity\Reservation $reservation
+     */
+    public function removeReservation(\BusinessModelBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations->removeElement($reservation);
+    }
+
+    /**
+     * Get reservations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
     }
 }

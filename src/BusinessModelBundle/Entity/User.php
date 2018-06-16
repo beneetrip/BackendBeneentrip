@@ -56,11 +56,35 @@ class User extends BaseUser
     protected $typeUtilisateur;
     
     /**
+    * @var string $privilege
+    *
+    * @ORM\Column(name="privilege", type="string", length=255)
+    */
+    protected $privilege;
+    
+    /**
      * @var string $urlPhoto
      *
      * @ORM\Column(name="urlPhoto", type="string", length=255, nullable=true)
    */
     protected $urlPhoto;
+    
+	  /**
+		* @var datetime $dateCreation
+		*
+		* @ORM\Column(name="dateCreation", type="datetime")
+		*/
+		protected $dateCreation;
+	  /**
+		* @var datetime $dateModification
+		*
+		* @ORM\Column(name="dateModification", type="datetime", nullable=true)
+		*/
+		protected $dateModification;
+		/**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="activite")
+        */
+      protected $discussions;
     
     
     protected $fichierPhoto;
@@ -73,6 +97,22 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
     }
+
+		/**
+		 * @ORM\PrePersist()
+		 */
+		public function createDate()
+		{
+		$this->setDateCreation(new \Datetime());
+		}
+		
+		/**
+		 * @ORM\PreUpdate()
+		 */
+		public function updateDate()
+		{
+		$this->setDateModification(new \Datetime());
+		}
 
 
     /**
@@ -291,5 +331,111 @@ class User extends BaseUser
     public function getUrlPhoto()
     {
         return $this->urlPhoto;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return User
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     *
+     * @return User
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }
+
+    /**
+     * Add discussion
+     *
+     * @param \BusinessModelBundle\Entity\Discussion $discussion
+     *
+     * @return User
+     */
+    public function addDiscussion(\BusinessModelBundle\Entity\Discussion $discussion)
+    {
+        $this->discussions[] = $discussion;
+
+        return $this;
+    }
+
+    /**
+     * Remove discussion
+     *
+     * @param \BusinessModelBundle\Entity\Discussion $discussion
+     */
+    public function removeDiscussion(\BusinessModelBundle\Entity\Discussion $discussion)
+    {
+        $this->discussions->removeElement($discussion);
+    }
+
+    /**
+     * Get discussions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDiscussions()
+    {
+        return $this->discussions;
+    }
+
+    /**
+     * Set privilege
+     *
+     * @param string $privilege
+     *
+     * @return User
+     */
+    public function setPrivilege($privilege)
+    {
+        $this->privilege = $privilege;
+
+        return $this;
+    }
+
+    /**
+     * Get privilege
+     *
+     * @return string
+     */
+    public function getPrivilege()
+    {
+        return $this->privilege;
     }
 }

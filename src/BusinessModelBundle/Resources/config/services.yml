@@ -35,3 +35,8 @@ services:
          class: BusinessModelBundle\Form\Type\ImageType
          tags:
             - { name: form.type, alias: businessmodelbundle_image }
+
+     model_discussion.registration.form.type:
+         class: BusinessModelBundle\Form\Type\DiscussionType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_discussion }

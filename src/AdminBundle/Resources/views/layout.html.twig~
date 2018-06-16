@@ -75,7 +75,15 @@
             <a class="navbar-brand" href="{{ path('admin_homepage')}}"> 
 			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
                 <span>Beneen Strip</span></a>
+					{% if  app.user.id is not defined %}
+ <a class="navbar-brand" href="{{ path('fos_user_security_login')}}"> 
+			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
+                <span>Connexion</span></a>
 
+ <a class="navbar-brand" href="{{ path('fos_user_registration_register')}}"> 
+			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
+                <span>Inscription</span></a>
+					{% endif %}
             <!-- user dropdown starts -->
             <div class="btn-group pull-right">
 					{% if  app.user.id is defined %}
@@ -90,7 +98,7 @@
                 <ul class="dropdown-menu">
                     <!-- <li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres</a></li>
                     <li class="divider"></li> -->
-					<li><a href="#"><i></i> {{app.user.nomComplet}} </a></li>
+					<li><a href="{{ path('fos_user_profile_edit') }}"><i></i>Salut, {{app.user.nomComplet}} </a></li>
 					<li class="divider"></li>
 					<li><a href="{{ path('fos_user_change_password') }}"><i class=" glyphicon glyphicon-cog"></i> Paramètres </a></li>
 					<li class="divider"></li>
@@ -118,7 +126,7 @@
 
                     </div>
                     <ul class="nav nav-pills nav-stacked main-menu">
-										{% if  app.user.id is defined %}
+										{% if  app.user.id is defined %} 
 						{{ render(controller('AdminBundle:Default:sidebarmenu')) }}
                         					{% endif %}
 					</ul>
@@ -322,7 +330,18 @@ $( document ).ready( function() {
 </script>
 
 
-{% block javascripts %} {% endblock %}
+{% block javascripts %} 
+
+{# Voici le script en question pour formatter les champs de mot de passe #}
+<script type="text/javascript">
+$(document).ready(function() {
+var $container = $('div#passe');
+for (var i = 0; i < $container.find(':input').length; i++){
+$($container.find(':input')[i]).attr('class','form-control');
+}
+});
+</script>
+{% endblock %}
 
 </body>
 </html>

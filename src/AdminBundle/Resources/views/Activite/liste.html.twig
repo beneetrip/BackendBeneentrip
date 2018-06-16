@@ -25,7 +25,8 @@
 	<th class="col-xs-1" data-field="prixIndividu" data-sortable="true">Prix/Pers</th>
    <th class="col-xs-1" data-field="description" data-sortable="true">Description</th>
    <th class="col-xs-1" data-field="nomCategorie" data-sortable="false">Categorie</th>
-   <th class="col-xs-1" data-field="images" data-sortable="false">Images</th>
+   <th class="col-xs-1" data-field="images" data-sortable="false"></th>
+   <th class="col-xs-1" data-field="discussion" data-sortable="false"></th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -48,7 +49,12 @@
 </td>
 		<td>
 		<a class="" href="{{ path('voirImagesActivite',{'id': activite.id}) }}">		
-		Visualiser
+		Img.
+		</a>
+		</td>
+		<td>
+		<a class="" href="{{ path('voirDiscussionsActivite',{'id': activite.id}) }}">		
+		Disc.
 		</a>
 		</td>
 		<td class="center">

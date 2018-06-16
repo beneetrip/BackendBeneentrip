@@ -73,7 +73,7 @@ class PageController extends Controller
 	 
 	 public function modifierAction($id)
     {
-		$page= new Categorie();
+		$page= new Page();
 		$form = $this->createForm('businessmodelbundle_page', $page); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST

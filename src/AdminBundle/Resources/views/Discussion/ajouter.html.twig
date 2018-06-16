@@ -1,11 +1,9 @@
 {% extends "AdminBundle::layout.html.twig" %}
 
-
 {% block page %}
 	<li>
-		Categorie
+		<a href="#">Discussion</a>
 	</li>
-	
 {% endblock %}
 
 {% block style %} 
@@ -57,15 +55,36 @@
 {% endif %}
 					{% block contentForm %}
 
-					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idCategorie|default('0') })}) }}
-   <div class="form-group">
-					{{ form_label(form.nom) }}
-					{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idDiscussion|default('0') })}) }}
+    <div class="control-group">
+					{{ form_label(form.activite) }}
+					<div class="controls">
+					{{ form_widget(form.activite, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
-					
+	</div>
+	 <div class="control-group">
+					{{ form_label(form.auteur) }}
+					<div class="controls">
+					{{ form_widget(form.auteur, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
+					</div>
+	</div>
+	 <div class="control-group">
+					{{ form_label(form.destinataires) }}
+					<div class="controls">
+					{{ form_widget(form.destinataires, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
+					</div>
+	</div>
+	<div class="control-group">
+					{{ form_label(form.message) }}
+					<div class="controls">
+					{{ form_widget(form.message, { 'attr': {'class': 'form-control'} }) }}
+					</div>
+	</div>
+	
+	<br/>
      <div class="form-group">
 <button id="button-submit" type="submit" class="btn btn-default" data-loading-text=" <i class='fa fa-refresh fa-spin fa-lg'></i> Envoie en cours ...">{{bouton}}</button>
-<button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                        
+<button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                                        
                     </div>
        
     

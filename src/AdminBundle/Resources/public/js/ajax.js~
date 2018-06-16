@@ -1,0 +1,17 @@
+/*
+Cette fonction permet grace a Ajax la suppression d'une activite avec pour id numero
+*/
+
+function delete_activite(numero)
+{
+   $.ajax({
+     type: 'get',
+     url: "activite/supprimer/"+numero+"",
+     data: {
+     },
+     success: function (response) { 
+     }
+   });
+}
+
+

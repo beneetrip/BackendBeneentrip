@@ -1,0 +1,78 @@
+{% extends "AdminBundle::liste.html.twig" %}
+
+{% block page %}
+	<li>
+		<a href="#">Discussion</a>
+	</li>
+{% endblock %}
+
+{% block contentInfo %}
+{% if app.session.flashbag.get('info') is defined %} 
+{% for message in app.session.flashbag.get('info') %}
+<p>{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block contentTablehead %}
+	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
+	<th class="col-xs-2" data-field="libelleActivite" data-sortable="true">Libelle Activite</th>
+	<th class="col-xs-2" data-field="auteur" data-sortable="true">Auteur</th>
+	<th class="col-xs-2" data-field="destinataires" data-sortable="true">Destinataires</th>
+	<th class="col-xs-2" data-field="message" data-sortable="true">Message</th>
+	<th class="col-xs-2" data-field="dateCreation" data-sortable="true">Date creation</th>
+	<th class="col-xs-2" data-field="dateModification" data-sortable="true">Date Modification</th>
+	<th class="col-xs-1" data-field="action" > </th>
+{% endblock %}
+
+{% block contentTableBody %}
+{% if listeDiscussions is defined %} 
+{% for discussion in listeDiscussions %}
+	<tr>
+		<td>{{ discussion.id }}</td>
+		<td>{{ discussion.activite.libelle }}</td>
+		<td>{{ discussion.auteur.nomComplet }}</td>
+		<td>
+{% if discussion.destinataires is defined %} 
+{% for destinataire in discussion.destinataires %}
+<p>{{destinataire.nomComplet}}</p>		
+{% endfor %}
+{% endif %}		
+		</td>
+		<td>{{ discussion.message }}</td>
+		<td>{{ discussion.dateCreation|date('Y-m-d H:i:s') }}</td>
+		<td>
+{% if discussion.dateModification is not null %} 
+{{ discussion.dateModification|date('Y-m-d H:i:s') }}
+{% endif %}
+</td>
+		<td class="center">
+			<div class="btn-group pull-right">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+						<a class="" href="{{ path('prendreDiscussion',{'id': discussion.id}) }}">
+							<i class="glyphicon glyphicon-edit icon-white"></i>
+							Modifier
+						</a>
+					</li>
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('supprimerDiscussion',{'id': discussion.id}) }}" >
+						<i class="glyphicon glyphicon-trash icon-white"></i>
+						Supprimer
+					</a>
+					</li>
+                </ul>
+            </div>
+			
+			
+			
+		</td>
+	</tr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

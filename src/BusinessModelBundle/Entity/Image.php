@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 * @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ImageRepository")
 * @ORM\HasLifecycleCallbacks
 */
-class Image
+class Image extends ClasseMere
 {
 /**
 * @var integer $id
@@ -49,6 +49,22 @@ private $activite;
 private $fichier;
 
 private $temp;
+
+/**
+ * @ORM\PrePersist()
+ */
+public function createDate()
+{
+$this->setDateCreation(new \Datetime());
+}
+
+/**
+ * @ORM\PreUpdate()
+ */
+public function updateDate()
+{
+$this->setDateModification(new \Datetime());
+}
 
 /**
 * @return integer
@@ -243,5 +259,53 @@ return $this->id;
     public function getActivite()
     {
         return $this->activite;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Image
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     *
+     * @return Image
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
     }
 }
