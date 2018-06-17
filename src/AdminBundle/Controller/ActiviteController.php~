@@ -28,6 +28,7 @@ class ActiviteController extends Controller
 		$image= new Image();
 		$form = $this->createForm('businessmodelbundle_activite', $activite); 
 		$request = $this->get('request');
+		$user= $this->container->get('security.context')->getToken()->getUser();
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
 		// On fait le lien Requête <-> Formulaire
@@ -35,6 +36,8 @@ class ActiviteController extends Controller
 		$form->bind($request);
 		
 		if($form->isValid()) {
+		//On lie notre activite a son Auteur
+		$activite->setAuteur($user);	
 		// On l'enregistre notre objet $user dans la base de
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($activite);
@@ -114,7 +117,7 @@ class ActiviteController extends Controller
 		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
     }
     
-    //Fonction speciale permettant de voir les images d'une activite
+    //Fonction speciale permettant de voir les discussions d'une activite
     public function voirDiscussionsAction($id)
     {
     	$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);     

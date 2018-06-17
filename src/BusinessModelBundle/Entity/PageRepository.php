@@ -25,5 +25,15 @@ class PageRepository extends \Doctrine\ORM\EntityRepository
 				->setParameter('id', $id);
 				return $qb->getQuery()->getResult()[0];
 				}
+				
+	
+				public function myFindOneByTitre($titrePage)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('p')
+				->where('p.titrePage = :titrePage')
+				->setParameter('titrePage', $titrePage);
+				return $qb->getQuery()->getResult()[0];
+				}
 
 }

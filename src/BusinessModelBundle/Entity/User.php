@@ -96,9 +96,15 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="activite")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="user")
         */
       protected $discussions;
+      
+      
+      /**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="user")
+        */
+      protected $activites;
     
     
     
@@ -454,5 +460,39 @@ use Doctrine\ORM\Mapping as ORM;
     public function getPrivilege()
     {
         return $this->privilege;
+    }
+
+    /**
+     * Add activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     *
+     * @return User
+     */
+    public function addActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites[] = $activite;
+
+        return $this;
+    }
+
+    /**
+     * Remove activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     */
+    public function removeActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites->removeElement($activite);
+    }
+
+    /**
+     * Get activites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivites()
+    {
+        return $this->activites;
     }
 }

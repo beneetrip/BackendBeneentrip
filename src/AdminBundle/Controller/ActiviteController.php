@@ -28,6 +28,8 @@ class ActiviteController extends Controller
 		$image= new Image();
 		$form = $this->createForm('businessmodelbundle_activite', $activite); 
 		$request = $this->get('request');
+		//On recupere l'utilisateur qui est connecte pour le definir comme auteur de l'Activite
+		$user= $this->container->get('security.context')->getToken()->getUser();
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
 		// On fait le lien Requête <-> Formulaire
@@ -35,6 +37,8 @@ class ActiviteController extends Controller
 		$form->bind($request);
 		
 		if($form->isValid()) {
+		//On lie notre activite a son Auteur
+		$activite->setAuteur($user);	
 		// On l'enregistre notre objet $user dans la base de
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($activite);

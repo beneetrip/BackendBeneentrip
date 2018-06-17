@@ -96,9 +96,15 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="activite")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="user")
         */
       protected $discussions;
+      
+      
+      /**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="user")
+        */
+      protected $activites;
     
     
     
@@ -317,7 +323,7 @@ use Doctrine\ORM\Mapping as ORM;
 		public function getUploadDir()
 		{
 		// On retourne le chemin relatif du dossier des images uploadees
-		return 'upload_images/users/'.$this->getUserName();
+		return 'upload_images/users/'.$this->getUsername();
 		}
 		protected function getUploadRootDir()
 		{

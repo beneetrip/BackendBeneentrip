@@ -106,6 +106,12 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
+		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\User",inversedBy="activites")
+		* @ORM\JoinColumn(nullable=false)
+		*/
+		private $auteur;
+		
+		/**
 		 * @ORM\PrePersist()
 		 */
 		public function createDate()
@@ -430,5 +436,29 @@ use Doctrine\ORM\Mapping as ORM;
     public function getReservations()
     {
         return $this->reservations;
+    }
+
+    /**
+     * Set auteur
+     *
+     * @param \BusinessModelBundle\Entity\User $auteur
+     *
+     * @return Activite
+     */
+    public function setAuteur(\BusinessModelBundle\Entity\User $auteur)
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    /**
+     * Get auteur
+     *
+     * @return \BusinessModelBundle\Entity\User
+     */
+    public function getAuteur()
+    {
+        return $this->auteur;
     }
 }
