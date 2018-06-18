@@ -1,3 +1,7 @@
-mobile_app_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: MobileAppBundle:Default:index }
+mobile_app_activity_addpage:
+    path:     /mobapp/activity/add
+    defaults: { _controller: MobileAppBundle:Activity:add }
+
+mobile_app_activity_uploadpage:
+    path:     /mobapp/activity/upload
+    defaults: { _controller: MobileAppBundle:Activity:upload }

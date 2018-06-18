@@ -44,7 +44,7 @@ class DiscussionController extends Controller
 		return $this->redirect( $this->generateUrl('ajouterDiscussion') );
 	 }
 	 
-	 public function listeAction()
+	public function listeAction()
     {
     	     
 		$listeDiscussions = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Discussion')->myFindAll();
@@ -64,14 +64,15 @@ class DiscussionController extends Controller
 		return $this->render('AdminBundle:Discussion:liste.html.twig',array('listeDiscussions' => $listeDiscussions));
     }
     
-     public function prendreAction($id)
+    public function prendreAction($id)
     {
 		$discussionId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Discussion')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_discussion', $discussionId);   
 		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>'Modifier','idDiscussion' => $id)); 	  	
-	 }
+	}
 	 
-	 public function modifierAction($id)
+	 
+	public function modifierAction($id)
     {
 		$discussion= new Discussion();
 		$form = $this->createForm('businessmodelbundle_discussion', $discussion);   
