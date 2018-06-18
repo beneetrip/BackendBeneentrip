@@ -28,6 +28,7 @@ class ActiviteType extends AbstractType
 				=> 'BusinessModelBundle:Categorie',
 				'property' => 'nom',
 				'multiple' => false))
+				->add('imagePrincipale', new ImageType())
 				->add('images', 'collection', array('type'=> new ImageType(),'allow_add'=>true,'allow_delete' =>true))
 				        ;
     }

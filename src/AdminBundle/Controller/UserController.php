@@ -70,7 +70,7 @@ class UserController extends Controller
     {
 		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
-		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','idUser' => $id)); 	  	
+		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -100,6 +100,14 @@ class UserController extends Controller
 		    
 		}  
 		return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
+	 }
+	 
+	 
+	 public function prendrePhotoAction($id)
+    {
+		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_user', $userId);   
+		return $this->render('AdminBundle:User:ajouterPhoto.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
 	 }
 
 

@@ -1,9 +1,9 @@
 {% extends "AdminBundle::liste.html.twig" %}
 
 {% block page %}
-					<li>
-						<a href="#">Reservation</a>
-					</li>
+	<li>
+		<a href="#">Reservation</a>
+	</li>
 {% endblock %}
 
 {% block contentInfo %}

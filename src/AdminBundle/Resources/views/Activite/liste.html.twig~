@@ -72,8 +72,7 @@
 					</li>
 					 <li class="divider"></li>
 					<li>
-						<a class="delete-content" href="#" 
-						onclick="if(confirm('Voulez-vous vraiment supprimer cet élément ?')) delete_activite({{ activite.id }});">
+						<a class="delete-content" href="{{ path('supprimerActivite',{'id': activite.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
 						Supprimer
 					</a>

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Admin Benee Trip</title>
+    <title>Admin Beneen Trip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="ubuntu" >
@@ -84,9 +84,10 @@
 			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
                 <span>Inscription</span></a>
 					{% endif %}
+			 					{% if  app.user.id is defined %}
             <!-- user dropdown starts -->
             <div class="btn-group pull-right">
-					{% if  app.user.id is defined %}
+
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
 					<span class="hidden-sm hidden-xs"> 
@@ -104,9 +105,20 @@
 					<li class="divider"></li>
 					<li><a href="{{ path('fos_user_security_logout') }}"><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
                 </ul>
-					{% endif %}
+
             </div>
-           
+             <div class="pull-right">
+				 <a href="{{ path('prendreUtilisateurPhoto',{'id': app.user.id}) }}">
+				 {% if app.user.photo is not null %} 
+				 <img src="{{ asset(app.user.urlPhoto) }}" alt="" style="height: 50px;border-radius: 50%;width: 50px; cursor: 
+					pointer;"/>
+				 {% else %}
+				 <img src="{{ asset('bundles/admin/img/noavatar.png') }}" alt="" style="height: 50px;border-radius: 50%;width: 50px; cursor: 
+					pointer;"/>
+             {% endif %}							
+					</a>		  
+			    </div>
+           	{% endif %}
             <ul class="collapse navbar-collapse nav navbar-nav top-menu">
                 <li><a href="#" title="site" target="_bank"><i class="glyphicon glyphicon-globe"></i> Site</a></li>
                

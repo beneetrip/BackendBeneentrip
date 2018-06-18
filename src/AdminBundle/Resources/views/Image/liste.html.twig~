@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Images
+		Galerie
 	</li>
 	
 {% endblock %}
@@ -29,7 +29,7 @@
 		<td>{{ image.id }}</td>
 		<td>{{ image.nom }}</td>
 		<td>
-<img src="{{ asset(image.url) }}" height="100" width="100" />		
+<img src="{{ asset(image.url) }}" height="100" width="100" style="border-radius: 50%;" />		
 		</td>
 		<td class="center">
 			<div class="btn-group pull-right">

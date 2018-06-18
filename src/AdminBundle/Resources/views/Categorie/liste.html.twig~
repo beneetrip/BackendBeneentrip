@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Reservation
+		Categorie
 	</li>
 	
 {% endblock %}

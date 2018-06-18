@@ -1,0 +1,371 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+
+{% block page %}
+	<li>
+		<a href="#">Utilisateurs</a>
+	</li>
+{% endblock %}
+
+{% block style %} 
+	<link href="{{ asset('bundles/admin/bower_components/Filterable-Multiple-Select-with-Checkboxes-fSelect/fSelect.css') }}" rel="stylesheet">
+	<!-- style for select multiple fil -->
+	<style>
+	.fs-wrap {
+		display: inline-block;
+		cursor: pointer;
+		line-height: 1;
+		width:100%;
+	}
+	.fs-dropdown {
+		position: absolute;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		width:93%;
+		margin-top: 5px;
+		z-index: 1000;
+	}
+	</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                
+				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
+
+                <!-- <div class="box-icon">
+                    <a href="#" class="btn btn-setting btn-round btn-default">
+						<i class="glyphicon glyphicon-cog"></i></a>
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+						<i class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+                </div> -->
+				
+            </div>
+            <div class="box-content">
+					{% block contentForm %}
+
+					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : user.id|default('0') })}) }}
+					
+							
+					<div class="form-group">
+					{{ form_widget(form.nomComplet, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div> 					
+ 							
+					<div class="form-group">
+					{{ form_widget(form.age, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					
+					<div class="control-group">
+					<div class="controls" style='display: none;'>
+					{{ form_widget(form.typeUtilisateur, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					</div>
+										<br/>
+					<div class="control-group">
+					<div class="controls" style='display: none;'>
+					{{ form_widget(form.genre, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					</div>
+										<br/>
+					<div class="form-group">
+					{{ form_widget(form.username, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					<div class="form-group">
+					{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					
+					<div class="form-group">
+					{{ form_widget(form.enabled, { 'attr': {'hidden': 'true'} }) }}
+					</div>					
+					
+               <div class="form-group">
+					{{ form_label(form.fichierPhoto) }}
+					{{ form_widget(form.fichierPhoto, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserAvatar();'} }) }}
+				 	{% if user is not defined or user.photo is null %} 					
+					<img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
+					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 100px;width: 100px;cursor: 
+					pointer;" src="{{ asset('upload_images/users/noavatar.png') }}" />
+					{% else %}
+					<img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
+					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 100px;width: 100px;cursor: 
+					pointer;" src="{{ asset(user.urlPhoto) }}" />
+					{% endif %}	
+					</div>
+					
+					<div class="control-group">
+					<div class="controls" style='display: none;'>
+					{{ form_widget(form.privilege, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div>
+					</div>					
+					<br/>
+               <div id="passe">
+					{{ form_widget(form) }}
+					</div>										
+					
+						
+					
+					<br/>
+      <div class="form-group">
+<button id="button-submit" type="submit" class="btn btn-default" data-loading-text=" <i class='fa fa-refresh fa-spin fa-lg'></i> Envoie en cours ...">{{bouton}}</button>
+<button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                    
+                    </div>
+       
+    
+{{ form_end(form) }}
+							
+                    
+				
+				{% endblock%}
+				
+                  
+				
+            </div>
+
+        </div>
+    </div>
+    <!--/span-->
+
+</div><!--/row-->
+
+<!-- <div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Form Elements</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-setting btn-round btn-default"><i
+                            class="glyphicon glyphicon-cog"></i></a>
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+               
+                <br>
+
+                <div class="form-group has-success col-md-4">
+                    <label class="control-label" for="inputSuccess1">Input with success</label>
+                    <input type="text" class="form-control" id="inputSuccess1">
+                </div>
+                <div class="form-group has-warning col-md-4">
+                    <label class="control-label" for="inputWarning1">Input with warning</label>
+                    <input type="text" class="form-control" id="inputWarning1">
+                </div>
+                <div class="form-group has-error col-md-4">
+                    <label class="control-label" for="inputError1">Input with error</label>
+                    <input type="text" class="form-control" id="inputError1">
+                </div>
+
+                <form class="form-inline" role="form">
+                    <div class="form-group has-success has-feedback">
+                        <label class="control-label" for="inputSuccess4">Input with success</label>
+                        <input type="text" class="form-control" id="inputSuccess4">
+                        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </form>
+
+                <br>
+                <div class="input-group col-md-4">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+                    <input type="text" class="form-control" placeholder="Username">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div> -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script src="{{ asset('bundles/admin/bower_components/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('bundles/admin/bower_components/ckeditor/adapters/jquery.js') }}"></script>
+	
+	
+	<script>
+	$( document ).ready( function() {
+	
+		// file manager sans modal dialog
+		
+		$( 'textarea.texteditor' ).ckeditor({	
+												height:300,
+												filebrowserBrowseUrl: '{{ asset('bundles/admin/bower_components/elFinder-2.0.7/elfinder.html') }}',
+												/*toolbar: [
+															[ 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
+															[ 'FontSize', 'TextColor', 'BGColor' ]
+														 ]*/
+											});
+		
+		
+		$('#cancel').on('click', function (event) {
+			
+			//retour à la page précédente
+			history.back();
+		
+		});
+		
+		
+	} );
+    </script>
+	
+<script src="{{ asset('bundles/admin/bower_components/Filterable-Multiple-Select-with-Checkboxes-fSelect/fSelect.js') }}"></script>
+
+<script>
+
+    $(function() {
+		
+        /*$('.select-one').fSelect({
+			placeholder: 'Selectionner un élément',
+			numDisplayed: 10,
+			overflowText: '{n} selections',
+			searchText: 'Recherche',
+			showSearch: true
+        });*/
+		
+		$('.select-one').multiselect({
+			enableFiltering: true,
+			filterPlaceholder: 'Rechercher un élément...',
+			enableCaseInsensitiveFiltering: true,
+			maxHeight: 400,
+			buttonWidth: '400px',
+			numberDisplayed: 5,
+			buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return 'Aucun élément selectionné';
+                }
+                else if (options.length > 5) {
+                    return 'Plus de 5 éléments selectionnés !';
+                }
+                 else {
+                     var labels = [];
+                     options.each(function() {
+                         if ($(this).attr('label') !== undefined) {
+                             labels.push($(this).attr('label'));
+                         }
+                         else {
+                             labels.push($(this).html());
+                         }
+                     });
+                     return labels.join(', ') + '';
+                 }
+			},
+		
+		});
+		
+		$('.selectcat').multiselect({
+			enableFiltering: true,
+			filterPlaceholder: 'Rechercher une catégorie...',
+			enableCaseInsensitiveFiltering: true,
+			maxHeight: 300,
+			dropUp: true,
+			buttonWidth: '400px',
+			numberDisplayed: 5,
+			buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return 'Aucun élément selectionné';
+                }
+                else if (options.length > 5) {
+                    return 'Plus de 5 éléments selectionnés !';
+                }
+                 else {
+                     var labels = [];
+                     options.each(function() {
+                         if ($(this).attr('label') !== undefined) {
+                             labels.push($(this).attr('label'));
+                         }
+                         else {
+                             labels.push($(this).html());
+                         }
+                     });
+                     return labels.join(', ') + '';
+                 }
+			},
+		});
+		
+		$('.selectkey').multiselect({
+			enableFiltering: true,
+			filterPlaceholder: 'Rechercher un mot clé...',
+			enableCaseInsensitiveFiltering: true,
+			maxHeight: 300,
+			dropUp: true,
+			buttonWidth: '400px',
+			numberDisplayed: 5,
+			buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return 'Aucun élément selectionné';
+                }
+                else if (options.length > 5) {
+                    return 'Plus de 5 éléments selectionnés !';
+                }
+                 else {
+                     var labels = [];
+                     options.each(function() {
+                         if ($(this).attr('label') !== undefined) {
+                             labels.push($(this).attr('label'));
+                         }
+                         else {
+                             labels.push($(this).html());
+                         }
+                     });
+                     return labels.join(', ') + '';
+                 }
+			},
+		
+		});
+		
+    });
+	
+</script>
+
+{# Voici le script en question pour formatter les champs de mot de passe #}
+<script type="text/javascript">
+$(document).ready(function() {
+var $container = $('div#passe');
+for (var i = 0; i < $container.find(':input').length; i++){
+if($container.find(':input')[i].type == 'password'){
+$($container.find(':input')[i]).attr('class','form-control');
+}
+}
+});
+</script>
+
+<script>
+//fonction permettant d'un previsualiser un fichier uploade on l'utilise pour les images des profils pour utilisateurs      
+function  previsualiserAvatar(){
+	
+	var file=document.getElementById("businessmodelbundle_user_fichierPhoto").files[0];
+	var fr=new FileReader();
+	var preview=document.getElementById("zoneAvatar");
+	fr.onprogress=function(){
+		preview.innerHTML='Chargement...';
+	}
+	fr.onerror=function(){
+		preview.innerHTML='Oups...';
+	}
+	fr.onload=function(){
+		preview.src=fr.result;
+		//preview.appendChild(document.createTextNode(fr.result));
+		}
+		//fr.readAsText(file);
+		fr.readAsDataURL(file);
+
+}
+</script>
+
+
+{####### on affiche les forms ici car il ont besoin des bioblotheques js ######}
+{% endblock %}
+
+

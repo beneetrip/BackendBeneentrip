@@ -50,9 +50,11 @@
 				
             </div>
             <div class="box-content">
-{% if app.session.flashbag.get('info') is defined %} 
+ {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 					{% block contentForm %}

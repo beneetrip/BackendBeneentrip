@@ -96,13 +96,13 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="user")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $discussions;
       
       
       /**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="user")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $activites;
     
