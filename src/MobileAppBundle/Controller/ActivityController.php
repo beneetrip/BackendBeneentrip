@@ -58,9 +58,9 @@ class ActivityController extends Controller
 			$heure = date('H');
 			$minute = date('i');
 			
-			$dossier_photos = 'images/photos/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute;
+			$dossier_photos = 'upload_images/galerie/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute;
 			
-			$nom_image_register = 'images/photos/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
+			$nom_image_register = 'upload_images/galerie/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
 			
 			if(!is_dir($dossier_photos))
 			{

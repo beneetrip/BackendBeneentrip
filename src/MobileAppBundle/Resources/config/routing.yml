@@ -5,3 +5,7 @@ mobile_app_activity_addpage:
 mobile_app_activity_uploadpage:
     path:     /mobapp/activity/upload
     defaults: { _controller: MobileAppBundle:Activity:upload }
+
+mobile_app_user_loginpage:
+    path:     /mobapp/user/login
+    defaults: { _controller: MobileAppBundle:User:login }
