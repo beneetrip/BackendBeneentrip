@@ -87,6 +87,8 @@ class UserController extends Controller
 		$response = new Response(json_encode(array('failure'=>'Identifiants utilisateur deja existant')));
 		else 
 		$response = new Response(json_encode(array('success'=>'Identifiants utilisateur Ok')));
+		
+		$response->headers->set('Content-Type', 'application/json');
 		//}
 		}    
 		  
