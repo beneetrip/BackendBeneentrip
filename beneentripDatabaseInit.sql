@@ -39,8 +39,10 @@ CREATE TABLE IF NOT EXISTS `activite` (
   `dateCreation` datetime NOT NULL,
   `dateModification` datetime DEFAULT NULL,
   `auteur_id` int(11) NOT NULL,
+  `image_principale_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_B8755515BCF5E72D` (`categorie_id`),
+  UNIQUE KEY `UNIQ_B875551591F8D062` (`image_principale_id`),
   KEY `IDX_B875551560BB6FE6` (`auteur_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -222,6 +224,7 @@ INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `em
 --
 ALTER TABLE `activite`
   ADD CONSTRAINT `FK_B875551560BB6FE6` FOREIGN KEY (`auteur_id`) REFERENCES `utilisateurs` (`id`),
+  ADD CONSTRAINT `FK_B875551591F8D062` FOREIGN KEY (`image_principale_id`) REFERENCES `image` (`id`),
   ADD CONSTRAINT `FK_B8755515BCF5E72D` FOREIGN KEY (`categorie_id`) REFERENCES `categorie` (`id`);
 
 --

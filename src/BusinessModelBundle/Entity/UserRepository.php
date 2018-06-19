@@ -25,5 +25,26 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			->setParameter('id', $id);
 			return $qb->getQuery()->getResult()[0];
 			}
+			
+			
+			public function myFindUsername($username)
+			{
+				
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('u')
+			->where('u.username = :username')
+			->setParameter('username', $username);
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+			}
+			
+			
+			public function myFindEmail($email)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('u')
+			->where('u.email = :email')
+			->setParameter('email', $email);
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+			}
 
 }
