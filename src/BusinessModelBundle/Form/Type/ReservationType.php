@@ -17,15 +17,15 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('activite','entity', array(
-'class'
-=> 'BusinessModelBundle:Activite',
-'property' => 'libelle',
-'multiple' => false))
+				'class'
+				=> 'BusinessModelBundle:Activite',
+				'property' => 'libelle',
+				'multiple' => false))
             ->add('utilisateurs', 'entity', array(
-'class' => 'BusinessModelBundle:User',
-'property' => 'nomComplet',
-'multiple' => true))
-        ;
+				'class' => 'BusinessModelBundle:User',
+				'property' => 'nomComplet',
+				'multiple' => true))
+				        ;
     }
     
     /**

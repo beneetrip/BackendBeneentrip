@@ -10,19 +10,30 @@ namespace BusinessModelBundle\Entity;
  */
 class PageRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function myFindAll()
-{
-return $this->createQueryBuilder('p')->getQuery()->getResult();
-}
+				
+				public function myFindAll()
+				{
+				return $this->createQueryBuilder('p')->getQuery()->getResult();
+				}
 
-public function myFindOne($id)
-{
-// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-$qb = $this->createQueryBuilder('p')
-->where('p.id = :id')
-->setParameter('id', $id);
-return $qb->getQuery()->getResult()[0];
-}
-
+				
+				public function myFindOne($id)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('p')
+				->where('p.id = :id')
+				->setParameter('id', $id);
+				return $qb->getQuery()->getResult()[0];
+				}
+				
+	
+				public function myFindOneByTitre($titrePage)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('p')
+				->where('p.titrePage = :titrePage')
+				->setParameter('titrePage', $titrePage);
+				return $qb->getQuery()->getResult()[0];
+				}
 
 }

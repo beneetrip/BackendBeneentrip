@@ -1,11 +1,10 @@
 <?php
 
-namespace AdminBundle\Form\Type;
+namespace BusinessModelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use AdminBundle\Form\Type\ActiviteType;
 
 
 class ReservationType extends AbstractType
@@ -19,11 +18,11 @@ class ReservationType extends AbstractType
         $builder
             ->add('activite','entity', array(
 'class'
-=> 'AdminBundle:Activite',
+=> 'BusinessModelBundle:Activite',
 'property' => 'libelle',
 'multiple' => false))
             ->add('utilisateurs', 'entity', array(
-'class' => 'AdminBundle:User',
+'class' => 'BusinessModelBundle:User',
 'property' => 'nomComplet',
 'multiple' => true))
         ;
@@ -35,7 +34,7 @@ class ReservationType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AdminBundle\Entity\Reservation'
+            'data_class' => 'BusinessModelBundle\Entity\Reservation'
         ));
     }
 
@@ -44,6 +43,6 @@ class ReservationType extends AbstractType
      */
     public function getName()
     {
-        return 'adminbundle_reservation';
+        return 'businessmodelbundle_reservation';
     }
 }

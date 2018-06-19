@@ -5,90 +5,106 @@ namespace BusinessModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
-* @ORM\Table()
-* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\PageRepository")
-* @ORM\HasLifecycleCallbacks
-*/
-class Page extends ClasseMere
-{
-/**
-* @var integer $id
-*
-* @ORM\Column(name="id", type="integer")
-* @ORM\Id
-* @ORM\GeneratedValue(strategy="AUTO")
-*/
-private $id;
-/**
-* @var string $titrePage
-*
-* @ORM\Column(name="titrePage", type="string", length=255)
-*/
-private $titrePage;
-/**
-* @var text $contenu
-*
-* @ORM\Column(name="contenu", type="text")
-*/
-private $contenu;
-
-
-/**
- * @ORM\PrePersist()
- */
-public function createDate()
-{
-$this->setDateCreation(new \Datetime());
-}
-
-/**
- * @ORM\PreUpdate()
- */
-public function updateDate()
-{
-$this->setDateModification(new \Datetime());
-}
-
-/**
-* @return integer
-*/
-public function getId()
-{
-return $this->id;
-}
-/**
-* @param string $titrePage
-* @return Page
-*/
-public function setTitrePage($titrePage)
-{
-$this->titrePage = $titrePage;
-return $this;
-}
-/**
-* @return string
-*/
-public function getTitrePage()
-{
-return $this->titrePage;
-}
-/**
-* @param text $contenu
-* @return Page
-*/
-public function setContenu($contenu)
-{
-$this->contenu = $contenu;
-return $this;
-}
-/**
-* @return text
-*/
-public function getContenu()
-{
-return $this->contenu;
-}
+		/**
+		* @ORM\Table()
+		* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\PageRepository")
+		* @ORM\HasLifecycleCallbacks
+		*/
+		class Page extends ClasseMere
+		{
+		
+		
+		/**
+		* @var integer $id
+		*
+		* @ORM\Column(name="id", type="integer")
+		* @ORM\Id
+		* @ORM\GeneratedValue(strategy="AUTO")
+		*/
+		private $id;
+		
+		
+		/**
+		* @var string $titrePage
+		*
+		* @ORM\Column(name="titrePage", type="string", length=255)
+		*/
+		private $titrePage;
+		
+		
+		/**
+		* @var text $contenu
+		*
+		* @ORM\Column(name="contenu", type="text")
+		*/
+		private $contenu;
+		
+		
+		/**
+		 * @ORM\PrePersist()
+		 */
+		public function createDate()
+		{
+		$this->setDateCreation(new \Datetime());
+		}
+		
+		
+		/**
+		 * @ORM\PreUpdate()
+		 */
+		public function updateDate()
+		{
+		$this->setDateModification(new \Datetime());
+		}
+		
+		
+		/**
+		* @return integer
+		*/
+		public function getId()
+		{
+		return $this->id;
+		}
+		
+		
+		/**
+		* @param string $titrePage
+		* @return Page
+		*/
+		public function setTitrePage($titrePage)
+		{
+		$this->titrePage = $titrePage;
+		return $this;
+		}
+		
+		
+		/**
+		* @return string
+		*/
+		public function getTitrePage()
+		{
+		return $this->titrePage;
+		}
+		
+		
+		/**
+		* @param text $contenu
+		* @return Page
+		*/
+		public function setContenu($contenu)
+		{
+		$this->contenu = $contenu;
+		return $this;
+		}
+		
+		
+		/**
+		* @return text
+		*/
+		public function getContenu()
+		{
+		return $this->contenu;
+		}
 
     /**
      * Set dateCreation

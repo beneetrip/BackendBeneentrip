@@ -10,19 +10,20 @@ namespace BusinessModelBundle\Entity;
  */
 class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function myFindAll()
-{
-return $this->createQueryBuilder('a')->getQuery()->getResult();
-}
+	
+			public function myFindAll()
+			{
+			return $this->createQueryBuilder('a')->getQuery()->getResult();
+			}
 
-public function myFindOne($id)
-{
-// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-$qb = $this->createQueryBuilder('a')
-->where('a.id = :id')
-->setParameter('id', $id);
-return $qb->getQuery()->getResult()[0];
-}
 
+			public function myFindOne($id)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.id = :id')
+			->setParameter('id', $id);
+			return $qb->getQuery()->getResult()[0];
+			}
 
 }
