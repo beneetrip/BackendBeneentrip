@@ -1,8 +1,31 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+
+<div class="row">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                
+				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
+
+                <!-- <div class="box-icon">
+                    <a href="#" class="btn btn-setting btn-round btn-default">
+						<i class="glyphicon glyphicon-cog"></i></a>
+                    <a href="#" class="btn btn-minimize btn-round btn-default">
+						<i class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default">
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+                </div> -->
+				
+            </div>
+            <div class="box-content">
+					{% block contentForm %}
+
 {% if error %}
     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
+
 <form action="{{ path("fos_user_security_check") }}" method="post">
     {% if csrf_token %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
@@ -27,3 +50,18 @@
     <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" class="btn btn-default" />
     </div>
 </form>
+							
+                    
+				
+				{% endblock%}
+				
+                  
+				
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+

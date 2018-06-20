@@ -109,6 +109,17 @@ class UserController extends Controller
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
 		return $this->render('AdminBundle:User:ajouterPhoto.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
 	 }
-
+	 
+	 public function checkLoginAction()
+    {   
+		return $this->render('AdminBundle:User:checkLogin.html.twig',array('path' => 'business_model_login', 'bouton'=>'Check Login'));  	
+	 }
+	 
+	 public function checkRegisterAction()
+    {
+    	$user= new User();
+		$form = $this->createForm('businessmodelbundle_user', $user);   
+		return $this->render('AdminBundle:User:checkRegister.html.twig',array('form' => $form->createView(),'path' => 'business_model_register', 'bouton'=>'Check Registration'));  	
+	 }
 
 }

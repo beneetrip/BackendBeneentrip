@@ -1,30 +1,12 @@
+{% extends "@FOSUser/layout.html.twig" %}
 {% trans_default_domain 'FOSUserBundle' %}
 
-
-
-
-<div class="row">
-    <div class="box col-md-12">
-        <div class="box-inner">
-            <div class="box-header well" data-original-title="">
-                
-				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
-
-                <!-- <div class="box-icon">
-                    <a href="#" class="btn btn-setting btn-round btn-default">
-						<i class="glyphicon glyphicon-cog"></i></a>
-                    <a href="#" class="btn btn-minimize btn-round btn-default">
-						<i class="glyphicon glyphicon-chevron-up"></i></a>
-                    <a href="#" class="btn btn-close btn-round btn-default">
-						<i class="glyphicon glyphicon-remove"></i>
-					</a>
-                </div> -->
-				
-            </div>
-            <div class="box-content">
-					{% block contentForm %}
-
+{% block fos_user_content %}
+{% if test is defined and test %}
+{{ form_start(form, {'method': 'post', 'action': path('business_model_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+{% else %}
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+{% endif %}
 		{{ form_errors(form) }} 
 		<div class="form-group">
 		{{ form_label(form.nomComplet) }}
@@ -76,16 +58,4 @@
     </div>
 		 {{ form_rest(form) }}
 {{ form_end(form) }}
-							
-                    
-				
-				{% endblock%}
-				
-                  
-				
-            </div>
-
-        </div>
-    </div>
-
-</div>
+{% endblock fos_user_content %}

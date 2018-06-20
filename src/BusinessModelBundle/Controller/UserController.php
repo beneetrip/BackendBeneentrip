@@ -26,8 +26,8 @@ class UserController extends Controller
 		$response=new Response(json_encode(array()));
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
-		$username = $request->get('_username');
-		$password = $request->get('_password');
+		$username = $request->get('username');
+		$password = $request->get('password');
 		//Par defaut le retour est a false car on suppose que l'Utilisateur n'a pas ete trouve
 		$retour=false;
 		//On essaie d'abord de voir si le username est correct		
