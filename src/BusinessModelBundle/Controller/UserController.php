@@ -26,6 +26,7 @@ class UserController extends Controller
 		$response=new Response(json_encode(array()));
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
+		//Les parametres sont recuperer cad le username et le password (champ avec ces names)	
 		$username = $request->get('username');
 		$password = $request->get('password');
 		//Par defaut le retour est a false car on suppose que l'Utilisateur n'a pas ete trouve
@@ -60,11 +61,14 @@ class UserController extends Controller
     
     public function registerAction()
     {
-		$request = $this->get('request');		
-		$registrationArray = $request->get('fos_user_registration_form');
+		$request = $this->get('request');
+		//On recupere toutes les donnees du formulaire de name 'businessmodelbundle_user' rempli par l'utilisateur 		
+		$registrationArray = $request->get('businessmodelbundle_user');
 		$user= new User();
+		//Si l'Utilisateur a entre effectivement des donnees on hydrate notre objet User
+		if($registrationArray!=null)
 		$user->hydrate($registrationArray);
-		$form = $this->createForm('businessmodelbundle_user', $user); 
+		//$form = $this->createForm('businessmodelbundle_user', $user); 
 		//var_dump($request->request->all());
 		$response=new Response(json_encode(array()));
 		// On vérifie qu'elle est de type POST
@@ -76,18 +80,28 @@ class UserController extends Controller
 		//var_dump($form->getErrorsAsString());
 		//if($form->isValid()) {
 		$retour=false;
-		$userBDByName = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindUsername($user->getUsername());
+		/*$userBDByName = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindUsername($user->getUsername());
 		$userBDByEmail = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($user->getEmail());
 		
 		if($userBDByName!=null || $userBDByEmail!=null)
 		$retour=true;		
+		*/
+		$userDB=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')
+		->myFindUsernameOREmail($user->getUsername(),$user->getEmail());
 		
+		if($userDB!=null)
+		$retour=true;
 		
-		if($retour)
-		$response = new Response(json_encode(array('failure'=>'Identifiants utilisateur deja existant')));
-		else 
-		$response = new Response(json_encode(array('success'=>'Identifiants utilisateur Ok')));
+		$encoders = array(new XmlEncoder(), new JsonEncoder());
+		$normalizers = array(new ObjectNormalizer());
+		$serializer = new Serializer($normalizers, $encoders);
+		$jsonContent = $serializer->serialize($user, 'json');		
 		
+		if($retour){	
+		$response = new Response(json_encode(array('failure'=>'Identifiants utilisateur deja existant','User'=>$jsonContent)));		
+		}else{ 
+		$response = new Response(json_encode(array('success'=>'Identifiants utilisateur Ok','User'=>$jsonContent)));
+		}
 		$response->headers->set('Content-Type', 'application/json');
 		//}
 		}    
