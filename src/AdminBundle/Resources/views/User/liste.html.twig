@@ -37,11 +37,11 @@
 		<td>{{ user.age }}</td>
 		<td>{{ user.email }}</td>
 		<td>{{ user.typeUtilisateur }}</td>
-		<td>
+		<td><center>
 {% if user.photo is not null %} 
 <img src="{{ asset(user.urlPhoto) }}" height="50" width="50" style="border-radius: 50%;" />		
 {% endif %}		
-		</td>
+		</center></td>
 		<td class="center">
 			<div class="btn-group pull-right">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">

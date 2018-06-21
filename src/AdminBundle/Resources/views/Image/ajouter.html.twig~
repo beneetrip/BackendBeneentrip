@@ -66,6 +66,11 @@
 					<div class="form-group">
 					{{ form_label(form.fichier) }}
 					{{ form_widget(form.fichier, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserImage();'} }) }}
+				 	{% if image is not defined or image.url is null %} 
+				 	<p>
+	ssssssssssssssssssssssssss			 	
+				 	</p>										
+				 						{% endif %}										 	
 				 	{% if image is not defined or image.url is null %} 										
 					<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_image_fichier').click();" 
 					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 

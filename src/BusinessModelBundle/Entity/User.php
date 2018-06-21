@@ -268,7 +268,7 @@ use Doctrine\ORM\Mapping as ORM;
 		public function preUpload()
 		{
 		// Si jamais il n'y a pas de fichier (champ facultatif)
-		if (null === $this->fichierPhoto) {
+		if (null == $this->fichierPhoto) {
 		return;
 		}
 		// Le nom du fichier est son nom avec son extension
@@ -288,17 +288,19 @@ use Doctrine\ORM\Mapping as ORM;
 		}
 		// Si on avait un ancien fichier, on le supprime
 		if (null != $this->tempPhoto) {
-		$oldFile = $this->getUploadRootDir().'/'.$this->photo;
+		$oldFile = $this->getUploadRootDir().'/'.$this->tempPhoto;
 		if (file_exists($oldFile)) {
 		unlink($oldFile);
 		}
 		}
+	
 		// On déplace le fichier envoyé dans le répertoire de notre choix
 		try{
 		$this->fichierPhoto->move($this->getUploadRootDir(), $this->photo);
-		}catch(\Exception $e){}
+		}catch(\Exception $e){}	
 		}
-			
+		
+		
 		/**
 		 * @ORM\PreRemove()
 		*/
