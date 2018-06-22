@@ -85,8 +85,8 @@ class ActiviteController extends Controller
     {
 		$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_activite', $activiteId);
-		var_dump($activiteId->getDateEnClair());   
-		//return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
+		//var_dump($activiteId->getDateEnClair());   
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
