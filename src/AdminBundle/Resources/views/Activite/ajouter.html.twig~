@@ -59,7 +59,7 @@
 {% endif %}
 					{% block contentForm %}
 
-					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idActivite|default('0') })}) }}
+					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : activite.id|default('0') })}) }}
 					<div class="form-group">
 					{{ form_label(form.libelle) }}
 					{{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
@@ -103,10 +103,19 @@
 					</div>
 
 					
-					<div class="form-group">
+					<div class="form-group" id="divImages">
 					<br/>
 					<!-- {{ form_label(form.images) }} -->
 					{{ form_widget(form.images) }}
+					
+					<!-- on genere tous les urls des fichiers images de l'activite pour la communication entre Twig et javascript -->
+					<div id="divUrls">
+					{% if activite is defined   %} 															
+					{% for image in activite.images %}
+					<span id="{{ image.url }}" hidden>{{ asset(image.url) }}</span>
+					{% endfor %}
+					{% endif %}
+					</div>
 					</div>
 
 					
@@ -337,12 +346,17 @@ $('#businessmodelbundle_activite_imagePrincipale_nom').attr('class','form-contro
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('accept','.jpg, .jpeg, .png');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('style','display: none;');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('onchange',"previsualiserImage('businessmodelbundle_activite_imagePrincipale_fichier','zoneImage');");
+$('#divImagePrincipale').children('label').first().html('<legend>Image Principale</legend>');
 document.getElementById('divImagePrincipale').innerHTML+=`
+{% if activite.imagePrincipale is not defined or activite.imagePrincipale.url is null %} 										
 <br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
 					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>`;	
-
-
+					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>
+{% else %}	
+<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
+					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
+					pointer;" src="{{ asset(activite.imagePrincipale.url) }}" /></center>
+{% endif %}`;	
 
 // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
 var $container = $('div#businessmodelbundle_activite_images');
@@ -355,14 +369,38 @@ ajouterImage($container);
 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 return false;
 });
-// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-var index = $container.find(':input').length;
+// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement en utilisant le nombre de div d'images
+var index = $container.children('div').length;
 // On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
 if (index == 0) {
 //ajouterImage($container);
 } else {
 // Pour chaque image déjà existante, on ajoute un lien de suppression
 $container.children('div').each(function() {
+//On decore un peu avec les fieldsets
+$(this).children('label').first().html('<legend>Image numero ' + ($(this).index()+1)+'</legend>');
+
+//Ayant generer les urls on peut les prendre respectivement par les index des fils span dans divUrls
+var elt=$('#divUrls').children('span').eq($(this).index()).html();
+
+$(this).html('<fieldset>'+$(this).html()+`
+<center><img id="img`+($(this).index())+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+($(this).index())+`_fichier').click();" 
+					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
+					pointer;" src="`+elt+`" /></center></fieldset>`
+);
+
+//Et on ajoute l'attribut class=form-control a tous les input type text
+for (var i = 0; i < $(this).find(':input').length; i++){
+if($(this).find(':input')[i].type == 'text')
+$($(this).find(':input')[i]).attr('class','form-control');
+else if($(this).find(':input')[i].type == 'file'){
+$($(this).find(':input')[i]).attr('accept','.jpg, .jpeg, .png');
+$($(this).find(':input')[i]).attr('style','display: none;');
+var idElt='businessmodelbundle_activite_images_'+($(this).index())+'_fichier';
+var idImg='img'+($(this).index());
+$($(this).find(':input')[i]).attr('onchange',"previsualiserImage('"+idElt+"','"+idImg+"');");
+}
+}
 ajouterLienSuppression($(this));
 });
 }

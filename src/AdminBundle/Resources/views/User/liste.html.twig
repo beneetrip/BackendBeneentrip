@@ -19,10 +19,11 @@
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
 	<th class="col-xs-2" data-field="nomPrenom" data-sortable="true">Nom & Prenom</th>
-	<th class="col-xs-2" data-field="genre" data-sortable="true">Genre</th>
-	<th class="col-xs-2" data-field="age" data-sortable="true">Age</th>
-	<th class="col-xs-2" data-field="email" data-sortable="true">Email</th>
+	<th class="col-xs-1" data-field="genre" data-sortable="true">Genre</th>
+	<th class="col-xs-1" data-field="age" data-sortable="true">Age</th>
+	<th class="col-xs-1" data-field="email" data-sortable="true">Email</th>
 	<th class="col-xs-1" data-field="type" data-sortable="true">Type Utilisateur</th>
+	<th class="col-xs-1" data-field="langues" data-sortable="true">Langues</th>
    <th class="col-xs-1" data-field="photo" data-sortable="false">Photo</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
@@ -38,10 +39,17 @@
 		<td>{{ user.email }}</td>
 		<td>{{ user.typeUtilisateur }}</td>
 		<td>
+{% if user.langues is defined %} 
+{% for langue in user.langues %}
+<p>{{langue.nom}}</p>		
+{% endfor %}
+{% endif %}		
+		</td>
+		<td><center>
 {% if user.photo is not null %} 
 <img src="{{ asset(user.urlPhoto) }}" height="50" width="50" style="border-radius: 50%;" />		
 {% endif %}		
-		</td>
+		</center></td>
 		<td class="center">
 			<div class="btn-group pull-right">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">

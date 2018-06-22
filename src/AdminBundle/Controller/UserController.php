@@ -91,6 +91,11 @@ class UserController extends Controller
 		$form = $this->createForm('businessmodelbundle_user', $userDB);
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
+		//Si l'utilisateur a mis une photo on lance les operations de upload
+		if($userDB->getFichierPhoto()!=null){
+		$userDB->preUpload();
+		$userDB->upload();
+		}
 		//on supprime l'ancien privilege et on ajoute le nouveau parmi les roles des utilisateurs FOSuserBundle
 		$userDB->removeRole($privilege);
 		$userDB->addRole($userDB->getPrivilege());
@@ -109,6 +114,17 @@ class UserController extends Controller
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
 		return $this->render('AdminBundle:User:ajouterPhoto.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
 	 }
-
+	 
+	 public function checkLoginAction()
+    {   
+		return $this->render('AdminBundle:User:checkLogin.html.twig',array('path' => 'business_model_login', 'bouton'=>'Check Login'));  	
+	 }
+	 
+	 public function checkRegisterAction()
+    {
+    	$user= new User();
+		$form = $this->createForm('businessmodelbundle_user', $user);   
+		return $this->render('AdminBundle:User:checkRegister.html.twig',array('form' => $form->createView(),'path' => 'business_model_register', 'bouton'=>'Check Registration'));  	
+	 }
 
 }

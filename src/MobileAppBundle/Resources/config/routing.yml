@@ -2,8 +2,8 @@ mobile_app_activity_addpage:
     path:     /mobapp/activity/add
     defaults: { _controller: MobileAppBundle:Activity:add }
 
-mobile_app_activity_lastpage:
-    path:     /mobapp/activity/list
+mobile_app_activity_listpage:
+    path:     /mobapp/activity/list/{page}
     defaults: { _controller: MobileAppBundle:Activity:list }
 
 mobile_app_activity_page:

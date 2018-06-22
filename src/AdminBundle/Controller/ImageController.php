@@ -68,7 +68,7 @@ class ImageController extends Controller
     {
 		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_image', $imgId);   
-		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','idImage' => $id)); 	  	
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)

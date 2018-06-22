@@ -40,3 +40,8 @@ services:
          class: BusinessModelBundle\Form\Type\DiscussionType
          tags:
             - { name: form.type, alias: businessmodelbundle_discussion }
+
+     model_langue.registration.form.type:
+         class: BusinessModelBundle\Form\Type\LangueType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_langue }

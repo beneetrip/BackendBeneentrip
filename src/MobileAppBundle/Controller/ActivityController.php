@@ -36,6 +36,14 @@ class ActivityController extends Controller
 		$result['id'] = $activiteId->getId();
 		$result['libelle'] = $activiteId->getLibelle();
 		$result['description'] = $activiteId->getDescription();
+		$result['user']['id'] = $activiteId->getAuteur()->getId();
+		$result['user']['username'] = $activiteId->getAuteur()->getUsername();
+		$result['user']['photo'] = $activiteId->getAuteur()->getPhoto();
+		$result['dateclair'] = $activiteId->getDateEnClair();
+		$result['nbVues'] = $activiteId->getNbVues();
+		$result['prix'] = $activiteId->getPrixIndividu();
+		$result['nbParticipants'] = $activiteId->getNbParticipants();
+		$result['lieuDestination'] = $activiteId->getLieuDestination();
 		
 		if(count($activiteId->getImages()) != 0 )
 		{
@@ -63,14 +71,23 @@ class ActivityController extends Controller
 		
     }
 	
-	public function listAction()
+	public function listAction($page)
     {
 		
 		
 		$result = array();
 		
-		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
+		$nbrResult = 10;
+		$debutresultat = 0;
 		
+		if($page > 0 )
+		{
+			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif
+		}
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
 		
 		foreach($listeActivites as $elem){
 			

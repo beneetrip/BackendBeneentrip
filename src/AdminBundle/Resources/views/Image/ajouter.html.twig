@@ -58,17 +58,23 @@
 {% endif %}
 					{% block contentForm %}
 
-					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idImage|default('0') })}) }}
+					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : image.id|default('0') })}) }}
     <div class="form-group">
 					{{ form_label(form.nom) }}
 					{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
 					</div>
 					<div class="form-group">
 					{{ form_label(form.fichier) }}
-					{{ form_widget(form.fichier, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserImage();'} }) }}
+					{{ form_widget(form.fichier, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserImage();'} }) }}										 	
+				 	{% if image is not defined or image.url is null %} 										
 					<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_image_fichier').click();" 
 					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>					
+					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>
+					{% else %}
+					<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_image_fichier').click();" 
+					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
+					pointer;" src="{{ asset(image.url) }}" /></center>
+					{% endif %}						
 					</div>
 					
      <div class="form-group">

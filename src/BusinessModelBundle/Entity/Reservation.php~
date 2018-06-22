@@ -5,57 +5,63 @@ namespace BusinessModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
-* @ORM\Table()
-* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ReservationRepository")
-* @ORM\HasLifecycleCallbacks
-*/
-class Reservation extends ClasseMere
-{
-/**
-* @var integer $id
-*
-* @ORM\Column(name="id", type="integer")
-* @ORM\Id
-* @ORM\GeneratedValue(strategy="AUTO")
-*/
-private $id;
-
-/**
- * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
- */
-private $utilisateurs;
-
-/**
-* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="reservations")
-* @ORM\JoinColumn(nullable=false)
-*/
-private $activite;
-
-
-/**
- * @ORM\PrePersist()
- */
-public function createDate()
-{
-$this->setDateCreation(new \Datetime());
-}
-
-/**
- * @ORM\PreUpdate()
- */
-public function updateDate()
-{
-$this->setDateModification(new \Datetime());
-}
-
-/**
-* @return integer
-*/
-public function getId()
-{
-return $this->id;
-}
+		/**
+		* @ORM\Table()
+		* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\ReservationRepository")
+		* @ORM\HasLifecycleCallbacks
+		*/
+		class Reservation extends ClasseMere
+		{
+		
+		
+		/**
+		* @var integer $id
+		*
+		* @ORM\Column(name="id", type="integer")
+		* @ORM\Id
+		* @ORM\GeneratedValue(strategy="AUTO")
+		*/
+		private $id;
+		
+		
+		/**
+		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\User")
+		 */
+		private $utilisateurs;
+		
+		
+		/**
+		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="reservations")
+		* @ORM\JoinColumn(nullable=false)
+		*/
+		private $activite;
+		
+		
+		/**
+		 * @ORM\PrePersist()
+		 */
+		public function createDate()
+		{
+		$this->setDateCreation(new \Datetime());
+		}
+		
+		
+		/**
+		 * @ORM\PreUpdate()
+		 */
+		public function updateDate()
+		{
+		$this->setDateModification(new \Datetime());
+		}
+		
+		
+		/**
+		* @return integer
+		*/
+		public function getId()
+		{
+		return $this->id;
+		}
 
 
     /**

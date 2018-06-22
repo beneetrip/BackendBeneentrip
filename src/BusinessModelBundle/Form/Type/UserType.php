@@ -30,11 +30,15 @@ class UserType extends BaseType
       ));
       $builder->add('privilege', 'choice', array(
        'choice_list' => new ChoiceList(
-        array('ROLE_USER','ROLE_ADMIN','ROLE_SUPERADMIN'),
-        array('USER','ADMIN','SUPERADMIN'))
+        array('ROLE_USER','ROLE_ADMIN'),
+        array('USER','ADMIN'))
       ));
         $builder->add('fichierPhoto','file',array('required' =>false));
         $builder->add('enabled');
+        $builder->add('langues', 'entity', array(
+				'class' => 'BusinessModelBundle:Langue',
+				'property' => 'nom',
+				'multiple' => true));
     }
     
     /**

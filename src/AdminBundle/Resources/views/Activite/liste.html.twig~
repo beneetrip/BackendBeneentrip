@@ -10,23 +10,26 @@
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 {% endblock %}
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="libelle" data-sortable="true">Libelle</th>
-	<th class="col-xs-2" data-field="lieuDestination" data-sortable="true">Destination</th>
-	<th class="col-xs-2" data-field="date" data-sortable="true">Date</th>
-	<th class="col-xs-2" data-field="heure" data-sortable="true">Heure</th>
-	<th class="col-xs-2" data-field="nbParticipants" data-sortable="true">Nb. pers</th>
+	<th class="col-xs-1" data-field="libelle" data-sortable="true">Libelle</th>
+	<th class="col-xs-1" data-field="lieuDestination" data-sortable="true">Destination</th>
+	<th class="col-xs-1" data-field="date" data-sortable="true">Date</th>
+	<th class="col-xs-1" data-field="heure" data-sortable="true">Heure</th>
+	<th class="col-xs-1" data-field="nbParticipants" data-sortable="true">Nb. pers</th>
 	<th class="col-xs-1" data-field="prixIndividu" data-sortable="true">Prix/Pers</th>
-   <th class="col-xs-1" data-field="description" data-sortable="true">Description</th>
-   <th class="col-xs-1" data-field="nomCategorie" data-sortable="false">Categorie</th>
-   <th class="col-xs-1" data-field="images" data-sortable="false"></th>
-   <th class="col-xs-1" data-field="discussion" data-sortable="false"></th>
+<!--   <th class="col-xs-1" data-field="description" data-sortable="true">Description</th> -->
+   <th class="col-xs-1" data-field="nomCategorie" data-sortable="true">Categorie</th>
+   <th class="col-xs-1" data-field="auteur" data-sortable="true">Auteur</th>
+   <th class="col-xs-1" data-field="images" data-sortable="false">Images</th>
+   <th class="col-xs-1" data-field="discussion" data-sortable="false">Discussions</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -43,18 +46,23 @@
 		<td>{{ activite.prixIndividu }}</td>
 		<td>{{ activite.description }}</td>
 		<td>
-{% if activite.categorie is not null %} 
-{{ activite.categorie.nom }}
-{% endif %}		
-</td>
+		{% if activite.categorie is not null %} 
+		{{ activite.categorie.nom }}
+		{% endif %}		
+		</td>
+		<td>
+		{% if activite.auteur is not null %} 
+		{{ activite.auteur.nomComplet }}
+		{% endif %}		
+		</td>
 		<td>
 		<a class="" href="{{ path('voirImagesActivite',{'id': activite.id}) }}">		
-		Img.
+		Ici.
 		</a>
 		</td>
 		<td>
 		<a class="" href="{{ path('voirDiscussionsActivite',{'id': activite.id}) }}">		
-		Disc.
+		Ici.
 		</a>
 		</td>
 		<td class="center">

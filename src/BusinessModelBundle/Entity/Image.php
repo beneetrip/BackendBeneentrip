@@ -136,7 +136,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 		}
 		// Si on avait un ancien fichier, on le supprime
 		if (null != $this->temp) {
-		$oldFile = $this->getUploadRootDir().'/'.$this->alt;
+		$oldFile = $this->getUploadRootDir().'/'.$this->temp;
 		if (file_exists($oldFile)) {
 		unlink($oldFile);
 		}
