@@ -242,3 +242,33 @@ modifierDiscussion:
     defaults: { _controller: AdminBundle:Discussion:modifier }
     requirements:
               id: \d+
+
+ajouterLangue:
+    path:     /admin/langue/ajouter
+    defaults: { _controller: AdminBundle:Langue:ajouter }
+
+creerLangue:
+    path:     /admin/langue/creer
+    defaults: { _controller: AdminBundle:Langue:creer }
+    
+listeLangues:
+    path:     /admin/langues
+    defaults: { _controller: AdminBundle:Langue:liste }
+    
+supprimerLangue:
+    path:     /admin/langue/supprimer/{id}
+    defaults: { _controller: AdminBundle:Langue:supprimer }
+    requirements:
+              id: \d+
+              
+prendreLangue:
+    path:     /admin/langue/{id}
+    defaults: { _controller: AdminBundle:Langue:prendre }
+    requirements:
+              id: \d+
+              
+modifierLangue:
+    path:     /admin/langue/modifier/{id}
+    defaults: { _controller: AdminBundle:Langue:modifier }
+    requirements:
+              id: \d+

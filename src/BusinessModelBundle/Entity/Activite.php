@@ -81,7 +81,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 		/**
-		 * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Categorie")
+		 * @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Categorie",inversedBy="activites")
 		 * @ORM\JoinColumn(nullable=false)
 		 */
 		private $categorie;
@@ -491,5 +491,29 @@ use Doctrine\ORM\Mapping as ORM;
     public function getImagePrincipale()
     {
         return $this->imagePrincipale;
+    }
+
+    /**
+     * Add categorie
+     *
+     * @param \BusinessModelBundle\Entity\Categorie $categorie
+     *
+     * @return Activite
+     */
+    public function addCategorie(\BusinessModelBundle\Entity\Categorie $categorie)
+    {
+        $this->categorie[] = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Remove categorie
+     *
+     * @param \BusinessModelBundle\Entity\Categorie $categorie
+     */
+    public function removeCategorie(\BusinessModelBundle\Entity\Categorie $categorie)
+    {
+        $this->categorie->removeElement($categorie);
     }
 }

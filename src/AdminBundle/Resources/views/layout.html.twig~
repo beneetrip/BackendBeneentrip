@@ -74,16 +74,13 @@
             </button>
             <a class="navbar-brand" href="{{ path('admin_homepage')}}"> 
 			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
-                <span>Beneen Strip</span></a>
-					{% if  app.user.id is not defined %}
+                <span>Beneen Trip</span></a>
+				<!--	{% if  app.user.id is not defined %}
  <a class="navbar-brand" href="{{ path('fos_user_security_login')}}"> 
-			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
                 <span>Connexion</span></a>
-
  <a class="navbar-brand" href="{{ path('fos_user_registration_register')}}"> 
-			<!-- <img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/> -->
                 <span>Inscription</span></a>
-					{% endif %}
+					{% endif %} -->
 			 					{% if  app.user.id is defined %}
             <!-- user dropdown starts -->
             <div class="btn-group pull-right">
@@ -121,7 +118,10 @@
            	{% endif %}
             <ul class="collapse navbar-collapse nav navbar-nav top-menu">
                 <li><a href="#" title="site" target="_bank"><i class="glyphicon glyphicon-globe"></i> Site</a></li>
-               
+                {% if  app.user.id is not defined %}
+                <li><a href="{{ path('fos_user_security_login')}}" title="connexion" target="_bank"><i class="glyphicon glyphicon-log-in"></i> Connexion</a></li>
+                <li><a href="{{ path('fos_user_registration_register')}}" title="inscription" target="_bank"><i class="glyphicon glyphicon-registration-mark"></i> Inscription</a></li>
+                {% endif %}
             </ul>
 
         </div>

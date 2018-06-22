@@ -56,6 +56,11 @@
 		{{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
 		{{ form_errors(form.email) }} 
 		</div>
+		<div class="control-group">
+		{{ form_label(form.langues) }}
+		<div class="controls">
+		{{ form_widget(form.langues, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': '','style': 'display:none;'} }) }}
+		</div>
 		<div class="form-group">
 		{{ form_widget(form.fichierPhoto, { 'attr': {'style': 'display:none;'} }) }}
 		</div>

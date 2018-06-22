@@ -33,6 +33,12 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="categorie")
+        */
+      protected $activites;		
+		
+		
+		/**
 		 * @ORM\PrePersist()
 		 */
 		public function createDate()
@@ -124,5 +130,46 @@ use Doctrine\ORM\Mapping as ORM;
     public function getDateModification()
     {
         return $this->dateModification;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->activites = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     *
+     * @return Categorie
+     */
+    public function addActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites[] = $activite;
+
+        return $this;
+    }
+
+    /**
+     * Remove activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     */
+    public function removeActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites->removeElement($activite);
+    }
+
+    /**
+     * Get activites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivites()
+    {
+        return $this->activites;
     }
 }

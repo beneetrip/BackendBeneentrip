@@ -105,6 +105,12 @@ use Doctrine\ORM\Mapping as ORM;
         * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $activites;
+      
+      
+      /**
+		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Langue")
+		 */
+		private $langues;
     
     
     

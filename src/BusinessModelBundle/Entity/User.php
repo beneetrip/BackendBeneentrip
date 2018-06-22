@@ -105,6 +105,12 @@ use Doctrine\ORM\Mapping as ORM;
         * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $activites;
+      
+      
+      /**
+		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Langue")
+		 */
+		private $langues;
     
     
     
@@ -516,4 +522,38 @@ use Doctrine\ORM\Mapping as ORM;
 
 	}
 
+
+    /**
+     * Add langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     *
+     * @return User
+     */
+    public function addLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues->removeElement($langue);
+    }
+
+    /**
+     * Get langues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangues()
+    {
+        return $this->langues;
+    }
 }

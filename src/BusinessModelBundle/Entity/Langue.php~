@@ -1,0 +1,62 @@
+<?php
+
+namespace BusinessModelBundle\Entity;
+
+
+use Doctrine\ORM\Mapping as ORM;
+
+		/**
+		* @ORM\Table()
+		* @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\LangueRepository")
+		* @ORM\HasLifecycleCallbacks
+		*/
+		class Langue extends ClasseMere
+		{
+		
+		
+		/**
+		* @var integer $id
+		*
+		* @ORM\Column(name="id", type="integer")
+		* @ORM\Id
+		* @ORM\GeneratedValue(strategy="AUTO")
+		*/
+		private $id;
+		
+		
+		/**
+		* @var string $nom
+		*
+		* @ORM\Column(name="nom", type="string", length=255)
+		*/
+		private $nom;
+		
+		
+		/**
+		* @var string $code
+		*
+		* @ORM\Column(name="code", type="string", length=255)
+		*/
+		private $code;
+		
+		
+		/**
+		 * @ORM\PrePersist()
+		 */
+		public function createDate()
+		{
+		$this->setDateCreation(new \Datetime());
+		}
+		
+		
+		/**
+		 * @ORM\PreUpdate()
+		 */
+		public function updateDate()
+		{
+		$this->setDateModification(new \Datetime());
+		}
+		
+		
+		
+}

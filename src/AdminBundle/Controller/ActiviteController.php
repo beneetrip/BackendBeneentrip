@@ -42,6 +42,7 @@ class ActiviteController extends Controller
 		// On l'enregistre notre objet $activite dans la base de
 		$em = $this->getDoctrine()->getManager();
 		//On enregistre d'abord l'image Principale avant l'activite
+		//$activite->getImagePrincipale()->setActivite($activite);
       $em->persist($activite->getImagePrincipale());
       $em->flush();
 		$em->persist($activite);

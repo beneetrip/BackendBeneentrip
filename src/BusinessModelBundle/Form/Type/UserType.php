@@ -35,6 +35,10 @@ class UserType extends BaseType
       ));
         $builder->add('fichierPhoto','file',array('required' =>false));
         $builder->add('enabled');
+        $builder->add('langues', 'entity', array(
+				'class' => 'BusinessModelBundle:Langue',
+				'property' => 'nom',
+				'multiple' => true));
     }
     
     /**

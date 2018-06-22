@@ -1,20 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb2+deb7u8
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 18, 2018 at 08:56 AM
--- Server version: 5.5.55
--- PHP Version: 5.6.30-1~dotdeb+7.1
+-- Generation Time: Jun 22, 2018 at 01:41 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 7.0.5
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `beneentrip`
@@ -26,9 +26,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `activite`
 --
 
-CREATE TABLE IF NOT EXISTS `activite` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `activite` (
+  `id` int(11) NOT NULL,
   `categorie_id` int(11) NOT NULL,
+  `image_principale_id` int(11) NOT NULL,
+  `auteur_id` int(11) NOT NULL,
   `libelle` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `lieuDestination` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,
@@ -37,14 +39,8 @@ CREATE TABLE IF NOT EXISTS `activite` (
   `prixIndividu` double NOT NULL,
   `description` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  `auteur_id` int(11) NOT NULL,
-  `image_principale_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_B8755515BCF5E72D` (`categorie_id`),
-  UNIQUE KEY `UNIQ_B875551591F8D062` (`image_principale_id`),
-  KEY `IDX_B875551560BB6FE6` (`auteur_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -52,13 +48,20 @@ CREATE TABLE IF NOT EXISTS `activite` (
 -- Table structure for table `categorie`
 --
 
-CREATE TABLE IF NOT EXISTS `categorie` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categorie` (
+  `id` int(11) NOT NULL,
   `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `categorie`
+--
+
+INSERT INTO `categorie` (`id`, `nom`, `dateCreation`, `dateModification`) VALUES
+(1, 'TOURISME', '2018-06-21 12:07:28', NULL),
+(2, 'VOYAGE', '2018-06-21 12:08:29', NULL);
 
 -- --------------------------------------------------------
 
@@ -66,17 +69,14 @@ CREATE TABLE IF NOT EXISTS `categorie` (
 -- Table structure for table `discussion`
 --
 
-CREATE TABLE IF NOT EXISTS `discussion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `discussion` (
+  `id` int(11) NOT NULL,
   `auteur_id` int(11) NOT NULL,
   `activite_id` int(11) NOT NULL,
   `message` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_C0B9F90F60BB6FE6` (`auteur_id`),
-  KEY `IDX_C0B9F90F9B0F88B1` (`activite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -84,12 +84,9 @@ CREATE TABLE IF NOT EXISTS `discussion` (
 -- Table structure for table `discussion_user`
 --
 
-CREATE TABLE IF NOT EXISTS `discussion_user` (
+CREATE TABLE `discussion_user` (
   `discussion_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`discussion_id`,`user_id`),
-  KEY `IDX_A8FD7A7F1ADED311` (`discussion_id`),
-  KEY `IDX_A8FD7A7FA76ED395` (`user_id`)
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -98,17 +95,222 @@ CREATE TABLE IF NOT EXISTS `discussion_user` (
 -- Table structure for table `image`
 --
 
-CREATE TABLE IF NOT EXISTS `image` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `image` (
+  `id` int(11) NOT NULL,
   `activite_id` int(11) DEFAULT NULL,
   `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `alt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_C53D045F9B0F88B1` (`activite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `langue`
+--
+
+CREATE TABLE `langue` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `dateCreation` datetime NOT NULL,
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `langue`
+--
+
+INSERT INTO `langue` (`id`, `nom`, `code`, `dateCreation`, `dateModification`) VALUES
+(1, 'Afar', 'aa', '2018-06-22 11:00:00', NULL),
+(2, 'Abkhazian', 'ab', '2018-06-22 11:00:00', NULL),
+(3, 'Avestan', 'ae', '2018-06-22 11:00:00', NULL),
+(4, 'Afrikaans', 'af', '2018-06-22 11:00:00', NULL),
+(5, 'Akan', 'ak', '2018-06-22 11:00:00', NULL),
+(6, 'Amharic', 'am', '2018-06-22 11:00:00', NULL),
+(7, 'Aragonese', 'an', '2018-06-22 11:00:00', NULL),
+(8, 'Arabic', 'ar', '2018-06-22 11:00:00', NULL),
+(9, 'Assamese', 'as', '2018-06-22 11:00:00', NULL),
+(10, 'Avaric', 'av', '2018-06-22 11:00:00', NULL),
+(11, 'Aymara', 'ay', '2018-06-22 11:00:00', NULL),
+(12, 'Azerbaijani', 'az', '2018-06-22 11:00:00', NULL),
+(13, 'Bashkir', 'ba', '2018-06-22 11:00:00', NULL),
+(14, 'Belarusian', 'be', '2018-06-22 11:00:00', NULL),
+(15, 'Bulgarian', 'bg', '2018-06-22 11:00:00', NULL),
+(16, 'Bihari', 'bh', '2018-06-22 11:00:00', NULL),
+(17, 'Bislama', 'bi', '2018-06-22 11:00:00', NULL),
+(18, 'Bambara', 'bm', '2018-06-22 11:00:00', NULL),
+(19, 'Bengali', 'bn', '2018-06-22 11:00:00', NULL),
+(20, 'Tibetan', 'bo', '2018-06-22 11:00:00', NULL),
+(21, 'Breton', 'br', '2018-06-22 11:00:00', NULL),
+(22, 'Bosnian', 'bs', '2018-06-22 11:00:00', NULL),
+(23, 'Catalan', 'ca', '2018-06-22 11:00:00', NULL),
+(24, 'Chechen', 'ce', '2018-06-22 11:00:00', NULL),
+(25, 'Chamorro', 'ch', '2018-06-22 11:00:00', NULL),
+(26, 'Corsican', 'co', '2018-06-22 11:00:00', NULL),
+(27, 'Cree', 'cr', '2018-06-22 11:00:00', NULL),
+(28, 'Czech', 'cs', '2018-06-22 11:00:00', NULL),
+(29, 'Old Church Slavonic', 'cu', '2018-06-22 11:00:00', NULL),
+(30, 'Chuvash', 'cv', '2018-06-22 11:00:00', NULL),
+(31, 'Welsh', 'cy', '2018-06-22 11:00:00', NULL),
+(32, 'Danish', 'da', '2018-06-22 11:00:00', NULL),
+(33, 'German', 'de', '2018-06-22 11:00:00', NULL),
+(34, 'Divehi', 'dv', '2018-06-22 11:00:00', NULL),
+(35, 'Dzongkha', 'dz', '2018-06-22 11:00:00', NULL),
+(36, 'Ewe', 'ee', '2018-06-22 11:00:00', NULL),
+(37, 'Greek', 'el', '2018-06-22 11:00:00', NULL),
+(38, 'English', 'en', '2018-06-22 11:00:00', NULL),
+(39, 'Esperanto', 'eo', '2018-06-22 11:00:00', NULL),
+(40, 'Spanish', 'es', '2018-06-22 11:00:00', NULL),
+(41, 'Estonian', 'et', '2018-06-22 11:00:00', NULL),
+(42, 'Basque', 'eu', '2018-06-22 11:00:00', NULL),
+(43, 'Persian', 'fa', '2018-06-22 11:00:00', NULL),
+(44, 'Fulah', 'ff', '2018-06-22 11:00:00', NULL),
+(45, 'Finnish', 'fi', '2018-06-22 11:00:00', NULL),
+(46, 'Fijian', 'fj', '2018-06-22 11:00:00', NULL),
+(47, 'Faroese', 'fo', '2018-06-22 11:00:00', NULL),
+(48, 'French', 'fr', '2018-06-22 11:00:00', NULL),
+(49, 'Western Frisian', 'fy', '2018-06-22 11:00:00', NULL),
+(50, 'Irish', 'ga', '2018-06-22 11:00:00', NULL),
+(51, 'Scottish Gaelic', 'gd', '2018-06-22 11:00:00', NULL),
+(52, 'Galician', 'gl', '2018-06-22 11:00:00', NULL),
+(53, 'Guarani', 'gn', '2018-06-22 11:00:00', NULL),
+(54, 'Gujarati', 'gu', '2018-06-22 11:00:00', NULL),
+(55, 'Manx', 'gv', '2018-06-22 11:00:00', NULL),
+(56, 'Hausa', 'ha', '2018-06-22 11:00:00', NULL),
+(57, 'Hebrew', 'he', '2018-06-22 11:00:00', NULL),
+(58, 'Hindi', 'hi', '2018-06-22 11:00:00', NULL),
+(59, 'Hiri Motu', 'ho', '2018-06-22 11:00:00', NULL),
+(60, 'Croatian', 'hr', '2018-06-22 11:00:00', NULL),
+(61, 'Haitian', 'ht', '2018-06-22 11:00:00', NULL),
+(62, 'Hungarian', 'hu', '2018-06-22 11:00:00', NULL),
+(63, 'Armenian', 'hy', '2018-06-22 11:00:00', NULL),
+(64, 'Herero', 'hz', '2018-06-22 11:00:00', NULL),
+(65, 'Interlingua', 'ia', '2018-06-22 11:00:00', NULL),
+(66, 'Indonesian', 'id', '2018-06-22 11:00:00', NULL),
+(67, 'Interlingue', 'ie', '2018-06-22 11:00:00', NULL),
+(68, 'Igbo', 'ig', '2018-06-22 11:00:00', NULL),
+(69, 'Sichuan Yi', 'ii', '2018-06-22 11:00:00', NULL),
+(70, 'Inupiaq', 'ik', '2018-06-22 11:00:00', NULL),
+(71, 'Ido', 'io', '2018-06-22 11:00:00', NULL),
+(72, 'Icelandic', 'is', '2018-06-22 11:00:00', NULL),
+(73, 'Italian', 'it', '2018-06-22 11:00:00', NULL),
+(74, 'Inuktitut', 'iu', '2018-06-22 11:00:00', NULL),
+(75, 'Japanese', 'ja', '2018-06-22 11:00:00', NULL),
+(76, 'Javanese', 'jv', '2018-06-22 11:00:00', NULL),
+(77, 'Georgian', 'ka', '2018-06-22 11:00:00', NULL),
+(78, 'Kongo', 'kg', '2018-06-22 11:00:00', NULL),
+(79, 'Kikuyu', 'ki', '2018-06-22 11:00:00', NULL),
+(80, 'Kwanyama', 'kj', '2018-06-22 11:00:00', NULL),
+(81, 'Kazakh', 'kk', '2018-06-22 11:00:00', NULL),
+(82, 'Kalaallisut', 'kl', '2018-06-22 11:00:00', NULL),
+(83, 'Khmer', 'km', '2018-06-22 11:00:00', NULL),
+(84, 'Kannada', 'kn', '2018-06-22 11:00:00', NULL),
+(85, 'Korean', 'ko', '2018-06-22 11:00:00', NULL),
+(86, 'Kanuri', 'kr', '2018-06-22 11:00:00', NULL),
+(87, 'Kashmiri', 'ks', '2018-06-22 11:00:00', NULL),
+(88, 'Kurdish', 'ku', '2018-06-22 11:00:00', NULL),
+(89, 'Komi', 'kv', '2018-06-22 11:00:00', NULL),
+(90, 'Cornish', 'kw', '2018-06-22 11:00:00', NULL),
+(91, 'Kirghiz', 'ky', '2018-06-22 11:00:00', NULL),
+(92, 'Latin', 'la', '2018-06-22 11:00:00', NULL),
+(93, 'Luxembourgish', 'lb', '2018-06-22 11:00:00', NULL),
+(94, 'Ganda', 'lg', '2018-06-22 11:00:00', NULL),
+(95, 'Limburgish', 'li', '2018-06-22 11:00:00', NULL),
+(96, 'Lingala', 'ln', '2018-06-22 11:00:00', NULL),
+(97, 'Lao', 'lo', '2018-06-22 11:00:00', NULL),
+(98, 'Lithuanian', 'lt', '2018-06-22 11:00:00', NULL),
+(99, 'Luba-Katanga', 'lu', '2018-06-22 11:00:00', NULL),
+(100, 'Latvian', 'lv', '2018-06-22 11:00:00', NULL),
+(101, 'Malagasy', 'mg', '2018-06-22 11:00:00', NULL),
+(102, 'Marshallese', 'mh', '2018-06-22 11:00:00', NULL),
+(103, 'Māori', 'mi', '2018-06-22 11:00:00', NULL),
+(104, 'Macedonian', 'mk', '2018-06-22 11:00:00', NULL),
+(105, 'Malayalam', 'ml', '2018-06-22 11:00:00', NULL),
+(106, 'Mongolian', 'mn', '2018-06-22 11:00:00', NULL),
+(107, 'Moldavian', 'mo', '2018-06-22 11:00:00', NULL),
+(108, 'Marathi', 'mr', '2018-06-22 11:00:00', NULL),
+(109, 'Malay', 'ms', '2018-06-22 11:00:00', NULL),
+(110, 'Maltese', 'mt', '2018-06-22 11:00:00', NULL),
+(111, 'Burmese', 'my', '2018-06-22 11:00:00', NULL),
+(112, 'Nauru', 'na', '2018-06-22 11:00:00', NULL),
+(113, 'Norwegian Bokmål', 'nb', '2018-06-22 11:00:00', NULL),
+(114, 'North Ndebele', 'nd', '2018-06-22 11:00:00', NULL),
+(115, 'Nepali', 'ne', '2018-06-22 11:00:00', NULL),
+(116, 'Ndonga', 'ng', '2018-06-22 11:00:00', NULL),
+(117, 'Dutch', 'nl', '2018-06-22 11:00:00', NULL),
+(118, 'Norwegian Nynorsk', 'nn', '2018-06-22 11:00:00', NULL),
+(119, 'Norwegian', 'no', '2018-06-22 11:00:00', NULL),
+(120, 'South Ndebele', 'nr', '2018-06-22 11:00:00', NULL),
+(121, 'Navajo', 'nv', '2018-06-22 11:00:00', NULL),
+(122, 'Chichewa', 'ny', '2018-06-22 11:00:00', NULL),
+(123, 'Occitan', 'oc', '2018-06-22 11:00:00', NULL),
+(124, 'Ojibwa', 'oj', '2018-06-22 11:00:00', NULL),
+(125, 'Oromo', 'om', '2018-06-22 11:00:00', NULL),
+(126, 'Oriya', 'or', '2018-06-22 11:00:00', NULL),
+(127, 'Ossetian', 'os', '2018-06-22 11:00:00', NULL),
+(128, 'Panjabi', 'pa', '2018-06-22 11:00:00', NULL),
+(129, 'Pāli', 'pi', '2018-06-22 11:00:00', NULL),
+(130, 'Polish', 'pl', '2018-06-22 11:00:00', NULL),
+(131, 'Pashto', 'ps', '2018-06-22 11:00:00', NULL),
+(132, 'Portuguese', 'pt', '2018-06-22 11:00:00', NULL),
+(133, 'Quechua', 'qu', '2018-06-22 11:00:00', NULL),
+(134, 'Reunionese', 'rc', '2018-06-22 11:00:00', NULL),
+(135, 'Romansh', 'rm', '2018-06-22 11:00:00', NULL),
+(136, 'Kirundi', 'rn', '2018-06-22 11:00:00', NULL),
+(137, 'Romanian', 'ro', '2018-06-22 11:00:00', NULL),
+(138, 'Russian', 'ru', '2018-06-22 11:00:00', NULL),
+(139, 'Kinyarwanda', 'rw', '2018-06-22 11:00:00', NULL),
+(140, 'Sanskrit', 'sa', '2018-06-22 11:00:00', NULL),
+(141, 'Sardinian', 'sc', '2018-06-22 11:00:00', NULL),
+(142, 'Sindhi', 'sd', '2018-06-22 11:00:00', NULL),
+(143, 'Northern Sami', 'se', '2018-06-22 11:00:00', NULL),
+(144, 'Sango', 'sg', '2018-06-22 11:00:00', NULL),
+(145, 'Serbo-Croatian', 'sh', '2018-06-22 11:00:00', NULL),
+(146, 'Sinhalese', 'si', '2018-06-22 11:00:00', NULL),
+(147, 'Slovak', 'sk', '2018-06-22 11:00:00', NULL),
+(148, 'Slovenian', 'sl', '2018-06-22 11:00:00', NULL),
+(149, 'Samoan', 'sm', '2018-06-22 11:00:00', NULL),
+(150, 'Shona', 'sn', '2018-06-22 11:00:00', NULL),
+(151, 'Somali', 'so', '2018-06-22 11:00:00', NULL),
+(152, 'Albanian', 'sq', '2018-06-22 11:00:00', NULL),
+(153, 'Serbian', 'sr', '2018-06-22 11:00:00', NULL),
+(154, 'Swati', 'ss', '2018-06-22 11:00:00', NULL),
+(155, 'Sotho', 'st', '2018-06-22 11:00:00', NULL),
+(156, 'Sundanese', 'su', '2018-06-22 11:00:00', NULL),
+(157, 'Swedish', 'sv', '2018-06-22 11:00:00', NULL),
+(158, 'Swahili', 'sw', '2018-06-22 11:00:00', NULL),
+(159, 'Tamil', 'ta', '2018-06-22 11:00:00', NULL),
+(160, 'Telugu', 'te', '2018-06-22 11:00:00', NULL),
+(161, 'Tajik', 'tg', '2018-06-22 11:00:00', NULL),
+(162, 'Thai', 'th', '2018-06-22 11:00:00', NULL),
+(163, 'Tigrinya', 'ti', '2018-06-22 11:00:00', NULL),
+(164, 'Turkmen', 'tk', '2018-06-22 11:00:00', NULL),
+(165, 'Tagalog', 'tl', '2018-06-22 11:00:00', NULL),
+(166, 'Tswana', 'tn', '2018-06-22 11:00:00', NULL),
+(167, 'Tonga', 'to', '2018-06-22 11:00:00', NULL),
+(168, 'Turkish', 'tr', '2018-06-22 11:00:00', NULL),
+(169, 'Tsonga', 'ts', '2018-06-22 11:00:00', NULL),
+(170, 'Tatar', 'tt', '2018-06-22 11:00:00', NULL),
+(171, 'Twi', 'tw', '2018-06-22 11:00:00', NULL),
+(172, 'Tahitian', 'ty', '2018-06-22 11:00:00', NULL),
+(173, 'Uighur', 'ug', '2018-06-22 11:00:00', NULL),
+(174, 'Ukrainian', 'uk', '2018-06-22 11:00:00', NULL),
+(175, 'Urdu', 'ur', '2018-06-22 11:00:00', NULL),
+(176, 'Uzbek', 'uz', '2018-06-22 11:00:00', NULL),
+(177, 'Venda', 've', '2018-06-22 11:00:00', NULL),
+(178, 'Viêt Namese', 'vi', '2018-06-22 11:00:00', NULL),
+(179, 'Volapük', 'vo', '2018-06-22 11:00:00', NULL),
+(180, 'Walloon', 'wa', '2018-06-22 11:00:00', NULL),
+(181, 'Wolof', 'wo', '2018-06-22 11:00:00', NULL),
+(182, 'Xhosa', 'xh', '2018-06-22 11:00:00', NULL),
+(183, 'Yiddish', 'yi', '2018-06-22 11:00:00', NULL),
+(184, 'Yoruba', 'yo', '2018-06-22 11:00:00', NULL),
+(185, 'Zhuang', 'za', '2018-06-22 11:00:00', NULL),
+(186, 'Chinese', 'zh', '2018-06-22 11:00:00', NULL),
+(187, 'Zulu', 'zu', '2018-06-22 11:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,14 +318,13 @@ CREATE TABLE IF NOT EXISTS `image` (
 -- Table structure for table `page`
 --
 
-CREATE TABLE IF NOT EXISTS `page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `page` (
+  `id` int(11) NOT NULL,
   `titrePage` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `contenu` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `page`
@@ -149,14 +350,12 @@ INSERT INTO `page` (`id`, `titrePage`, `contenu`, `dateCreation`, `dateModificat
 -- Table structure for table `reservation`
 --
 
-CREATE TABLE IF NOT EXISTS `reservation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `reservation` (
+  `id` int(11) NOT NULL,
   `activite_id` int(11) NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_42C849559B0F88B1` (`activite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -164,13 +363,33 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 -- Table structure for table `reservation_user`
 --
 
-CREATE TABLE IF NOT EXISTS `reservation_user` (
+CREATE TABLE `reservation_user` (
   `reservation_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`reservation_id`,`user_id`),
-  KEY `IDX_9BAA1B21B83297E7` (`reservation_id`),
-  KEY `IDX_9BAA1B21A76ED395` (`user_id`)
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_langue`
+--
+
+CREATE TABLE `user_langue` (
+  `user_id` int(11) NOT NULL,
+  `langue_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `user_langue`
+--
+
+INSERT INTO `user_langue` (`user_id`, `langue_id`) VALUES
+(1, 38),
+(1, 48),
+(2, 33),
+(2, 38),
+(2, 48),
+(3, 48);
 
 -- --------------------------------------------------------
 
@@ -178,8 +397,8 @@ CREATE TABLE IF NOT EXISTS `reservation_user` (
 -- Table structure for table `utilisateurs`
 --
 
-CREATE TABLE IF NOT EXISTS `utilisateurs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `utilisateurs` (
+  `id` int(11) NOT NULL,
   `username` varchar(180) COLLATE utf8_unicode_ci NOT NULL,
   `username_canonical` varchar(180) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(180) COLLATE utf8_unicode_ci NOT NULL,
@@ -199,22 +418,148 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `privilege` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `urlPhoto` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_497B315E92FC23A8` (`username_canonical`),
-  UNIQUE KEY `UNIQ_497B315EA0D96FBF` (`email_canonical`),
-  UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `dateModification` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `genre`, `nomcomplet`, `age`, `photo`, `typeutilisateur`, `privilege`, `urlPhoto`, `dateCreation`, `dateModification`) VALUES
-(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$ekPJxYFbMpuK0Z0JQOubpep8Td7v3hOnBFTnm8hmVgWfqT1NrTlLO', '2018-06-17 22:05:03', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', 26, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-06-17 22:05:03'),
-(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$IBf047.BuEHHcIOg9Xmkd.KQ9r3HgnX7S3GhbEj471/w1GRdDncj6', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', 32, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-17 14:40:33'),
-(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$.jfi77mxTEIuudOHxiYlKuoqFvhmYgQuVhEnvYnTY5bg5WO7eYf5u', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', 31, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-18 04:54:39');
+(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$IAB5PagRHNjhgCOsG/1TEO/q7H7Vb5.nA6KCaR.MSAVFPJs7V8.g2', '2018-06-22 10:02:14', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', 26, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-06-22 13:09:39'),
+(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', 32, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22'),
+(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$fQcM44IYpir1I5KLdPJhNeyMlzIQMKgXwIDw0JerAgW9LK6pycYEC', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', 31, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-22 13:31:49');
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `activite`
+--
+ALTER TABLE `activite`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_B875551591F8D062` (`image_principale_id`),
+  ADD KEY `IDX_B8755515BCF5E72D` (`categorie_id`),
+  ADD KEY `IDX_B875551560BB6FE6` (`auteur_id`);
+
+--
+-- Indexes for table `categorie`
+--
+ALTER TABLE `categorie`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `discussion`
+--
+ALTER TABLE `discussion`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_C0B9F90F60BB6FE6` (`auteur_id`),
+  ADD KEY `IDX_C0B9F90F9B0F88B1` (`activite_id`);
+
+--
+-- Indexes for table `discussion_user`
+--
+ALTER TABLE `discussion_user`
+  ADD PRIMARY KEY (`discussion_id`,`user_id`),
+  ADD KEY `IDX_A8FD7A7F1ADED311` (`discussion_id`),
+  ADD KEY `IDX_A8FD7A7FA76ED395` (`user_id`);
+
+--
+-- Indexes for table `image`
+--
+ALTER TABLE `image`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_C53D045F9B0F88B1` (`activite_id`);
+
+--
+-- Indexes for table `langue`
+--
+ALTER TABLE `langue`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `page`
+--
+ALTER TABLE `page`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_42C849559B0F88B1` (`activite_id`);
+
+--
+-- Indexes for table `reservation_user`
+--
+ALTER TABLE `reservation_user`
+  ADD PRIMARY KEY (`reservation_id`,`user_id`),
+  ADD KEY `IDX_9BAA1B21B83297E7` (`reservation_id`),
+  ADD KEY `IDX_9BAA1B21A76ED395` (`user_id`);
+
+--
+-- Indexes for table `user_langue`
+--
+ALTER TABLE `user_langue`
+  ADD PRIMARY KEY (`user_id`,`langue_id`),
+  ADD KEY `IDX_F6056EB3A76ED395` (`user_id`),
+  ADD KEY `IDX_F6056EB32AADBACD` (`langue_id`);
+
+--
+-- Indexes for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_497B315E92FC23A8` (`username_canonical`),
+  ADD UNIQUE KEY `UNIQ_497B315EA0D96FBF` (`email_canonical`),
+  ADD UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `activite`
+--
+ALTER TABLE `activite`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `categorie`
+--
+ALTER TABLE `categorie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `discussion`
+--
+ALTER TABLE `discussion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `image`
+--
+ALTER TABLE `image`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `langue`
+--
+ALTER TABLE `langue`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+--
+-- AUTO_INCREMENT for table `page`
+--
+ALTER TABLE `page`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
@@ -259,6 +604,13 @@ ALTER TABLE `reservation`
 ALTER TABLE `reservation_user`
   ADD CONSTRAINT `FK_9BAA1B21A76ED395` FOREIGN KEY (`user_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_9BAA1B21B83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_langue`
+--
+ALTER TABLE `user_langue`
+  ADD CONSTRAINT `FK_F6056EB32AADBACD` FOREIGN KEY (`langue_id`) REFERENCES `langue` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_F6056EB3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
