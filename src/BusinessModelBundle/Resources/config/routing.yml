@@ -1,3 +1,11 @@
 business_model_homepage:
     path:     /hello/{name}
     defaults: { _controller: BusinessModelBundle:Default:index }
+
+business_model_login:
+    path:     /verifierLogin
+    defaults: { _controller: BusinessModelBundle:User:login }
+
+business_model_register:
+    path:     /verifierInscription
+    defaults: { _controller: BusinessModelBundle:User:register }

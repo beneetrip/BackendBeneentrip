@@ -88,6 +88,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 
 		/**
+		 * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Image", cascade={"persist", "remove"})
+		 * @ORM\JoinColumn(nullable=false)
+		 */
+		private $imagePrincipale;
+
+
+		/**
 		 * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Image",cascade={"persist", "remove"}, mappedBy="activite")
 		 */
 		private $images;
@@ -460,5 +467,29 @@ use Doctrine\ORM\Mapping as ORM;
     public function getAuteur()
     {
         return $this->auteur;
+    }
+
+    /**
+     * Set imagePrincipale
+     *
+     * @param \BusinessModelBundle\Entity\Image $imagePrincipale
+     *
+     * @return Activite
+     */
+    public function setImagePrincipale(\BusinessModelBundle\Entity\Image $imagePrincipale)
+    {
+        $this->imagePrincipale = $imagePrincipale;
+
+        return $this;
+    }
+
+    /**
+     * Get imagePrincipale
+     *
+     * @return \BusinessModelBundle\Entity\Image
+     */
+    public function getImagePrincipale()
+    {
+        return $this->imagePrincipale;
     }
 }

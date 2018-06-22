@@ -28,6 +28,86 @@ class ActivityController extends Controller
 		
     }
 	
+	public function showAction($id)
+    {
+		
+		$activiteId = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
+
+		$result['id'] = $activiteId->getId();
+		$result['libelle'] = $activiteId->getLibelle();
+		$result['description'] = $activiteId->getDescription();
+		
+		if(count($activiteId->getImages()) != 0 )
+		{
+			$result['image'] = $activiteId->getImages()[0]->getUrl();
+		}
+		else
+		{
+			$result['image'] = "";
+		} 
+		
+		$result['images'] = array();
+		
+		foreach( $activiteId->getImages() as $imgelem ){
+			$result['images'][] =  $imgelem->getUrl();
+		} 
+		
+		
+		$response = new Response(json_encode($result));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response; 
+		
+    }
+	
+	public function listAction()
+    {
+		
+		
+		$result = array();
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
+		
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['image'] = $elem->getImages()[0]->getUrl();
+			
+			if( count($elem->getImages()) != 0 )
+			{
+				$row['image'] = $elem->getImages()[0]->getUrl();
+			}
+			else
+			{
+				$row['image'] = "";
+			}
+			
+			/* foreach($elem->getImages() as $imgelem){
+				$imgrow['url'] = $imgelem->getUrl();
+				$row['images'] = $imgrow;
+			} */
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+			
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response; 
+		
+    }
+	
 	public function uploadAction()
     {
 		

@@ -34,6 +34,12 @@ prendreUtilisateur:
     requirements:
               id: \d+
               
+prendreUtilisateurPhoto:
+    path:     /admin/utilisateur/photo/{id}
+    defaults: { _controller: AdminBundle:User:prendrePhoto }
+    requirements:
+              id: \d+              
+              
 modifierUtilisateur:
     path:     /admin/utilisateur/modifier/{id}
     defaults: { _controller: AdminBundle:User:modifier }

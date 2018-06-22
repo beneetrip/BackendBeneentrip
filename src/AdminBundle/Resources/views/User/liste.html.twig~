@@ -2,14 +2,16 @@
 
 {% block page %}
 	<li>
-		<a href="#">Reservation</a>
+		<a href="#">Utilisateurs</a>
 	</li>
 {% endblock %}
 
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 {% endblock %}
@@ -37,7 +39,7 @@
 		<td>{{ user.typeUtilisateur }}</td>
 		<td>
 {% if user.photo is not null %} 
-<img src="{{ asset(user.urlPhoto) }}" height="50" width="50" />		
+<img src="{{ asset(user.urlPhoto) }}" height="50" width="50" style="border-radius: 50%;" />		
 {% endif %}		
 		</td>
 		<td class="center">

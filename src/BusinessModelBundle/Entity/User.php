@@ -96,13 +96,13 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="user")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Discussion",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $discussions;
       
       
       /**
-        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="user")
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $activites;
     
@@ -495,4 +495,24 @@ use Doctrine\ORM\Mapping as ORM;
     {
         return $this->activites;
     }
+    
+    //fonction permettant d'hydrater cad remplir un objet de la classe a partir des donnees d'un tableau
+	 public function hydrate(array $Tabdonnees){
+
+		//on parcourt notre Tableau bidimensionnel cle-valeur cad qu'on a un tableau de donnees tel que Tabdonnees[key]=value 
+		foreach ($Tabdonnees as $key => $value){
+			// On récupère le nom du mutateur correspondant à l'attribut: Les methodes ont pour nom setNomdeLattribut(avec la premiere lettre de l'attribut en majuscule)
+			$method = 'set'.ucfirst($key);
+
+			// Si le mutateur correspondant existe.
+			if (method_exists($this, $method))
+			{
+			// On appelle le mutateur.
+			$this->$method($value);
+			}
+			
+		}
+
+	}
+
 }

@@ -51,7 +51,9 @@
             <div class="box-content">
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 					{% block contentForm %}
@@ -63,7 +65,10 @@
 					</div>
 					<div class="form-group">
 					{{ form_label(form.fichier) }}
-					{{ form_widget(form.fichier) }}
+					{{ form_widget(form.fichier, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserImage();'} }) }}
+					<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_image_fichier').click();" 
+					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
+					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>					
 					</div>
 					
      <div class="form-group">
@@ -283,6 +288,28 @@
 	
 </script>
 
+<script>
+//fonction permettant d'un previsualiser un fichier uploade on l'utilise pour les images des profils pour utilisateurs      
+function  previsualiserImage(){
+	
+	var file=document.getElementById("businessmodelbundle_image_fichier").files[0];
+	var fr=new FileReader();
+	var preview=document.getElementById("zoneImage");
+	fr.onprogress=function(){
+		preview.innerHTML='Chargement...';
+	}
+	fr.onerror=function(){
+		preview.innerHTML='Oups...';
+	}
+	fr.onload=function(){
+		preview.src=fr.result;
+		//preview.appendChild(document.createTextNode(fr.result));
+		}
+		//fr.readAsText(file);
+		fr.readAsDataURL(file);
+
+}
+</script>
 
 
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}

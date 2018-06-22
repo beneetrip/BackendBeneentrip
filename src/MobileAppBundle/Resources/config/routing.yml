@@ -2,6 +2,14 @@ mobile_app_activity_addpage:
     path:     /mobapp/activity/add
     defaults: { _controller: MobileAppBundle:Activity:add }
 
+mobile_app_activity_lastpage:
+    path:     /mobapp/activity/list
+    defaults: { _controller: MobileAppBundle:Activity:list }
+
+mobile_app_activity_page:
+    path:     /mobapp/activity/{id}
+    defaults: { _controller: MobileAppBundle:Activity:show }
+
 mobile_app_activity_uploadpage:
     path:     /mobapp/activity/upload
     defaults: { _controller: MobileAppBundle:Activity:upload }
@@ -9,3 +17,11 @@ mobile_app_activity_uploadpage:
 mobile_app_user_loginpage:
     path:     /mobapp/user/login
     defaults: { _controller: MobileAppBundle:User:login }
+
+mobile_app_user_registerpage:
+    path:     /mobapp/user/register
+    defaults: { _controller: MobileAppBundle:User:register }
+
+mobile_app_user_updatepage:
+    path:     /mobapp/user/update
+    defaults: { _controller: MobileAppBundle:User:update }

@@ -39,8 +39,11 @@ class ActiviteController extends Controller
 		if($form->isValid()) {
 		//On lie notre activite a son Auteur
 		$activite->setAuteur($user);	
-		// On l'enregistre notre objet $user dans la base de
+		// On l'enregistre notre objet $activite dans la base de
 		$em = $this->getDoctrine()->getManager();
+		//On enregistre d'abord l'image Principale avant l'activite
+      $em->persist($activite->getImagePrincipale());
+      $em->flush();
 		$em->persist($activite);
 		$em->flush();
 		
@@ -114,6 +117,8 @@ class ActiviteController extends Controller
     {
     	$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);     
 		$listeImages = $activiteId->getImages();
+		//On ajoute aussi l'image principale
+		$listeImages[] = $activiteId->getImagePrincipale();
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
     }
