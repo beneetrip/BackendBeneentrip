@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 22, 2018 at 01:41 PM
+-- Generation Time: Jun 22, 2018 at 04:03 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 7.0.5
 
@@ -39,7 +39,8 @@ CREATE TABLE `activite` (
   `prixIndividu` double NOT NULL,
   `description` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL
+  `dateModification` datetime DEFAULT NULL,
+  `nbVues` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

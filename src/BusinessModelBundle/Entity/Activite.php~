@@ -551,7 +551,7 @@ use Doctrine\ORM\Mapping as ORM;
     
     //fonction permettant de retourner la date de deroulement de l'Activite en clair
     public function getDateEnClair(){
-    $formatter = new IntlDateFormatter('fr_FR',IntlDateFormatter::LONG,IntlDateFormatter::NONE,'Europe/Paris',IntlDateFormatter::GREGORIAN );
-	 return $formatter->format(new DateTime($this->getDate()));
+    $formatter = new \IntlDateFormatter('fr_FR',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'Europe/Paris',\IntlDateFormatter::GREGORIAN );
+	 return $formatter->format(new \DateTime(date_format($this->getDate(),'Y/m/d')));
     }
 }
