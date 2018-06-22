@@ -504,6 +504,42 @@ use Doctrine\ORM\Mapping as ORM;
         return $this->activites;
     }
     
+  
+    /**
+     * Add langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     *
+     * @return User
+     */
+    public function addLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues->removeElement($langue);
+    }
+
+    /**
+     * Get langues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangues()
+    {
+        return $this->langues;
+    }
+    
+    
     //fonction permettant d'hydrater cad remplir un objet de la classe a partir des donnees d'un tableau
 	 public function hydrate(array $Tabdonnees){
 
@@ -521,5 +557,15 @@ use Doctrine\ORM\Mapping as ORM;
 	}
 
 	}
+	
+	
+   //fonction permettant de renvoyer la date en claire d'une activite de l'utilisateur etant donne son id
+   public function getDateActivite($idActivite){
+	
+	
 
+	}	
+	
+	
+	
 }

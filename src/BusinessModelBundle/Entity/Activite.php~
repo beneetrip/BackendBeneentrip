@@ -78,6 +78,14 @@ use Doctrine\ORM\Mapping as ORM;
 		* @ORM\Column(name="description", type="text")
 		*/
 		private $description;
+		
+		
+		/**
+		* @var text $nbVues
+		*
+		* @ORM\Column(name="nbVues", type="integer", options={"default":0})
+		*/
+		private $nbVues=0;
 
 
 		/**
@@ -515,5 +523,35 @@ use Doctrine\ORM\Mapping as ORM;
     public function removeCategorie(\BusinessModelBundle\Entity\Categorie $categorie)
     {
         $this->categorie->removeElement($categorie);
+    }
+
+    /**
+     * Set nbVues
+     *
+     * @param integer $nbVues
+     *
+     * @return Activite
+     */
+    public function setNbVues($nbVues)
+    {
+        $this->nbVues = $nbVues;
+
+        return $this;
+    }
+
+    /**
+     * Get nbVues
+     *
+     * @return integer
+     */
+    public function getNbVues()
+    {
+        return $this->nbVues;
+    }
+    
+    //fonction permettant de retourner la date de deroulement de l'Activite en clair
+    public function getDateEnClair(){
+    $formatter = new IntlDateFormatter('fr_FR',IntlDateFormatter::LONG,IntlDateFormatter::NONE,'Europe/Paris',IntlDateFormatter::GREGORIAN );
+	 return $formatter->format(new DateTime($this->getDate()));
     }
 }
