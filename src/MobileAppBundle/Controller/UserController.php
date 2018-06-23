@@ -226,7 +226,7 @@ class UserController extends Controller
 				
 				if($userByUsername->getId() == $id)
 				{
-					$user = $userByEmail;
+					$user = $userByUsername;
 					$user->setEmail($request->email);
 					$user->setNomComplet($request->name);
 					$user->setUsername($request->username);

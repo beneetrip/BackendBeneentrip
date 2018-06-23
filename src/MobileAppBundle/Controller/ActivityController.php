@@ -30,9 +30,13 @@ class ActivityController extends Controller
 	
 	public function showAction($id)
     {
+		$em = $this->getDoctrine()->getManager();
 		
-		$activiteId = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
-
+		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
+		
+		$activiteId->setNbVues( $activiteId->getNbVues() + 1 );
+		
+		
 		$result['id'] = $activiteId->getId();
 		$result['libelle'] = $activiteId->getLibelle();
 		$result['description'] = $activiteId->getDescription();
@@ -63,6 +67,9 @@ class ActivityController extends Controller
 		
 		$response = new Response(json_encode($result));
 		
+		
+		$em->flush();
+		
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');
@@ -77,23 +84,32 @@ class ActivityController extends Controller
 		
 		$result = array();
 		
-		$nbrResult = 10;
+		$nbrResult = 7;
+		
 		$debutresultat = 0;
 		
-		if($page > 0 )
-		{
+		
 			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif
-		}
 		
-		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
 		
-		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
 		
 		foreach($listeActivites as $elem){
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
 			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
 			$row['image'] = $elem->getImages()[0]->getUrl();
 			
 			if( count($elem->getImages()) != 0 )
