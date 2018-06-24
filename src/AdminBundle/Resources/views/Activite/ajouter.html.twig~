@@ -70,11 +70,11 @@
 					</div>
 					<div class="form-group">
 					{{ form_label(form.date) }}
-					{{ form_widget(form.date) }}
+					{{ form_widget(form.date, { 'attr': {'class': 'datepicker form-control'}}) }}
 					</div>
 					<div class="form-group">
 					{{ form_label(form.heure) }}
-					{{ form_widget(form.heure) }}
+					{{ form_widget(form.heure, { 'attr': {'class': 'timepicker form-control'}}) }}
 					</div>
 					<div class="form-group">
 					{{ form_label(form.nbParticipants) }}
@@ -341,6 +341,9 @@
 {# Voici le script en question pour ajouter les images a une activite: #}
 <script type="text/javascript">
 $(document).ready(function() {
+//On affiche bien nos dates et heures avec des beaux widgets
+$('.datepicker').datepicker();
+$('.timepicker').timepicker({showMeridian: false});//false pour activer le mode 24h 
 //On formatte les champs pour l'Image principale
 $('#businessmodelbundle_activite_imagePrincipale_nom').attr('class','form-control');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('accept','.jpg, .jpeg, .png');
@@ -348,21 +351,22 @@ $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('style','display
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('onchange',"previsualiserImage('businessmodelbundle_activite_imagePrincipale_fichier','zoneImage');");
 $('#divImagePrincipale').children('label').first().html('<legend>Image Principale</legend>');
 document.getElementById('divImagePrincipale').innerHTML+=`
-{% if activite.imagePrincipale is not defined or activite.imagePrincipale.url is null %} 										
 <br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
-					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>
-{% else %}	
-<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
-					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="{{ asset(activite.imagePrincipale.url) }}" /></center>
-{% endif %}`;	
-
+					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
+					pointer; height: 400px; width: 400px;" 
+{% if activite.imagePrincipale is not defined or activite.imagePrincipale.url is null %} 															
+					src="{{ asset('bundles/admin/img/image.jpg') }}" 
+{% else %}
+					src="{{ asset(activite.imagePrincipale.url) }}"
+{% endif %}/></center>`;							
+					
 // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
 var $container = $('div#businessmodelbundle_activite_images');
+//On recupere le div des images et on va ajouter notre bouton ajout pour qu'il apparaisse toujours a la fin des images qu'on ajoute
+var $divImages= $('div#divImages');
 // On ajoute un lien pour ajouter une nouvelle catégorie
-var $lienAjout = $('<a href="#" id="ajout_image" class="btn btn-default">Ajouter autre Image</a><br/><br/>');
-$container.append($lienAjout);
+var $lienAjout = $('<center><br/><br/><a href="#" id="ajout_image" class="btn btn-primary">Ajouter autre Image</a><br/><br/></center>');
+$divImages.append($lienAjout);
 // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
 $lienAjout.click(function(e) {
 ajouterImage($container);
@@ -385,8 +389,8 @@ var elt=$('#divUrls').children('span').eq($(this).index()).html();
 
 $(this).html('<fieldset>'+$(this).html()+`
 <center><img id="img`+($(this).index())+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+($(this).index())+`_fichier').click();" 
-					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="`+elt+`" /></center></fieldset>`
+					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
+					pointer; height: 400px; width: 400px;" src="`+elt+`" /></center></fieldset>`
 );
 
 //Et on ajoute l'attribut class=form-control a tous les input type text
@@ -412,8 +416,8 @@ function ajouterImage($container) {
 // Et on decore un peu avec des fieldsets
 var $prototype = $('<fieldset>'+$container.attr('data-prototype').replace(/__name__label__/g, '<legend>Image numero ' + (index+1)+'</legend>').replace(/__name__/g, index)
 +`<center><img id="img`+(index)+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+(index)+`_fichier').click();" 
-					style="margin-left: 0%;background: #fff; height: 300px;width: 300px;cursor: 
-					pointer;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
+					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
+					pointer; height: 400px; width: 400px;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
 `
 +'</fieldset>');
 //Et on ajoute l'attribut class=form-control a tous les input type text
@@ -453,29 +457,10 @@ return false;
 <script type="text/javascript">
 				CKEDITOR.replace( 'businessmodelbundle_activite_description' );
 			</script>
-			
-<script>
-//fonction permettant d'un previsualiser un fichier uploade on l'utilise pour les images des profils pour utilisateurs      
-function  previsualiserImage(idElt,idImg){
-	
-	var file=document.getElementById(""+idElt).files[0];
-	var fr=new FileReader();
-	var preview=document.getElementById(""+idImg);
-	fr.onprogress=function(){
-		preview.innerHTML='Chargement...';
-	}
-	fr.onerror=function(){
-		preview.innerHTML='Oups...';
-	}
-	fr.onload=function(){
-		preview.src=fr.result;
-		//preview.appendChild(document.createTextNode(fr.result));
-		}
-		//fr.readAsText(file);
-		fr.readAsDataURL(file);
 
-}
-</script>			
+
+			
+						
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}
 {% endblock %}
 

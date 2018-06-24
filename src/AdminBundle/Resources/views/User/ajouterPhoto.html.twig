@@ -53,6 +53,18 @@
 
 					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : user.id|default('0') })}) }}
 					
+					
+					<div class="form-group">
+					{{ form_label(form.fichierPhoto) }}
+					{{ form_widget(form.fichierPhoto, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': "previsualiserImage('businessmodelbundle_user_fichierPhoto','zoneAvatar');"} }) }}
+					<center><img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
+					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 200px;width: 200px;cursor: pointer;border: 5px solid black;" 
+					{% if user is not defined or user.photo is null %} 									
+					src="{{ asset('bundles/admin/img/noavatar.png') }}"
+					{% else %}
+					src="{{ asset(user.urlPhoto) }}" 
+					{% endif %}	/></center>						
+					</div>					
 							
 					<div class="form-group">
 					{{ form_widget(form.nomComplet, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
@@ -83,20 +95,11 @@
 					
 					<div class="form-group">
 					{{ form_widget(form.enabled, { 'attr': {'hidden': 'true'} }) }}
-					</div>					
-					
-               <div class="form-group">
-					{{ form_label(form.fichierPhoto) }}
-					{{ form_widget(form.fichierPhoto, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': 'previsualiserAvatar();'} }) }}
-				 	{% if user is not defined or user.photo is null %} 					
-					<img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
-					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 100px;width: 100px;cursor: 
-					pointer;" src="{{ asset('bundles/admin/img/noavatar.png') }}" />
-					{% else %}
-					<img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
-					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 100px;width: 100px;cursor: 
-					pointer;" src="{{ asset(user.urlPhoto) }}" />
-					{% endif %}	
+					</div>
+										
+					<div class="control-group">
+					<div class="controls" style='display:none;'>
+					{{ form_widget(form.langues, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': '','style': 'display:none;'} }) }}
 					</div>
 					
 					<div class="control-group">
@@ -340,30 +343,6 @@ $($container.find(':input')[i]).attr('class','form-control');
 }
 });
 </script>
-
-<script>
-//fonction permettant d'un previsualiser un fichier uploade on l'utilise pour les images des profils pour utilisateurs      
-function  previsualiserAvatar(){
-	
-	var file=document.getElementById("businessmodelbundle_user_fichierPhoto").files[0];
-	var fr=new FileReader();
-	var preview=document.getElementById("zoneAvatar");
-	fr.onprogress=function(){
-		preview.innerHTML='Chargement...';
-	}
-	fr.onerror=function(){
-		preview.innerHTML='Oups...';
-	}
-	fr.onload=function(){
-		preview.src=fr.result;
-		//preview.appendChild(document.createTextNode(fr.result));
-		}
-		//fr.readAsText(file);
-		fr.readAsDataURL(file);
-
-}
-</script>
-
 
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}
 {% endblock %}

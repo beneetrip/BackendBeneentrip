@@ -18,8 +18,8 @@ class ActiviteType extends AbstractType
         $builder
             ->add('libelle')
             ->add('lieuDestination')
-            ->add('date')
-            ->add('heure')
+            ->add('date', 'date', array('widget' =>'single_text','format' =>'dd/MM/yyyy'))
+            ->add('heure', 'datetime', array('widget' =>'single_text','format' =>'HH:mm'))
             ->add('nbParticipants')
             ->add('prixIndividu')
             ->add('description')

@@ -119,6 +119,7 @@ use Doctrine\ORM\Mapping as ORM;
     
     
       protected $tempPhoto;
+      
     
 
 	    public function __construct()
@@ -280,6 +281,12 @@ use Doctrine\ORM\Mapping as ORM;
 		// Le nom du fichier est son nom avec son extension
 		$this->photo = $this->fichierPhoto->getClientOriginalName();
 	   $this->urlPhoto = $this->getUploadDir()."/".$this->fichierPhoto->getClientOriginalName();
+	   //On teste si l'id est non null alors on utilise l'id pour le nom de photo sinon on reste  avec le nom original de la photo
+	   if($this->getId()!=null){
+	   //Desormais les photos des utilisateurs seront sauvegardees avec les id des utilisateurs
+		$this->photo = $this->getId().".".$this->fichierPhoto->getClientOriginalExtension();
+	   $this->urlPhoto = $this->getUploadDir()."/".$this->photo;
+	   }
 		}
 	
 		/**
@@ -299,7 +306,6 @@ use Doctrine\ORM\Mapping as ORM;
 		unlink($oldFile);
 		}
 		}
-	
 		// On déplace le fichier envoyé dans le répertoire de notre choix
 		try{
 		$this->fichierPhoto->move($this->getUploadRootDir(), $this->photo);
@@ -331,7 +337,7 @@ use Doctrine\ORM\Mapping as ORM;
 		public function getUploadDir()
 		{
 		// On retourne le chemin relatif du dossier des images uploadees
-		return 'upload_images/users/'.$this->getUsername();
+		return 'upload_images/users';
 		}
 		protected function getUploadRootDir()
 		{
