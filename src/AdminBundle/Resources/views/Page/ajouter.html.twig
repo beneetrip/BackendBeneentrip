@@ -62,10 +62,12 @@
 <div class="form-group">
 					{{ form_label(form.titrePage) }}
 					{{ form_widget(form.titrePage, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.titrePage) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.contenu) }}
 					{{ form_widget(form.contenu, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.contenu) }} 
 					</div>
 					
      <div class="form-group">

@@ -57,6 +57,7 @@
 					<div class="form-group">
 					{{ form_label(form.fichierPhoto) }}
 					{{ form_widget(form.fichierPhoto, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': "previsualiserImage('businessmodelbundle_user_fichierPhoto','zoneAvatar');"} }) }}
+					{{ form_errors(form.fichierPhoto) }} 										
 					<center><img id="zoneAvatar" onclick="document.getElementById('businessmodelbundle_user_fichierPhoto').click();" 
 					style="margin-left: 0%;background: #fff;border-radius: 100%;height: 200px;width: 200px;cursor: pointer;border: 5px solid black;" 
 					{% if user is not defined or user.photo is null %} 									

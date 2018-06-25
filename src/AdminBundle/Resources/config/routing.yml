@@ -183,6 +183,12 @@ modifierReservation:
     requirements:
               id: \d+
 
+voirActiviteReservation:
+    path:     /admin/reservation/{id}/activite
+    defaults: { _controller: AdminBundle:Reservation:voirActivite }
+    requirements:
+              id: \d+
+
 ajouterImage:
     path:     /admin/image/ajouter
     defaults: { _controller: AdminBundle:Image:ajouter }
@@ -240,6 +246,12 @@ prendreDiscussion:
 modifierDiscussion:
     path:     /admin/discussion/modifier/{id}
     defaults: { _controller: AdminBundle:Discussion:modifier }
+    requirements:
+              id: \d+
+
+voirActiviteDiscussion:
+    path:     /admin/discussion/{id}/activite
+    defaults: { _controller: AdminBundle:Discussion:voirActivite }
     requirements:
               id: \d+
 

@@ -5,6 +5,7 @@ namespace BusinessModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
 		
 		/**
 		* @ORM\Table()
@@ -29,6 +30,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 		* @var string $nom
 		*
 		* @ORM\Column(name="nom", type="string", length=255)
+		* @Assert\Length(
+      *      min = 3
+      * )
 		*/
 		private $nom;
 		
@@ -56,6 +60,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 		private $activite;
 		    
 		
+		
+	/**
+     * @Assert\File(
+     *     maxSize = "2M",
+     *     mimeTypes = {"image/png", "image/jpeg", "image/jpg"}
+     * )
+     * @Assert\NotNull()
+     */
 		private $fichier;
 		
 		
@@ -328,4 +340,117 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
     {
         return $this->dateModification;
     }
+    
+    //Cette fonction permet de renvoyer un tableau de dimension de l'image qu'on soit modifie
+    public function modifierImage($img, $largeur, $hauteur) {
+    $dst_w = $largeur;
+    $dst_h = $hauteur;
+     
+     // Lit les dimensions de l'image
+   $src_w = imagesx($img);
+   $src_h = imagesy($img);
+    
+   // Teste les dimensions tenant dans la zone
+   $test_h = round(($dst_w / $src_w) * $src_h);
+   $test_w = round(($dst_h / $src_h) * $src_w);
+    
+   // Si Height final non précisé (0)
+   if(!$dst_h) $dst_h = $test_h;
+    
+   // Sinon si Width final non précisé (0)
+   elseif(!$dst_w) $dst_w = $test_w;
+    
+   // Sinon teste quel redimensionnement tient dans la zone
+   elseif($test_h>$dst_h) $dst_w = $test_w;
+   else $dst_h = $test_h;
+    
+    if($dst_h > 1 && $dst_h < $hauteur){
+        $paddingTop = ceil(($hauteur - $dst_h) / 2);
+    }
+    else{
+        $paddingTop = 0;
+    }
+    $pad = " style=\"margin-top:".$paddingTop."px;\"";
+    
+    $tab = array($dst_w, $dst_h, $pad);
+    return $tab;
+	}
+	
+	//Fonction permettant d'obtenir l'extension de l'image
+	public function getExtension(){
+	$partieFichier = explode(".",$this->getAlt());
+	if(count($partieFichier) > 1){
+	$extension = array_pop($partieFichier);
+	if($extension=="jpg")
+	$extension="jpeg";
+	}
+	else
+	$extension = null;
+	
+	return $extension;	
+	}
+		
+	
+	//Fonction permettant de creer des thumbs de largeur x hauteur comme on veut, le thumb est gardee dans le meme dossier que l'image
+	public function createThumb($largeur, $hauteur){
+	
+	$extension=$this->getExtension();	
+	if($extension==null)
+	return ;
+	
+	$dir=$this->getUploadRootDir();
+	
+	$method1="imagecreatefrom".strtolower($extension);	
+	
+	$img_src = $method1($dir.'/'.$this->getAlt());
+ 
+	$dimension = $this->modifierImage($img_src, $largeur, $hauteur);
+         
+	$name="temp.".$extension; 	
+	
+			// Redimensionner
+        $thumb = imagecreatetruecolor($dimension[0], $dimension[1]) or die('Impossible de creer l\'image de destination pour la miniature');
+         
+        // Les fonctions imagesx et imagesy renvoient la largeur et la hauteur d'une image
+        $largeur_source = imagesx($img_src);
+        $hauteur_source = imagesy($img_src);
+        $largeur_thumb = imagesx($thumb);
+        $hauteur_thumb = imagesy($thumb);
+         
+        // On crée la miniature
+        imagecopyresampled($thumb, $img_src, 0, 0, 0, 0, $largeur_thumb, $hauteur_thumb, $largeur_source, $hauteur_source);
+		 //Puis j'enregistre la miniature, sinon, la suite ne marche pas. j'ai fait trop d'essais
+		 $method2="image".strtolower($extension);	
+       $method2($thumb, $dir.'/'.$name);
+       
+       // =================================
+		// Melange des images
+		// ================================
+         
+        // Ouvertrue de la source redimensionnée et enregistree tout à l'heure
+         
+        $new_img_src = $method1($dir.'/'.$name);
+         
+         
+        // Création de l'image de destination
+         
+        $fond = imagecreatetruecolor($largeur, $hauteur);
+        imagecolorallocate($fond, 0, 0, 0);
+         
+        // Récuperation des nouvelles dimensions
+         
+        $fond_w = imagesx($fond);
+        $fond_h = imagesy($fond);
+         
+        $sample_w = imagesx($new_img_src);
+        $sample_h = imagesy($new_img_src);
+         
+        imagecopymerge($fond, $new_img_src, ($fond_w - $sample_w) /2, ($fond_h - $sample_h) / 2, 0, 0, $fond_w, $fond_h, 100) or die('melange impossible');
+        // On enregistre la nouvelle image "pellicule" sous un nouveau nom
+        $method2($fond, $dir.'/'.$this->getNom().'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension);
+			// Pour finir je supprime la première image que j'ai enregistré.
+        unlink($dir.'/'.$name);
+	}	
+	
+	
 }

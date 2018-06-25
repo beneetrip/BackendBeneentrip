@@ -38,10 +38,12 @@ class CategorieController extends Controller
 		$em->persist($categorie);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Categorie creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterCategorie') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterCategorie') );
+		//return $this->redirect( $this->generateUrl('ajouterCategorie') );
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerCategorie', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -74,7 +76,8 @@ class CategorieController extends Controller
 	 public function modifierAction($id)
     {
 		$categorie= new Categorie();
-		$form = $this->createForm('businessmodelbundle_categorie', $categorie); 
+		$form = $this->createForm('businessmodelbundle_categorie', $categorie);
+		$categorieId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne($id); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -90,10 +93,12 @@ class CategorieController extends Controller
 		$form->bind($request);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Categorie modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterCategorie') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterCategorie') );
+		//return $this->redirect( $this->generateUrl('ajouterCategorie') );
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierCategorie', 'bouton'=>'Modifier','idCategorie' => $id)); 	  	
 	 }
 
 

@@ -55,10 +55,13 @@ class ActiviteController extends Controller
             }
                 $em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Activite creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterActivite') );
 		    }
+		    //var_dump($form->getErrorsAsString());
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterActivite') );
+		//return $this->redirect( $this->generateUrl('ajouterActivite') );
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -93,7 +96,8 @@ class ActiviteController extends Controller
 	 public function modifierAction($id)
     {
 		$activite= new Activite();
-		$form = $this->createForm('businessmodelbundle_activite', $activite); 
+		$form = $this->createForm('businessmodelbundle_activite', $activite);
+		$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -117,10 +121,12 @@ class ActiviteController extends Controller
             }
                 $em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Activite modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterActivite') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterActivite') );
+		//return $this->redirect( $this->generateUrl('ajouterActivite') );
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
 	 }
 
     //Fonction speciale permettant de voir les images d'une activite

@@ -5,6 +5,7 @@ namespace BusinessModelBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
 
 	/**
 	 * @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\UserRepository")
@@ -27,6 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
     * @var string $genre
     *
     * @ORM\Column(name="genre", type="string", length=255)
+    * @Assert\Choice({"Homme", "Femme"})
     */
     protected $genre;
     
@@ -35,6 +37,9 @@ use Doctrine\ORM\Mapping as ORM;
     * @var string $nomComplet
     *
     * @ORM\Column(name="nomcomplet", type="string", length=255)
+    * @Assert\Length(
+    *      min = 3
+    * )
     */
     protected $nomComplet;
         
@@ -43,6 +48,7 @@ use Doctrine\ORM\Mapping as ORM;
     * @var integer $age
     *
     * @ORM\Column(name="age", type="integer")
+    * @Assert\GreaterThan(17)
     */
     protected $age;
     
@@ -59,6 +65,7 @@ use Doctrine\ORM\Mapping as ORM;
     * @var string $typeUtilisateur
     *
     * @ORM\Column(name="typeutilisateur", type="string", length=255)
+    * @Assert\Choice({"Guide", "Touriste"})
     */
     protected $typeUtilisateur;
     
@@ -67,6 +74,7 @@ use Doctrine\ORM\Mapping as ORM;
     * @var string $privilege
     *
     * @ORM\Column(name="privilege", type="string", length=255)
+    * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN"})
     */
     protected $privilege;
     
@@ -113,7 +121,12 @@ use Doctrine\ORM\Mapping as ORM;
 		private $langues;
     
     
-    
+    /**
+     * @Assert\File(
+     *     maxSize = "6M",
+     *     mimeTypes = {"image/png", "image/jpeg", "image/jpg"}
+     * )
+     */
       protected $fichierPhoto;
     
     
@@ -281,7 +294,7 @@ use Doctrine\ORM\Mapping as ORM;
 		// Le nom du fichier est son nom avec son extension
 		$this->photo = $this->fichierPhoto->getClientOriginalName();
 	   $this->urlPhoto = $this->getUploadDir()."/".$this->fichierPhoto->getClientOriginalName();
-	   //On teste si l'id est non null alors on utilise l'id pour le nom de photo
+	   //On teste si l'id est non null alors on utilise l'id pour le nom de photo sinon on reste  avec le nom original de la photo
 	   if($this->getId()!=null){
 	   //Desormais les photos des utilisateurs seront sauvegardees avec les id des utilisateurs
 		$this->photo = $this->getId().".".$this->fichierPhoto->getClientOriginalExtension();

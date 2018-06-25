@@ -38,10 +38,12 @@ class PageController extends Controller
 		$em->persist($page);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Page creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterPage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterPage') );
+		//return $this->redirect( $this->generateUrl('ajouterPage') );
+	   return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -73,7 +75,7 @@ class PageController extends Controller
 	 
 	 public function modifierAction($id)
     {
-		$page= new Categorie();
+		$page= new Page();
 		$form = $this->createForm('businessmodelbundle_page', $page); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
@@ -94,6 +96,7 @@ class PageController extends Controller
 		    
 		}  
 		return $this->redirect( $this->generateUrl('ajouterPage') );
+		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>'Modifier','idPage' => $id)); 	  	
 	 }
 
 

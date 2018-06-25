@@ -4,6 +4,7 @@ namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
 
 		/**
 		* @ORM\Table()
@@ -28,6 +29,9 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var string $libelle
 		*
 		* @ORM\Column(name="libelle", type="string", length=255)
+		* @Assert\Length(
+      *      min = 3
+      * )
 		*/
 		private $libelle;
 
@@ -36,6 +40,9 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var string $lieuDestination
 		*
 		* @ORM\Column(name="lieuDestination", type="string", length=255)
+		* @Assert\Length(
+      *      min = 3
+      * )
 		*/
 		private $lieuDestination;
 
@@ -60,6 +67,7 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var integer $nbParticipants
 		*
 		* @ORM\Column(name="nbParticipants", type="integer")
+      * @Assert\GreaterThan(0)
 		*/
 		private $nbParticipants;
 
@@ -68,6 +76,7 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var float $prixIndividu
 		*
 		* @ORM\Column(name="prixIndividu", type="float")
+		* @Assert\GreaterThanOrEqual(0)
 		*/
 		private $prixIndividu;
 
@@ -76,6 +85,7 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var text $description
 		*
 		* @ORM\Column(name="description", type="text")
+		* @Assert\NotBlank()
 		*/
 		private $description;
 		

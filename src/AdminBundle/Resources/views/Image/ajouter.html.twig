@@ -62,14 +62,16 @@
     <div class="form-group">
 					{{ form_label(form.nom) }}
 					{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nom) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.fichier) }}
 					{{ form_widget(form.fichier, { 'attr': {'accept': '.jpg, .jpeg, .png', 'style': 'display: none;', 'onchange': "previsualiserImage('businessmodelbundle_image_fichier','zoneImage');"} }) }}										 	
-
+					{{ form_errors(form.fichier) }}
+					 
 					<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_image_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; height: 400px; width: 400px;" 
+					pointer; width: 30%;" 
 					{% if image is not defined or image.url is null %} 
 					src="{{ asset('bundles/admin/img/image.jpg') }}" 
 					{% else %}

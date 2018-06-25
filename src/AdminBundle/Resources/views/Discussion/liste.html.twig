@@ -32,7 +32,11 @@
 {% for discussion in listeDiscussions %}
 	<tr>
 		<td>{{ discussion.id }}</td>
-		<td>{{ discussion.activite.libelle }}</td>
+		<td>
+		<a class="" href="{{ path('voirActiviteDiscussion',{'id': discussion.id}) }}">				
+		{{ discussion.activite.libelle }}
+		</a>		
+		</td>
 		<td>{{ discussion.auteur.nomComplet }}</td>
 		<td>
 {% if discussion.destinataires is defined %} 

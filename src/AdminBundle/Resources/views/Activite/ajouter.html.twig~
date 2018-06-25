@@ -63,10 +63,12 @@
 					<div class="form-group">
 					{{ form_label(form.libelle) }}
 					{{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.libelle) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.lieuDestination) }}
 					{{ form_widget(form.lieuDestination, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.lieuDestination) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.date) }}
@@ -79,10 +81,12 @@
 					<div class="form-group">
 					{{ form_label(form.nbParticipants) }}
 					{{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nbParticipants) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.prixIndividu) }}
 					{{ form_widget(form.prixIndividu, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.prixIndividu) }} 
 					</div>
 
 					<div class="control-group">
@@ -95,11 +99,13 @@
 					<div class="form-group">
 					{{ form_label(form.description) }}
 					{{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.description) }} 
 					</div>
 					
 					<div class="form-group" id="divImagePrincipale">
 					{{ form_label(form.imagePrincipale) }}
 					{{ form_widget(form.imagePrincipale) }}
+					{{ form_errors(form.imagePrincipale) }} 
 					</div>
 
 					
@@ -343,7 +349,7 @@
 $(document).ready(function() {
 //On affiche bien nos dates et heures avec des beaux widgets
 $('.datepicker').datepicker();
-$('.timepicker').timepicker({showMeridian: false});//false pour activer le mode 24h 
+$('.timepicker').timepicker({showMeridian: false});//false pour activer le mode 24h voir https://jdewit.github.io/bootstrap-timepicker/
 //On formatte les champs pour l'Image principale
 $('#businessmodelbundle_activite_imagePrincipale_nom').attr('class','form-control');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('accept','.jpg, .jpeg, .png');
@@ -353,7 +359,7 @@ $('#divImagePrincipale').children('label').first().html('<legend>Image Principal
 document.getElementById('divImagePrincipale').innerHTML+=`
 <br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; height: 400px; width: 400px;" 
+					pointer; width: 30%;" 
 {% if activite.imagePrincipale is not defined or activite.imagePrincipale.url is null %} 															
 					src="{{ asset('bundles/admin/img/image.jpg') }}" 
 {% else %}
@@ -390,7 +396,7 @@ var elt=$('#divUrls').children('span').eq($(this).index()).html();
 $(this).html('<fieldset>'+$(this).html()+`
 <center><img id="img`+($(this).index())+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+($(this).index())+`_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; height: 400px; width: 400px;" src="`+elt+`" /></center></fieldset>`
+					pointer; width: 25%;" src="`+elt+`" /></center></fieldset>`
 );
 
 //Et on ajoute l'attribut class=form-control a tous les input type text
@@ -417,7 +423,7 @@ function ajouterImage($container) {
 var $prototype = $('<fieldset>'+$container.attr('data-prototype').replace(/__name__label__/g, '<legend>Image numero ' + (index+1)+'</legend>').replace(/__name__/g, index)
 +`<center><img id="img`+(index)+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+(index)+`_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; height: 400px; width: 400px;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
+					pointer; width: 25%;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
 `
 +'</fieldset>');
 //Et on ajoute l'attribut class=form-control a tous les input type text
@@ -455,7 +461,7 @@ return false;
 });
 </script>
 <script type="text/javascript">
-				CKEDITOR.replace( 'businessmodelbundle_activite_description' );
+				//CKEDITOR.replace( 'businessmodelbundle_activite_description' );
 			</script>
 
 

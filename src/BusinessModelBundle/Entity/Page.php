@@ -4,6 +4,7 @@ namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
 
 		/**
 		* @ORM\Table()
@@ -28,6 +29,9 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var string $titrePage
 		*
 		* @ORM\Column(name="titrePage", type="string", length=255)
+		* @Assert\Length(
+      *      min = 3
+      * )
 		*/
 		private $titrePage;
 		
@@ -36,6 +40,7 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var text $contenu
 		*
 		* @ORM\Column(name="contenu", type="text")
+		* @Assert\NotBlank()
 		*/
 		private $contenu;
 		

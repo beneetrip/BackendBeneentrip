@@ -30,7 +30,11 @@
 {% for reservation in listeReservations %}
 	<tr>
 		<td>{{ reservation.id }}</td>
-		<td>{{ reservation.activite.libelle }}</td>
+		<td>
+		<a class="" href="{{ path('voirActiviteReservation',{'id': reservation.id}) }}">		
+		{{ reservation.activite.libelle }}
+		</a>
+		</td>
 		<td>
 {% if reservation.utilisateurs is defined %} 
 {% for participant in reservation.utilisateurs %}

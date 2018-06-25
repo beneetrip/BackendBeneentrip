@@ -16,7 +16,7 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('fichier','file',array('required' =>true))
+            ->add('fichier','file',array('required' =>false))
         ;
     }
     

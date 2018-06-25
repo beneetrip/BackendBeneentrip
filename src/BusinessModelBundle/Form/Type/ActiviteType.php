@@ -4,8 +4,11 @@ namespace BusinessModelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use BusinessModelBundle\Form\Type\ImageType;
+
 
 class ActiviteType extends AbstractType
 {
@@ -50,4 +53,6 @@ class ActiviteType extends AbstractType
     {
         return 'businessmodelbundle_activite';
     }
+   
+	
 }

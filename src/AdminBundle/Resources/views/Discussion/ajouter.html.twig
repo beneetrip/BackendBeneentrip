@@ -64,23 +64,30 @@
 					{{ form_widget(form.activite, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 	</div>
+	<br/>
 	 <div class="control-group">
 					{{ form_label(form.auteur) }}
 					<div class="controls">
 					{{ form_widget(form.auteur, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 	</div>
+	<br/>
 	 <div class="control-group">
 					{{ form_label(form.destinataires) }}
 					<div class="controls">
 					{{ form_widget(form.destinataires, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
+					<!-- <div class="checkbox">
+                        <label>
+                            <input type="checkbox" onclick="selectAll(this);"> Tous
+                        </label>
+                    </div> -->					
 					</div>
 	</div>
+	<br/>
 	<div class="control-group">
 					{{ form_label(form.message) }}
-					<div class="controls">
 					{{ form_widget(form.message, { 'attr': {'class': 'form-control'} }) }}
-					</div>
+					{{ form_errors(form.message) }} 
 	</div>
 	
 	<br/>
