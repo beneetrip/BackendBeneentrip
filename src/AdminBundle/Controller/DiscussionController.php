@@ -38,10 +38,12 @@ class DiscussionController extends Controller
 		$em->persist($discussion);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Discussion creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterDiscussion') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterDiscussion') );
+		//return $this->redirect( $this->generateUrl('ajouterDiscussion') );
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerDiscussion', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	public function listeAction()
@@ -91,11 +93,22 @@ class DiscussionController extends Controller
 		$form->bind($request);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Discussion modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterDiscussion') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterDiscussion') );
+		//return $this->redirect( $this->generateUrl('ajouterDiscussion') );
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>'Modifier','idDiscussion' => $id)); 	  	
 	 }
+	 
+	 //Fonction speciale permettant de voir l'activite d'une discussion
+    public function voirActiviteAction($id)
+    {
+		$discussionId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Discussion')->myFindOne($id);
+		$listeActivites=[];
+		$listeActivites[] = $discussionId->getActivite();
+		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    }
 
 
 }

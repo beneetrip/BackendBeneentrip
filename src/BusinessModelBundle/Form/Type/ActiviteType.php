@@ -4,8 +4,11 @@ namespace BusinessModelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\CallbackValidator;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use BusinessModelBundle\Form\Type\ImageType;
+
 
 class ActiviteType extends AbstractType
 {
@@ -18,8 +21,8 @@ class ActiviteType extends AbstractType
         $builder
             ->add('libelle')
             ->add('lieuDestination')
-            ->add('date')
-            ->add('heure')
+            ->add('date', 'date', array('widget' =>'single_text','format' =>'dd/MM/yyyy'))
+            ->add('heure', 'datetime', array('widget' =>'single_text','format' =>'HH:mm'))
             ->add('nbParticipants')
             ->add('prixIndividu')
             ->add('description')
@@ -50,4 +53,6 @@ class ActiviteType extends AbstractType
     {
         return 'businessmodelbundle_activite';
     }
+   
+	
 }

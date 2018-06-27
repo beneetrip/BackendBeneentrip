@@ -38,10 +38,12 @@ class LangueController extends Controller
 		$em->persist($langue);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Langue creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterLangue') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterLangue') );
+		//return $this->redirect( $this->generateUrl('ajouterLangue') );
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerLangue', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -60,7 +62,7 @@ class LangueController extends Controller
 		$em->remove($langueId);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Langue supprimee avec Succes');
-		$listeLangues = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindAll();
+		$listeLangues = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Langue')->myFindAll();
 		return $this->render('AdminBundle:Langue:liste.html.twig',array('listeLangues' => $listeLangues));
     }
     
@@ -90,10 +92,12 @@ class LangueController extends Controller
 		$form->bind($request);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Langue modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterLangue') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterLangue') );
+		//return $this->redirect( $this->generateUrl('ajouterLangue') );
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierLangue', 'bouton'=>'Modifier','idLangue' => $id)); 	  	
 	 }
 
 

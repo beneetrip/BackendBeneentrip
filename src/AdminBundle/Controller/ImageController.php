@@ -38,10 +38,12 @@ class ImageController extends Controller
 		$em->persist($img);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Image creee avec Succes');
+				return $this->redirect( $this->generateUrl('ajouterImage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterImage') );
+		//return $this->redirect( $this->generateUrl('ajouterImage') );
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -67,14 +69,16 @@ class ImageController extends Controller
      public function prendreAction($id)
     {
 		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
+		//$imgId->createThumb(500,500);
 		$form = $this->createForm('businessmodelbundle_image', $imgId);   
-		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  	
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  		 
 	 }
 	 
 	 public function modifierAction($id)
     {
 		$img= new Image();
-		$form = $this->createForm('businessmodelbundle_image', $img);   
+		$form = $this->createForm('businessmodelbundle_image', $img);
+		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);   
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -90,10 +94,12 @@ class ImageController extends Controller
 		$form->bind($request);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Image modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterImage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterImage') );
+		//return $this->redirect( $this->generateUrl('ajouterImage') );
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  	
 	 }
 
 

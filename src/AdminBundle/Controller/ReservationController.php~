@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
-use AdminBundle\Entity\Reservation;
-use AdminBundle\Form\Type\ReservationType;
+use BusinessModelBundle\Entity\Reservation;
+use BusinessModelBundle\Form\Type\ReservationType;
 
 class ReservationController extends Controller
 {
@@ -17,14 +17,14 @@ class ReservationController extends Controller
     public function ajouterAction()
     {
 		$reservation= new Reservation();
-		$form = $this->createForm('adminbundle_reservation', $reservation);   
+		$form = $this->createForm('businessmodelbundle_reservation', $reservation);   
 		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerReservation', 'bouton'=>'Enregistrer')); 	  	
 	 }
 
 	 public function creerAction()
     {
 		$reservation= new Reservation();
-		$form = $this->createForm('adminbundle_reservation', $reservation); 
+		$form = $this->createForm('businessmodelbundle_reservation', $reservation); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -47,7 +47,7 @@ class ReservationController extends Controller
 	 public function listeAction()
     {
     	     
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('AdminBundle:Reservation')->myFindAll();
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
     }
@@ -55,26 +55,26 @@ class ReservationController extends Controller
     public function supprimerAction($id)
     {
     	    
-		$reservationId=$this->getDoctrine()->getManager()->getRepository('AdminBundle:Reservation')->myFindOne($id);
+		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($reservationId);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Reservation supprimee avec Succes');
-		$listePages = $this->getDoctrine()->getManager()->getRepository('AdminBundle:Reservation')->myFindAll();
+		$listePages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
     }
     
      public function prendreAction($id)
     {
-		$reservationId=$this->getDoctrine()->getManager()->getRepository('AdminBundle:Reservation')->myFindOne($id);
-		$form = $this->createForm('adminbundle_reservation', $reservationId);   
+		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_reservation', $reservationId);   
 		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierReservation', 'bouton'=>'Modifier','idReservation' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
     {
 		$reservation= new Reservation();
-		$form = $this->createForm('adminbundle_reservation', $reservation); 
+		$form = $this->createForm('businessmodelbundle_reservation', $reservation); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
@@ -84,8 +84,8 @@ class ReservationController extends Controller
 		
 		if($form->isValid()) {
 		$em = $this->getDoctrine()->getManager();
-		$reservationDB=$em->getRepository('AdminBundle:Reservation')->myFindOne($id);
-		$form = $this->createForm('adminbundle_reservation', $reservationDB);
+		$reservationDB=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
+		$form = $this->createForm('businessmodelbundle_reservation', $reservationDB);
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
@@ -95,6 +95,15 @@ class ReservationController extends Controller
 		}  
 		return $this->redirect( $this->generateUrl('ajouterReservation') );
 	 }
+	 
+	 //Fonction speciale permettant de voir l'activite d'une reservation
+    public function voirActiviteAction($id)
+    {
+		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
+		$listeActivites=[];
+		$listeActivites[] = $reservationId->getActivite();
+		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    }
 
 
 }

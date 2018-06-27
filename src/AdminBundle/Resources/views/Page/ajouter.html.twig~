@@ -51,7 +51,9 @@
             <div class="box-content">
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 					{% block contentForm %}
@@ -60,10 +62,12 @@
 <div class="form-group">
 					{{ form_label(form.titrePage) }}
 					{{ form_widget(form.titrePage, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nom) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.contenu) }}
 					{{ form_widget(form.contenu, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nom) }} 
 					</div>
 					
      <div class="form-group">
@@ -284,7 +288,7 @@
 </script>
 
 <script type="text/javascript">
-				CKEDITOR.replace( 'monEditeur' );
+				CKEDITOR.replace( 'businessmodelbundle_page_contenu' );
 			</script>
 
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}

@@ -95,6 +95,15 @@ class ReservationController extends Controller
 		}  
 		return $this->redirect( $this->generateUrl('ajouterReservation') );
 	 }
+	 
+	 //Fonction speciale permettant de voir l'activite d'une reservation
+    public function voirActiviteAction($id)
+    {
+		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
+		$listeActivites=[];
+		$listeActivites[] = $reservationId->getActivite();
+		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    }
 
 
 }

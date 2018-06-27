@@ -4,6 +4,7 @@ namespace BusinessModelBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
 
 		/**
 		* @ORM\Table()
@@ -28,6 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 		* @var string $message
 		*
 		* @ORM\Column(name="message", type="text")
+		* @Assert\NotBlank()
 		*/
 		private $message;
 		

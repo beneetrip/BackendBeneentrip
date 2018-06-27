@@ -38,10 +38,12 @@ class PageController extends Controller
 		$em->persist($page);
 		$em->flush();
 		     $this->get('session')->getFlashBag()->add('info', 'Page creee avec Succes');
+		     return $this->redirect( $this->generateUrl('ajouterPage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterPage') );
+		//return $this->redirect( $this->generateUrl('ajouterPage') );
+	   return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>'Enregistrer')); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -90,10 +92,12 @@ class PageController extends Controller
 		$form->bind($request);
 		$em->flush();
 		$this->get('session')->getFlashBag()->add('info', 'Page modifiee avec Succes');
+		return $this->redirect( $this->generateUrl('ajouterPage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterPage') );
+		//return $this->redirect( $this->generateUrl('ajouterPage') );
+		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>'Modifier','idPage' => $id)); 	  	
 	 }
 
 
