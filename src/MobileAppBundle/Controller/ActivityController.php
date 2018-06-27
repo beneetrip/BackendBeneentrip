@@ -4,6 +4,8 @@ namespace MobileAppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use BusinessModelBundle\Entity\Image;
+use BusinessModelBundle\Entity\Activite;
 
 class ActivityController extends Controller
 {
@@ -11,31 +13,196 @@ class ActivityController extends Controller
     public function indexAction($id)
     {
 		
+		
     }
 	
-	public function addAction()
+	public function deleteAction()
     {
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
 		
-		$result = array(2,5,7);
+		$idactivity = $request->id;
 		
-		$response = new Response(json_encode($_POST));
+		$em = $this->getDoctrine()->getManager();
+		
+		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idactivity);
+		
+		//suppression des images
+		foreach( $activiteId->getImages() as $imgelem){
+		
+			$imgelem->setActivite(null);
+			//$activiteId->removeImage($imgelem);
+			//$em->remove($imgelem);
+		}
+			
+		if($activiteId != null)
+		$em->remove($activiteId);
+	
+		$em->flush(); 
+		
+		$result['message'] = "Opération éffectuée avec succèss";
+		
+		$response = new Response(json_encode($result));
+		
 		
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;
+    }
+	
+	public function editAction()
+    {
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		//$id = $request->photos[1]->id;
+		$id = $request->id;
+		$em = $this->getDoctrine()->getManager();
+		
+		$activite = null;
+		
+		if ($id != 0)
+		{
+			
+			$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
+			$activiteId->setLibelle($request->libelle);
+			$activiteId->setLieuDestination($request->destination);
+			$activiteId->setNbParticipants($request->nbParticipant);
+			$activiteId->setPrixIndividu($request->prix);
+			$activiteId->setDescription($request->description);
+			
+			$time = $request->heure;
+			$date = $request->dateAct;
+	
+			$activiteId->setDate(\DateTime::createFromFormat("d-m-Y", $date));
+			$activiteId->setHeure(\DateTime::createFromFormat("H:i",$time));	
+		
+			//image principale
+			if(($request->photos[0]->id != 0) and ($request->photos[0]->id != $activiteId->getImagePrincipale()->getId()))
+			{
+				$holdimagePrincipale = $activiteId->getImagePrincipale();
+				$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->photos[0]->id);
+				
+				if($imageId != null)
+				{
+					$activiteId->setImagePrincipale($imageId);
+					$em->remove($holdimagePrincipale);
+				} 
+			}
+			
+			$updateImage[] = $request->photos[1]->id;
+			$updateImage[] = $request->photos[2]->id;
+			
+			$holdImage = array();
+			//on retire les images supprimés
+			foreach( $activiteId->getImages() as $imgelem){
+			
+				if(!(in_array($imgelem->getId(), $updateImage))){
+					$activiteId->removeImage($imgelem);
+					$em->remove($imgelem);
+				}
+				else
+				{
+					$holdImage[] = $imgelem->getId();
+				}
+			
+			}
+			
+			//on ajoute les nouvelles
+			foreach( $updateImage as $imgelem){
+			
+				if(!(in_array($imgelem, $holdImage)) and $imgelem != 0){
+				
+					$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($imgelem);
+					$activiteId->addImage($imageId);
+					$imageId->setActivite($activiteId);
+				}
+				
+			} 
+			
+			$em->flush();
+			
+			$activite = $activiteId;
+			
+		}
+		else
+		{
+			
+			$activite = new Activite();
+			$activite->setLibelle($request->libelle);
+			$activite->setLieuDestination($request->destination);
+			$activite->setNbParticipants($request->nbParticipant);
+			$activite->setPrixIndividu($request->prix);
+			$activite->setDescription($request->description);
+			
+			$time = $request->heure;
+			$date = $request->dateAct;
+	
+			$activite->setDate(\DateTime::createFromFormat("d-m-Y", $date));
+			$activite->setHeure(\DateTime::createFromFormat("H:i",$time));
+			
+			$user = $em->getRepository('BusinessModelBundle:User')->myFindOne($request->userid);
+			$activite->setAuteur($user);
+			
+			//image principale
+			if($request->photos[0]->id != 0)
+			{
+				$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->photos[0]->id);
+				
+				if($imageId != null)
+				{
+					$activite->setImagePrincipale($imageId);
+				} 
+			}
+			
+			
+			$updateImage[] = $request->photos[1]->id;
+			$updateImage[] = $request->photos[2]->id;
+			
+			//on ajoute les nouvelles
+			foreach( $updateImage as $imgelem){
+			
+				if($imgelem != 0){
+				
+					$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($imgelem);
+					$activite->addImage($imageId);
+					$imageId->setActivite($activite);
+				}
+				
+			} 
+			
+			
+			$em->persist($activite);
+			$em->flush();
+			
+		}
+		
+		$result['id'] = $activite->getId();
+		
+		$response = new Response(json_encode($result));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
 		
 		return $response; 
 		
     }
 	
+	
+	
 	public function showAction($id)
     {
+		
 		$em = $this->getDoctrine()->getManager();
 		
 		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
 		
 		$activiteId->setNbVues( $activiteId->getNbVues() + 1 );
-		
 		
 		$result['id'] = $activiteId->getId();
 		$result['libelle'] = $activiteId->getLibelle();
@@ -43,15 +210,17 @@ class ActivityController extends Controller
 		$result['user']['id'] = $activiteId->getAuteur()->getId();
 		$result['user']['username'] = $activiteId->getAuteur()->getUsername();
 		$result['user']['photo'] = $activiteId->getAuteur()->getPhoto();
+		$result['date'] = $activiteId->getDate()->format('d-m-Y');;
+		$result['heure'] = $activiteId->getHeure()->format('H:i');;
 		$result['dateclair'] = $activiteId->getDateEnClair();
 		$result['nbVues'] = $activiteId->getNbVues();
 		$result['prix'] = $activiteId->getPrixIndividu();
 		$result['nbParticipants'] = $activiteId->getNbParticipants();
-		$result['lieuDestination'] = $activiteId->getLieuDestination();
+		$result['lieuDestination'] = $activiteId->getLieuDestination(); 
 		
-		if(count($activiteId->getImages()) != 0 )
+		if( $activiteId->getImagePrincipale()!= null )
 		{
-			$result['image'] = $activiteId->getImages()[0]->getUrl();
+			$result['image'] = $activiteId->getImagePrincipale()->getUrl();
 		}
 		else
 		{
@@ -60,13 +229,18 @@ class ActivityController extends Controller
 		
 		$result['images'] = array();
 		
-		foreach( $activiteId->getImages() as $imgelem ){
-			$result['images'][] =  $imgelem->getUrl();
-		} 
+		//On ajoute aussi l'image principale
+		$row['id'] = $activiteId->getImagePrincipale()->getId();
+		$row['url'] =  $activiteId->getImagePrincipale()->getUrl();
+		$result['images'][] = $row;
 		
+		foreach( $activiteId->getImages() as $imgelem ){
+			$row['id'] = $imgelem->getId();
+			$row['url'] =  $imgelem->getUrl();
+			$result['images'][] = $row;
+		}
 		
 		$response = new Response(json_encode($result));
-		
 		
 		$em->flush();
 		
@@ -76,10 +250,12 @@ class ActivityController extends Controller
 		
 		return $response; 
 		
+		
     }
 	
 	public function listAction($page)
     {
+		
 		
 		
 		$result = array();
@@ -110,16 +286,16 @@ class ActivityController extends Controller
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
 			
-			$row['image'] = $elem->getImages()[0]->getUrl();
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			if( count($elem->getImages()) != 0 )
+			/* if( count($elem->getImages()) != 0 )
 			{
 				$row['image'] = $elem->getImages()[0]->getUrl();
 			}
 			else
 			{
 				$row['image'] = "";
-			}
+			} */
 			
 			/* foreach($elem->getImages() as $imgelem){
 				$imgrow['url'] = $imgelem->getUrl();
@@ -132,7 +308,6 @@ class ActivityController extends Controller
 		
 		$response = new Response(json_encode($result));
 		
-			
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');
@@ -145,10 +320,12 @@ class ActivityController extends Controller
     {
 		
 		//Directory where uploaded images are saved
-		 $dirname = "photos"; 
+		 $dirname = "upload_images/galerie/";
+		
 		
 		 // If uploading file
-		 if ($_FILES) {
+		if($_FILES) {
+			
 		   //print_r($_FILES);
 		   //mkdir ($dirname, 0777, true);
 		   $caracteres = array(2, 'y', 9, 'a', 9, 'j', 5, 'i', 7, 'd', 3, 'b', 2, 's', 6, 'm', 8, 'h', 1, 'e', 9, 't', 2, 'r', 4, 'z',
@@ -171,34 +348,45 @@ class ActivityController extends Controller
 			$heure = date('H');
 			$minute = date('i');
 			
-			$dossier_photos = 'upload_images/galerie/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute;
+			$dossier_photos = $dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute;
 			
-			$nom_image_register = 'upload_images/galerie/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
+			$nom_image_register = $dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
 			
 			if(!is_dir($dossier_photos))
 			{
 				mkdir($dossier_photos, 0777, true); 
-				chmod('images/photos/'. $annee, 0777);
-				chmod('images/photos/'. $annee .'/'. $mois, 0777);
-				chmod('images/photos/'. $annee .'/'. $mois .'/'. $jour, 0777);
-				chmod('images/photos/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure, 0777);
-				chmod('images/photos/'. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute, 0777);
+				chmod($dirname. $annee, 0777);
+				chmod($dirname. $annee .'/'. $mois, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute, 0777);
 			}
 			
-		  
+			move_uploaded_file($_FILES["photo"]["tmp_name"], $dossier_photos."/".$new_image_name);
 		   
-		   move_uploaded_file($_FILES["photo"]["tmp_name"], $dossier_photos."/".$new_image_name);
-		   
-		 }
+			$img = new Image();
+			$img->setUrl($dossier_photos."/".$new_image_name);
+			$img->setAlt($new_image_name);
+			$img->setNom($new_image_name);
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($img);
+			$em->flush();
+			
+			$resp['id'] = $img->getId();
+			$resp['url'] = $img->getUrl();
+			
+			$response = new Response(json_encode($resp));
+			
+		}
+		else
+		{
+			$response = new Response($dossier_photos."/".$nom_image_register);
+		}
 		
-		
-
-		$response = new Response($nom_image_register);
 		
 		//header('Access-Control-Allow-Origin: *'); //allow everybody
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');
-		
 		return $response; 
 		
     }

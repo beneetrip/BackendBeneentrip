@@ -90,7 +90,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 		/**
 		 * @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Categorie",inversedBy="activites")
-		 * @ORM\JoinColumn(nullable=false)
+		 * @ORM\JoinColumn(nullable=true)
 		 */
 		private $categorie;
 
@@ -131,7 +131,7 @@ use Doctrine\ORM\Mapping as ORM;
 		 */
 		public function createDate()
 		{
-		$this->setDateCreation(new \Datetime());
+			$this->setDateCreation(new \Datetime());
 		}
 		
 		/**
@@ -554,4 +554,10 @@ use Doctrine\ORM\Mapping as ORM;
     $formatter = new \IntlDateFormatter('fr_FR',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'Europe/Paris',\IntlDateFormatter::GREGORIAN );
 	 return $formatter->format(new \DateTime(date_format($this->getDate(),'Y/m/d')));
     }
+
+    //fonction permettant de retourner la description de l'Activite sans balise HTML
+    public function getDescriptionEnClair(){
+	 return strip_tags($this->getDescription());
+    }
+
 }

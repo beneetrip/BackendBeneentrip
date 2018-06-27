@@ -1,17 +1,22 @@
-mobile_app_activity_addpage:
-    path:     /mobapp/activity/add
-    defaults: { _controller: MobileAppBundle:Activity:add }
+mobile_app_activity_editpage:
+    path:     /mobapp/activity/edit
+    defaults: { _controller: MobileAppBundle:Activity:edit }
+
 
 mobile_app_activity_listpage:
     path:     /mobapp/activity/list/{page}
     defaults: { _controller: MobileAppBundle:Activity:list }
 
 mobile_app_activity_page:
-    path:     /mobapp/activity/{id}
+    path:     /mobapp/activity/show/{id}
     defaults: { _controller: MobileAppBundle:Activity:show }
 
+mobile_app_activity_deletepage:
+    path:     /mobapp/activity/delete
+    defaults: { _controller: MobileAppBundle:Activity:delete }
+
 mobile_app_activity_uploadpage:
-    path:     /mobapp/activity/upload
+    path:     /mobapp/activity/image/upload
     defaults: { _controller: MobileAppBundle:Activity:upload }
 
 mobile_app_user_loginpage:

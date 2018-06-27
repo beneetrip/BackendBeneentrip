@@ -20,9 +20,9 @@ class ActiviteController extends Controller
 		$activite= new Activite();
 		$form = $this->createForm('businessmodelbundle_activite', $activite);   
 		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>'Enregistrer')); 	  	
-	 }
+	}
 
-	 public function creerAction()
+	public function creerAction()
     {
 		$activite= new Activite();
 		$image= new Image();
@@ -85,7 +85,9 @@ class ActiviteController extends Controller
     {
 		$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_activite', $activiteId);
-		//var_dump($activiteId->getDateEnClair());   
+
+		//var_dump($activiteId->getDateEnClair());
+		//var_dump($activiteId->getDescriptionEnClair());      
 		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
 	 }
 	 

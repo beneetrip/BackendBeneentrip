@@ -105,6 +105,12 @@ use Doctrine\ORM\Mapping as ORM;
         * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Activite",cascade={"persist", "remove"}, mappedBy="auteur")
         */
       protected $activites;
+      
+      
+      /**
+		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Langue")
+		 */
+		private $langues;
     
     
     
@@ -268,7 +274,7 @@ use Doctrine\ORM\Mapping as ORM;
 		public function preUpload()
 		{
 		// Si jamais il n'y a pas de fichier (champ facultatif)
-		if (null === $this->fichierPhoto) {
+		if (null == $this->fichierPhoto) {
 		return;
 		}
 		// Le nom du fichier est son nom avec son extension
@@ -288,17 +294,19 @@ use Doctrine\ORM\Mapping as ORM;
 		}
 		// Si on avait un ancien fichier, on le supprime
 		if (null != $this->tempPhoto) {
-		$oldFile = $this->getUploadRootDir().'/'.$this->photo;
+		$oldFile = $this->getUploadRootDir().'/'.$this->tempPhoto;
 		if (file_exists($oldFile)) {
 		unlink($oldFile);
 		}
 		}
+	
 		// On déplace le fichier envoyé dans le répertoire de notre choix
 		try{
 		$this->fichierPhoto->move($this->getUploadRootDir(), $this->photo);
-		}catch(\Exception $e){}
+		}catch(\Exception $e){}	
 		}
-			
+		
+		
 		/**
 		 * @ORM\PreRemove()
 		*/
@@ -496,6 +504,42 @@ use Doctrine\ORM\Mapping as ORM;
         return $this->activites;
     }
     
+  
+    /**
+     * Add langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     *
+     * @return User
+     */
+    public function addLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues[] = $langue;
+
+        return $this;
+    }
+
+    /**
+     * Remove langue
+     *
+     * @param \BusinessModelBundle\Entity\Langue $langue
+     */
+    public function removeLangue(\BusinessModelBundle\Entity\Langue $langue)
+    {
+        $this->langues->removeElement($langue);
+    }
+
+    /**
+     * Get langues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLangues()
+    {
+        return $this->langues;
+    }
+    
+    
     //fonction permettant d'hydrater cad remplir un objet de la classe a partir des donnees d'un tableau
 	 public function hydrate(array $Tabdonnees){
 
@@ -514,5 +558,5 @@ use Doctrine\ORM\Mapping as ORM;
 		}
 
 	}
-
+		
 }
