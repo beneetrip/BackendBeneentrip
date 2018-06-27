@@ -69,9 +69,9 @@ class ImageController extends Controller
      public function prendreAction($id)
     {
 		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
+		$imgId->createThumb(500,500);
 		//$form = $this->createForm('businessmodelbundle_image', $imgId);   
-		//return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  	
-		$imgId->createThumb(500,500);	 
+		//return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  		 
 	 }
 	 
 	 public function modifierAction($id)

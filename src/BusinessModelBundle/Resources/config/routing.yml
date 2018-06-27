@@ -9,3 +9,9 @@ business_model_login:
 business_model_register:
     path:     /verifierInscription
     defaults: { _controller: BusinessModelBundle:User:register }
+
+business_model_supprimerActivite:
+    path:     /supprimerActivite/{id}
+    defaults: { _controller: BusinessModelBundle:Activite:supprimer }
+    requirements:
+              id: \d+

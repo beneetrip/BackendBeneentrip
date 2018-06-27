@@ -376,9 +376,9 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     return $tab;
 	}
 	
-	//Fonction permettant d'obtenir l'extension de l'image
-	public function getExtension(){
-	$partieFichier = explode(".",$this->getAlt());
+	//Fonction permettant d'obtenir l'extension a partir du nom du fichier image
+	public function getExtension($nomfichier){
+	$partieFichier = explode(".",$nomfichier);
 	if(count($partieFichier) > 1){
 	$extension = array_pop($partieFichier);
 	if($extension=="jpg")
@@ -389,24 +389,52 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 	
 	return $extension;	
 	}
+	
+	//Fonction permettant d'obtenir l'extension a partir du nom du fichier image
+	public function getNomSansExtension($nomfichier){
+	$partieFichier = explode(".",$nomfichier);
+	if(count($partieFichier) > 1){
+	$extension = array_pop($partieFichier);
+	if($extension=="jpg")
+	$extension="jpeg";
+	}
+	else
+	$extension = null;
+	
+	return implode(".",$partieFichier);	
+	}
 		
 	
 	//Fonction permettant de creer des thumbs de largeur x hauteur comme on veut, le thumb est gardee dans le meme dossier que l'image
+	//Elle est generique et travaille juste avec l'url de l'image pour avoir tous les infos pour creer le thumb de l'image en question
 	public function createThumb($largeur, $hauteur){
 	
-	$extension=$this->getExtension();	
+	//On recupere les infos dont on a besoin de l'url de l'image : le nom de l'image et son dossier
+
+	$tab = explode("/",$this->getUrl());	
+	
+	$nomImage= array_pop($tab);
+	
+	$dossierRelatif= implode("/",$tab);	
+	
+	$extension=$this->getExtension($nomImage);	
 	if($extension==null)
 	return ;
 	
-	$dir=$this->getUploadRootDir();
+	$dir=__DIR__.'/../../../web/'.$dossierRelatif;
+	
+	$nomThumb=$dir.'/'.$this->getNomSansExtension($nomImage).'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension;	
+	
+	if (file_exists($nomThumb))
+	return ;	
 	
 	$method1="imagecreatefrom".strtolower($extension);	
 	
-	$img_src = $method1($dir.'/'.$this->getAlt());
+	$img_src = $method1($dir.'/'.$nomImage);
  
 	$dimension = $this->modifierImage($img_src, $largeur, $hauteur);
          
-	$name="temp.".$extension; 	
+	$nameTemp="temp.".$extension; 	
 	
 			// Redimensionner
         $thumb = imagecreatetruecolor($dimension[0], $dimension[1]) or die('Impossible de creer l\'image de destination pour la miniature');
@@ -421,7 +449,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         imagecopyresampled($thumb, $img_src, 0, 0, 0, 0, $largeur_thumb, $hauteur_thumb, $largeur_source, $hauteur_source);
 		 //Puis j'enregistre la miniature, sinon, la suite ne marche pas. j'ai fait trop d'essais
 		 $method2="image".strtolower($extension);	
-       $method2($thumb, $dir.'/'.$name);
+       $method2($thumb, $dir.'/'.$nameTemp);
        
        // =================================
 		// Melange des images
@@ -429,7 +457,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
          
         // Ouvertrue de la source redimensionnée et enregistree tout à l'heure
          
-        $new_img_src = $method1($dir.'/'.$name);
+        $new_img_src = $method1($dir.'/'.$nameTemp);
          
          
         // Création de l'image de destination
@@ -447,9 +475,9 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
          
         imagecopymerge($fond, $new_img_src, ($fond_w - $sample_w) /2, ($fond_h - $sample_h) / 2, 0, 0, $fond_w, $fond_h, 100) or die('melange impossible');
         // On enregistre la nouvelle image "pellicule" sous un nouveau nom
-        $method2($fond, $dir.'/'.$this->getNom().'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension);
+        $method2($fond,$nomThumb);
 			// Pour finir je supprime la première image que j'ai enregistré.
-        unlink($dir.'/'.$name);
+        unlink($dir.'/'.$nameTemp);
 	}	
 	
 	
