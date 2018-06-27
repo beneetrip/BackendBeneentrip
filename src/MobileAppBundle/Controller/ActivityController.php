@@ -16,6 +16,7 @@ class ActivityController extends Controller
 		
     }
 	
+	
 	public function deleteAction()
     {
 		$postdata = file_get_contents("php://input");
@@ -28,12 +29,12 @@ class ActivityController extends Controller
 		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idactivity);
 		
 		//suppression des images
-		foreach( $activiteId->getImages() as $imgelem){
+		/* foreach( $activiteId->getImages() as $imgelem){
 		
 			$imgelem->setActivite(null);
 			//$activiteId->removeImage($imgelem);
-			//$em->remove($imgelem);
-		}
+			$em->remove($imgelem);
+		} */
 			
 		if($activiteId != null)
 		$em->remove($activiteId);
@@ -316,6 +317,112 @@ class ActivityController extends Controller
 		
     }
 	
+	public function toplistAction($page)
+    {
+		
+		$result = array();
+		
+		$nbrResult = 7;
+		
+		$debutresultat = 0;
+		
+		
+			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif
+		
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'), $nbrResult, $debutresultat);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+			/* if( count($elem->getImages()) != 0 )
+			{
+				$row['image'] = $elem->getImages()[0]->getUrl();
+			}
+			else
+			{
+				$row['image'] = "";
+			} */
+			
+			/* foreach($elem->getImages() as $imgelem){
+				$imgrow['url'] = $imgelem->getUrl();
+				$row['images'] = $imgrow;
+			} */
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response; 
+		
+    }
+	
+	public function userAction($iduser, $numpage)
+    {
+		
+		$result = array();
+		
+		$nbrResult = 5;
+		
+		$debutresultat = 0;
+		
+		
+		$debutresultat = $nbrResult * ($numpage - 1);//car le numero de page peut etre negatif
+		
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array('auteur'=>$iduser), array('id' => 'DESC'), $nbrResult, $debutresultat);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+		
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response;
+    }
+	
+	
 	public function uploadAction()
     {
 		
@@ -366,8 +473,8 @@ class ActivityController extends Controller
 		   
 			$img = new Image();
 			$img->setUrl($dossier_photos."/".$new_image_name);
-			$img->setAlt($new_image_name);
-			$img->setNom($new_image_name);
+			$img->setAlt($code);
+			$img->setNom($code);
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($img);
 			$em->flush();

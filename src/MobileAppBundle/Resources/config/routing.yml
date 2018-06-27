@@ -7,9 +7,17 @@ mobile_app_activity_listpage:
     path:     /mobapp/activity/list/{page}
     defaults: { _controller: MobileAppBundle:Activity:list }
 
+mobile_app_activity_toplistpage:
+    path:     /mobapp/activity/toplist/{page}
+    defaults: { _controller: MobileAppBundle:Activity:toplist }
+
 mobile_app_activity_page:
     path:     /mobapp/activity/show/{id}
     defaults: { _controller: MobileAppBundle:Activity:show }
+
+mobile_app_activity_userpage:
+    path:     /mobapp/activity/user/{iduser}/{numpage}
+    defaults: { _controller: MobileAppBundle:Activity:user }
 
 mobile_app_activity_deletepage:
     path:     /mobapp/activity/delete
