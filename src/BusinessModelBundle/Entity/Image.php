@@ -478,7 +478,39 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         $method2($fond,$nomThumb);
 			// Pour finir je supprime la première image que j'ai enregistré.
         unlink($dir.'/'.$nameTemp);
-	}	
+	}
+
+	public function linkThumb($largeur, $hauteur){
+		
+		//On recupere les infos dont on a besoin de l'url de l'image : le nom de l'image et son dossier
+
+		$tab = explode("/",$this->getUrl());	
+		
+		$nomImage= array_pop($tab);
+		
+		$dossierRelatif= implode("/",$tab);	
+		
+		$extension=$this->getExtension($nomImage);	
+		if($extension==null)
+		return ;
+		
+		$dir = __DIR__.'/../../../web/'.$dossierRelatif;
+		
+		$nomThumb = $dir.'/'.$this->getNomSansExtension($nomImage).'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension;
+		
+		$dir=__DIR__.'/../../../web/'.$dossierRelatif;
+	
+		$nomThumb = $dir.'/'.$this->getNomSansExtension($nomImage).'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension;	
+		
+		$linkThumb = $dossierRelatif.'/'.$this->getNomSansExtension($nomImage).'_Thumb'.$largeur.'X'.$hauteur.'.'.$extension;	
+		
+		//si le fichier du thumb n'existe pas on le créer
+		if (!file_exists($nomThumb))
+		$this->createThumb($largeur, $hauteur);
+	
+		return $linkThumb;
+		
+	}
 	
 	
 }

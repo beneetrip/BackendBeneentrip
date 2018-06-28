@@ -16,6 +16,21 @@ class ActivityController extends Controller
 		
     }
 	
+	public function testAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne(122);
+		//$imageId->createThumb(100, 100);
+		
+		
+		
+		if ($imageId->linkThumb(100, 100) != "")
+		$response = new Response($imageId->linkThumb(100, 100));
+		else
+		$response = new Response("");
+	
+		return $response;
+    }
 	
 	public function deleteAction()
     {
@@ -26,25 +41,23 @@ class ActivityController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idactivity);
+		//on prepare notre reponse vide
+		$response=new Response(json_encode(array()));
 		
-		//suppression des images
-		/* foreach( $activiteId->getImages() as $imgelem){
+		//On surveille les operations de suppressions et en cas d'erreurs on va retourner qu'il y a echec
+		try{	
+			//On recupere l'Activite correspondant a l'Id
+			$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($idactivity);
+			//On recupere notre Manager pour la suppression
+			$em=$this->getDoctrine()->getManager();
+			$em->remove($activiteId);
+			$em->flush();
+			$response = new Response(json_encode(array('success'=>'Activite supprimee avec succès')));
+		}catch(\Exception $e){
+			$response = new Response(json_encode(array('failure'=>'Echec de suppression')));
+		}
 		
-			$imgelem->setActivite(null);
-			//$activiteId->removeImage($imgelem);
-			$em->remove($imgelem);
-		} */
-			
-		if($activiteId != null)
-		$em->remove($activiteId);
-	
-		$em->flush(); 
-		
-		$result['message'] = "Opération éffectuée avec succèss";
-		
-		$response = new Response(json_encode($result));
-		
+		$response->headers->set('Content-Type', 'application/json');  
 		
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
@@ -289,19 +302,9 @@ class ActivityController extends Controller
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			/* if( count($elem->getImages()) != 0 )
-			{
-				$row['image'] = $elem->getImages()[0]->getUrl();
-			}
-			else
-			{
-				$row['image'] = "";
-			} */
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			/* foreach($elem->getImages() as $imgelem){
-				$imgrow['url'] = $imgelem->getUrl();
-				$row['images'] = $imgrow;
-			} */
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -350,19 +353,9 @@ class ActivityController extends Controller
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			/* if( count($elem->getImages()) != 0 )
-			{
-				$row['image'] = $elem->getImages()[0]->getUrl();
-			}
-			else
-			{
-				$row['image'] = "";
-			} */
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			/* foreach($elem->getImages() as $imgelem){
-				$imgrow['url'] = $imgelem->getUrl();
-				$row['images'] = $imgrow;
-			} */
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
