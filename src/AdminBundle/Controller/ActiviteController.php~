@@ -68,6 +68,8 @@ class ActiviteController extends Controller
     {
     	     
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindByAuteur("mi");
+		//print_r($listeActivites);
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
     }

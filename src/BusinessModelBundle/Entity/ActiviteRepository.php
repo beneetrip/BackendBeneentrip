@@ -31,8 +31,12 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
 			->where('a.lieuDestination LIKE :lieuDestination')
-			->setParameter('lieuDestination', '%'.$lieuDestination.'%');
-			return $qb->getQuery()->getResult();
+			->setParameter('lieuDestination','%'.$lieuDestination.'%');
+			/*print_r(array(
+        'sql'        => $qb->getQuery()->getSQL(),
+        'parameters' => $qb->getQuery()->getParameters(),
+        ));*/
+			return $qb->getQuery()->getArrayResult();
 			} 
 			
 			public function myFindByDate($dateDebut, $dateFin)
@@ -42,7 +46,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.date BETWEEN :dateDebut AND :dateFin')
 			->setParameter('dateDebut', new \Datetime($dateDebut))
 			->setParameter('dateFin', new \Datetime($dateFin));
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			public function myFindByHeure($heureDebut, $heureFin)
@@ -52,51 +56,52 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.heure BETWEEN :heureDebut AND :heureFin')
 			->setParameter('heureDebut', new \Datetime($heureDebut))
 			->setParameter('heureFin', new \Datetime($heureFin));
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 
 			public function myFindByCategorie($categorie)
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
-			->where('a.categorie.nom = :categorie')
+			->join('a.categorie', 'c', 'WITH', 'c.nom = :categorie')
 			->setParameter('categorie', $categorie);
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			public function myFindByAuteur($auteur)
 			{
-				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-				$qb = $this->createQueryBuilder('a')
-				->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
-				->setParameter('auteur', '%'.$auteur.'%');
-				return $qb->getQuery()->getResult();
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
+			->setParameter('auteur', '%'.$auteur.'%');
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			
 			//Fonction pour les recherches selon les criteres specifiques sur les activites
 			public function myFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
 			{
-				//On initialise notre liste de retour au tableau vide			
-				$listeRetour=[];
-				//Ensuite on teste les criteres en parametres celui qui est non null on appelle sa methode de recherche
-				
-				if($lieuDestination!=null)
-				$listeRetour=array_merge($listeRetour,$this->myFindByLieuDestination($lieuDestination));
-				
-				if($dateDebut!=null && $dateFin!=null)
-				$listeRetour=array_merge($listeRetour,$this->myFindByDate($dateDebut, $dateFin));
-				
-				if($heureDebut!=null && $heureFin!=null)
-				$listeRetour=array_merge($listeRetour,$this->myFindByHeure($heureDebut, $heureFin));
-				
-				if($categorie!=null)
-				$listeRetour=array_merge($listeRetour,$this->myFindByCategorie($categorie));
-				
-				if($auteur!=null)
-				$listeRetour=array_merge($listeRetour,$this->myFindByAuteur($auteur));			
-				
-				return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
+			//On initialise notre liste de retour au tableau vide			
+			$listeRetour=[];
+			//Ensuite on teste les criteres en parametres celui qui est non null on appelle sa methode de recherche
+			
+			if($lieuDestination!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByLieuDestination($lieuDestination));
+			
+		//print_r($this->myFindByLieuDestination($lieuDestination));
+			if($dateDebut!=null && $dateFin!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByDate($dateDebut, $dateFin));
+			
+			if($heureDebut!=null && $heureFin!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByHeure($heureDebut, $heureFin));
+			
+			if($categorie!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByCategorie($categorie));
+			
+			if($auteur!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByAuteur($auteur));			
+			
+			return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
 			}
 			
 			public function myFindListeDestinations()
@@ -105,7 +110,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			$retour=[];
 			
 			//On fait un tableau simple pour les destinations
-			foreach ($qb->getQuery()->getResult() as $elt)
+			foreach ($qb->getQuery()->getArrayResult() as $elt)
 			$retour[]=$elt['lieuDestination'];			
 			
 			return $retour;
