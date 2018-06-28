@@ -23,7 +23,7 @@ class PageRepository extends \Doctrine\ORM\EntityRepository
 				$qb = $this->createQueryBuilder('p')
 				->where('p.id = :id')
 				->setParameter('id', $id);
-				return $qb->getQuery()->getResult()[0];
+				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
 				
 	
@@ -33,7 +33,7 @@ class PageRepository extends \Doctrine\ORM\EntityRepository
 				$qb = $this->createQueryBuilder('p')
 				->where('p.titrePage = :titrePage')
 				->setParameter('titrePage', $titrePage);
-				return $qb->getQuery()->getResult()[0];
+				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
 
 }

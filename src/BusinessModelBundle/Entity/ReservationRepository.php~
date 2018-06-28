@@ -10,19 +10,18 @@ namespace BusinessModelBundle\Entity;
  */
 class ReservationRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function myFindAll()
-{
-return $this->createQueryBuilder('r')->getQuery()->getResult();
-}
+			public function myFindAll()
+			{
+			return $this->createQueryBuilder('r')->getQuery()->getResult();
+			}
 
-public function myFindOne($id)
-{
-// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-$qb = $this->createQueryBuilder('r')
-->where('r.id = :id')
-->setParameter('id', $id);
-return $qb->getQuery()->getResult()[0];
-}
-
+			public function myFindOne($id)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('r')
+			->where('r.id = :id')
+			->setParameter('id', $id);
+			return $qb->getQuery()->getResult()[0];
+			}
 
 }

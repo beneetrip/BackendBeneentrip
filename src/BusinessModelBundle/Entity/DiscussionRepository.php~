@@ -10,10 +10,12 @@ namespace BusinessModelBundle\Entity;
  */
 class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 {
+			
 			public function myFindAll()
 			{
 			return $this->createQueryBuilder('d')->getQuery()->getResult();
 			}
+
 
 			public function myFindOne($id)
 			{

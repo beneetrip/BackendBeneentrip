@@ -23,7 +23,7 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('d')
 			->where('d.id = :id')
 			->setParameter('id', $id);
-			return $qb->getQuery()->getResult()[0];
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 
 

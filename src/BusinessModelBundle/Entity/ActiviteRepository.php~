@@ -10,19 +10,66 @@ namespace BusinessModelBundle\Entity;
  */
 class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function myFindAll()
-{
-return $this->createQueryBuilder('a')->getQuery()->getResult();
-}
-
-public function myFindOne($id)
-{
-// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-$qb = $this->createQueryBuilder('a')
-->where('a.id = :id')
-->setParameter('id', $id);
-return $qb->getQuery()->getResult()[0];
-}
+	
+			public function myFindAll()
+			{
+			return $this->createQueryBuilder('a')->getQuery()->getResult();
+			}
 
 
+			public function myFindOne($id)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.id = :id')
+			->setParameter('id', $id);
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+			}
+			
+			public function myFindByDestination($lieuDestination)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.lieuDestination LIKE :lieuDestination')
+			->setParameter('lieuDestination', '%'.$lieuDestination.'%');
+			return $qb->getQuery()->getResult();
+			} 
+			
+			public function myFindByDate($dateDebut, $dateFin)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.date BETWEEN :dateDebut AND :dateFin')
+			->setParameter('dateDebut', new \Datetime($dateDebut))
+			->setParameter('dateFin', new \Datetime($dateFin));
+			return $qb->getQuery()->getResult();
+			}
+			
+			public function myFindByHeure($heureDebut, $heureFin)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.heure BETWEEN :heureDebut AND :heureFin')
+			->setParameter('heureDebut', new \Datetime($heureDebut))
+			->setParameter('heureFin', new \Datetime($heureFin));
+			return $qb->getQuery()->getResult();
+			}
+
+			public function myFindByCategorie($categorie)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.categorie.nom = :categorie')
+			->setParameter('categorie', $categorie);
+			return $qb->getQuery()->getResult();
+			}
+			
+			public function myFindByAuteur($auteur)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
+			->setParameter('auteur', '%'.$auteur.'%');
+			return $qb->getQuery()->getResult();
+			}
 }

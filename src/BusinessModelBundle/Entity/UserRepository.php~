@@ -47,6 +47,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 			
+			
 			public function myFindUsernameOREmail($username,$email)
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
