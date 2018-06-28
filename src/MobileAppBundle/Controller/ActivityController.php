@@ -52,7 +52,10 @@ class ActivityController extends Controller
 		
 		//myFindSurActivites($request->destination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
 		//$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites('LIMBE', null, null, null, null, null, null, 3, 0);
+		
+		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindByLieuDestination('LIMBE');
 
+		
 		//$result['id'] = $request->destination;
 		
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
@@ -83,8 +86,9 @@ class ActivityController extends Controller
 			
 		}
 		
-		$response = new Response(json_encode($result));
+		$response = new Response(json_encode($searchresult));
 		
+		//$response = new Response(json_encode($searchresult));
 		
 		$response->headers->set('Content-Type', 'application/json');  
 		
@@ -115,7 +119,7 @@ class ActivityController extends Controller
 		
 		foreach( $listDestinations as $elem){
 			
-			$result['destinations'][] = $elem['lieuDestination'];
+			$result['destinations'][] = $elem;
 			
 		} 
 					

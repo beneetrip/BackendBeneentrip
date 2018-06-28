@@ -101,8 +101,14 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			
 			public function myFindListeDestinations()
 			{
-				$qb=$this->_em->createQueryBuilder()->select('a.lieuDestination')->from($this->_entityName, 'a');
-				return $qb->getQuery()->getResult();
+			$qb=$this->_em->createQueryBuilder()->select('a.lieuDestination')->from($this->_entityName, 'a');
+			$retour=[];
+			
+			//On fait un tableau simple pour les destinations
+			foreach ($qb->getQuery()->getResult() as $elt)
+			$retour[]=$elt['lieuDestination'];			
+			
+			return $retour;
 			}
 			
 }

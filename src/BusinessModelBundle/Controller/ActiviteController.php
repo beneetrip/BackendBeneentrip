@@ -52,8 +52,8 @@ class ActiviteController extends Controller
 		try{	
 		//On recupere l'Activite correspondant a l'Id
 		$listDestinations=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations();
-		
-		$response = new Response(json_encode(array_unique($listDestinations)));
+		print_r($listDestinations);
+		$response = new Response(json_encode(array_unique(array_map("strtoupper", $listDestinations))));
 		}catch(\Exception $e){
 		$response = new Response(json_encode(array('failure'=>'Echec de requete')));
 		}
