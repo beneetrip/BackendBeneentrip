@@ -6,6 +6,10 @@ mobile_app_activity_searchpage:
     path:     /mobapp/activity/search
     defaults: { _controller: MobileAppBundle:Activity:search }
 
+mobile_app_activity_searchresultpage:
+    path:     /mobapp/activity/searchresult
+    defaults: { _controller: MobileAppBundle:Activity:searchresult }
+
 mobile_app_activity_testpage:
     path:     /mobapp/test
     defaults: { _controller: MobileAppBundle:Activity:test }

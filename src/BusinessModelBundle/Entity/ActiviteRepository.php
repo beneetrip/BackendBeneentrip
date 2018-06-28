@@ -66,11 +66,11 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			
 			public function myFindByAuteur($auteur)
 			{
-			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-			$qb = $this->createQueryBuilder('a')
-			->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
-			->setParameter('auteur', '%'.$auteur.'%');
-			return $qb->getQuery()->getResult();
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('a')
+				->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
+				->setParameter('auteur', '%'.$auteur.'%');
+				return $qb->getQuery()->getResult();
 			}
 			
 			
@@ -101,7 +101,8 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			
 			public function myFindListeDestinations()
 			{
-			$qb=$this->_em->createQueryBuilder()->select('a.lieuDestination')->from($this->_entityName, 'a');
-			return $qb->getQuery()->getResult();
+				$qb=$this->_em->createQueryBuilder()->select('a.lieuDestination')->from($this->_entityName, 'a');
+				return $qb->getQuery()->getResult();
 			}
+			
 }

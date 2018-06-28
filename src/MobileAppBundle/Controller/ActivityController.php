@@ -35,6 +35,31 @@ class ActivityController extends Controller
 		return $response;
     }
 	
+	public function searchresultAction()
+    {
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		
+		//myFindSurActivites($request->destination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
+		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites('test', null, null, null, null, null, null, 3, 0);
+
+		//$result['id'] = $request->destination;
+		
+		$result['id'] = "kribi";
+		
+		$response = new Response(json_encode($searchresult));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;
+    }
+	
 	public function searchAction()
     {
 		/* $postdata = file_get_contents("php://input");
@@ -48,9 +73,16 @@ class ActivityController extends Controller
 		foreach( $eclaireurs as $elem){
 			
 			$result['eclaireurs'][] = $elem->getUsername();
+		} 
+		
+		$listDestinations=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations();
+		
+		foreach( $listDestinations as $elem){
+			
+			$result['destinations'][] = $elem['lieuDestination'];
 			
 		} 
-			
+					
 		
 		$response = new Response(json_encode($result));
 		
