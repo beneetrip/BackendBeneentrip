@@ -2,6 +2,10 @@ mobile_app_activity_editpage:
     path:     /mobapp/activity/edit
     defaults: { _controller: MobileAppBundle:Activity:edit }
 
+mobile_app_activity_searchpage:
+    path:     /mobapp/activity/search
+    defaults: { _controller: MobileAppBundle:Activity:search }
+
 mobile_app_activity_testpage:
     path:     /mobapp/test
     defaults: { _controller: MobileAppBundle:Activity:test }

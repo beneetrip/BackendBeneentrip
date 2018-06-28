@@ -18,17 +18,49 @@ class ActivityController extends Controller
 	
 	public function testAction()
     {
-		$em = $this->getDoctrine()->getManager();
-		$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne(122);
-		//$imageId->createThumb(100, 100);
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
 		
+		$result['id'] = "	message";
 		
+		$response = new Response(json_encode($result));
 		
-		if ($imageId->linkThumb(100, 100) != "")
-		$response = new Response($imageId->linkThumb(100, 100));
-		else
-		$response = new Response("");
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;
+    }
 	
+	public function searchAction()
+    {
+		/* $postdata = file_get_contents("php://input");
+		$request = json_decode($postdata); */
+		
+		$result['eclaireurs'] = array();
+		$result['destinations'] = array();
+		
+		$eclaireurs = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->findBy(array('typeUtilisateur'=>'Guide'), array('id' => 'DESC'));
+		
+		foreach( $eclaireurs as $elem){
+			
+			$result['eclaireurs'][] = $elem->getUsername();
+			
+		} 
+			
+		
+		$response = new Response(json_encode($result));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
 		return $response;
     }
 	
