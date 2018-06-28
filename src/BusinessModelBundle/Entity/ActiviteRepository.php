@@ -72,4 +72,30 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->setParameter('auteur', '%'.$auteur.'%');
 			return $qb->getQuery()->getResult();
 			}
+			
+			
+			//Fonction pour les recherches selon les criteres specifiques sur les activites
+			public function myFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
+			{
+			//On initialise notre liste de retour au tableau vide			
+			$listeRetour=[];
+			//Ensuite on teste les criteres en parametres celui qui est non null on appelle sa methode de recherche
+			
+			if($lieuDestination!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByLieuDestination($lieuDestination));
+			
+			if($dateDebut!=null && $dateFin!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByDate($dateDebut, $dateFin));
+			
+			if($heureDebut!=null && $heureFin!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByHeure($heureDebut, $heureFin));
+			
+			if($categorie!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByCategorie($categorie));
+			
+			if($auteur!=null)
+			$listeRetour=array_merge($listeRetour,$this->myFindByAuteur($auteur));			
+			
+			return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
+			}
 }
