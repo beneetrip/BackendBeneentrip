@@ -41,6 +41,26 @@ class ActiviteController extends Controller
 		
 		$response->headers->set('Content-Type', 'application/json');  
 		return $response;
-	 }    
+	 }
+	 
+	 public function listeDestinationsAction(){
+	
+		//on prepare notre reponse vide
+		$response=new Response(json_encode(array()));
+		
+		//On surveille les operations et en cas d'erreurs on va retourner qu'il y a echec
+		try{	
+		//On recupere l'Activite correspondant a l'Id
+		$listDestinations=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations();
+		
+		$response = new Response(json_encode(array_unique($listDestinations)));
+		}catch(\Exception $e){
+		$response = new Response(json_encode(array('failure'=>'Echec de requete')));
+		}
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		return $response;
+	 }		 
+	      
      
 }
