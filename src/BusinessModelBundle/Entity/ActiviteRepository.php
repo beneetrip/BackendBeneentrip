@@ -63,7 +63,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
-			->where('a.categorie.nom = :categorie')
+			->join('a.categorie', 'c', 'WITH', 'c.nom = :categorie')
 			->setParameter('categorie', $categorie);
 			return $qb->getQuery()->getArrayResult();
 			}
@@ -72,7 +72,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
-			->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
+			->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
 			->setParameter('auteur', '%'.$auteur.'%');
 			return $qb->getQuery()->getArrayResult();
 			}
@@ -110,7 +110,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			$retour=[];
 			
 			//On fait un tableau simple pour les destinations
-			foreach ($qb->getQuery()->getResult() as $elt)
+			foreach ($qb->getQuery()->getArrayResult() as $elt)
 			$retour[]=$elt['lieuDestination'];			
 			
 			return $retour;
