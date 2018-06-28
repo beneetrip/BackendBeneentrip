@@ -31,8 +31,12 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
 			->where('a.lieuDestination LIKE :lieuDestination')
-			->setParameter('lieuDestination', '%'.$lieuDestination.'%');
-			return $qb->getQuery()->getResult();
+			->setParameter('lieuDestination','%'.$lieuDestination.'%');
+			/*print_r(array(
+        'sql'        => $qb->getQuery()->getSQL(),
+        'parameters' => $qb->getQuery()->getParameters(),
+        ));*/
+			return $qb->getQuery()->getArrayResult();
 			} 
 			
 			public function myFindByDate($dateDebut, $dateFin)
@@ -42,7 +46,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.date BETWEEN :dateDebut AND :dateFin')
 			->setParameter('dateDebut', new \Datetime($dateDebut))
 			->setParameter('dateFin', new \Datetime($dateFin));
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			public function myFindByHeure($heureDebut, $heureFin)
@@ -52,7 +56,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.heure BETWEEN :heureDebut AND :heureFin')
 			->setParameter('heureDebut', new \Datetime($heureDebut))
 			->setParameter('heureFin', new \Datetime($heureFin));
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 
 			public function myFindByCategorie($categorie)
@@ -61,7 +65,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('a')
 			->where('a.categorie.nom = :categorie')
 			->setParameter('categorie', $categorie);
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			public function myFindByAuteur($auteur)
@@ -70,7 +74,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('a')
 			->where('a.auteur.nomComplet LIKE :auteur OR a.auteur.username LIKE :auteur')
 			->setParameter('auteur', '%'.$auteur.'%');
-			return $qb->getQuery()->getResult();
+			return $qb->getQuery()->getArrayResult();
 			}
 			
 			
@@ -84,6 +88,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			if($lieuDestination!=null)
 			$listeRetour=array_merge($listeRetour,$this->myFindByLieuDestination($lieuDestination));
 			
+		//print_r($this->myFindByLieuDestination($lieuDestination));
 			if($dateDebut!=null && $dateFin!=null)
 			$listeRetour=array_merge($listeRetour,$this->myFindByDate($dateDebut, $dateFin));
 			
