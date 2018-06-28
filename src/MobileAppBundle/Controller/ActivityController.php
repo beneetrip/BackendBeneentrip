@@ -40,15 +40,51 @@ class ActivityController extends Controller
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
+		$result = array();
+		
+		$nbrResult = 7;
+		
+		$debutresultat = 0;
+		
+		/* if($page > 0)
+			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif */
+		
 		
 		//myFindSurActivites($request->destination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
-		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites('test', null, null, null, null, null, null, 3, 0);
+		//$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites('LIMBE', null, null, null, null, null, null, 3, 0);
 
 		//$result['id'] = $request->destination;
 		
-		$result['id'] = "kribi";
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
 		
-		$response = new Response(json_encode($searchresult));
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
 		
 		$response->headers->set('Content-Type', 'application/json');  
 		
