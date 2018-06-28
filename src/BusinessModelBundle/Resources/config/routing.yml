@@ -15,3 +15,7 @@ business_model_supprimerActivite:
     defaults: { _controller: BusinessModelBundle:Activite:supprimer }
     requirements:
               id: \d+
+
+business_model_listeDestinations:
+    path:     /listeDestinations
+    defaults: { _controller: BusinessModelBundle:Activite:listeDestinations }
