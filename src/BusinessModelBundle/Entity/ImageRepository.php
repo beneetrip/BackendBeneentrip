@@ -23,7 +23,7 @@ class ImageRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('i')
 			->where('i.id = :id')
 			->setParameter('id', $id);
-			return $qb->getQuery()->getResult()[0];
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 
 }

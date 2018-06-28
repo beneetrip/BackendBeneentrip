@@ -10,11 +10,13 @@ namespace BusinessModelBundle\Entity;
  */
 class ImageRepository extends \Doctrine\ORM\EntityRepository
 {
+			
 			public function myFindAll()
 			{
 			return $this->createQueryBuilder('i')->getQuery()->getResult();
 			}
 
+			
 			public function myFindOne($id)
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple

@@ -23,7 +23,7 @@ class LangueRepository extends \Doctrine\ORM\EntityRepository
 				$qb = $this->createQueryBuilder('l')
 				->where('l.id = :id')
 				->setParameter('id', $id);
-				return $qb->getQuery()->getResult()[0];
+				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
 
 }
