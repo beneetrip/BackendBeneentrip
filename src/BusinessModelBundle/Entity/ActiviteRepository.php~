@@ -103,6 +103,8 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			
 			return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
 			}
+			*/
+			
 			
 			public function myFindListeDestinations()
 			{
@@ -115,7 +117,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			
 			return $retour;
 			}
-			*/
+		
 			
 			//Fonction pour les recherches selon les criteres specifiques sur les activites
 			public function myFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
