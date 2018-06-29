@@ -175,10 +175,11 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;										
 						}
 						
-						print_r(array(
+						/*print_r(array(
         				'sql'        => $qb->getQuery()->getSQL(),
         				'parameters' => $qb->getQuery()->getParameters(),
         				));						
+						*/
 						
 						//Et pour finir on prend les resultats avec tous les criteres en compte
 						$listeRetour=$qb->getQuery()->getArrayResult();
