@@ -33,9 +33,9 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.lieuDestination LIKE :lieuDestination')
 			->setParameter('lieuDestination','%'.$lieuDestination.'%');
 			/*print_r(array(
-        'sql'        => $qb->getQuery()->getSQL(),
-        'parameters' => $qb->getQuery()->getParameters(),
-        ));*/
+			'sql'        => $qb->getQuery()->getSQL(),
+			'parameters' => $qb->getQuery()->getParameters(),
+			));*/
 			return $qb->getQuery()->getArrayResult();
 			} 
 			
@@ -101,7 +101,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			if($auteur!=null)
 			$listeRetour=array_merge($listeRetour,$this->myFindByAuteur($auteur));			
 			
-			return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
+			return array_slice($listeRetour, $indexDebut, $nbResults);			
 			}
 			
 			public function myFindListeDestinations()

@@ -35,35 +35,45 @@ class ActivityController extends Controller
 		return $response;
     }
 	
-	public function searchresultAction()
+	public function searchresultAction($page)
     {
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
 		$result = array();
 		
-		$nbrResult = 7;
+		$nbrResult = 5;
 		
 		$debutresultat = 0;
 		
-		/* if($page > 0)
-			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif */
+		if($page > 0)
+			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif
 		
+		
+		if( $request->destination == "")
+			$destination = null;
+		else
+			$destination = $request->destination;
+		
+		if( $request->eclaireur == "")
+			$eclaireur = null;
+		else
+			$eclaireur = $request->eclaireur;
 		
 		//myFindSurActivites($request->destination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
-		//$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites('LIMBE', null, null, null, null, null, null, 3, 0);
+		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites($destination, null, null, null, null, null, $eclaireur, $nbrResult, $debutresultat);
 		
-		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindByLieuDestination('LIMBE');
 
 		
 		//$result['id'] = $request->destination;
 		
-		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
 		
 		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
 		
-		foreach($listeActivites as $elem){
+		foreach($searchresult as $elem){
 			
+			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
 			$row['description'] = $elem->getDescription();
@@ -86,7 +96,7 @@ class ActivityController extends Controller
 			
 		}
 		
-		$response = new Response(json_encode($searchresult));
+		$response = new Response(json_encode($result));
 		
 		//$response = new Response(json_encode($searchresult));
 		
@@ -328,8 +338,8 @@ class ActivityController extends Controller
 		$result['user']['id'] = $activiteId->getAuteur()->getId();
 		$result['user']['username'] = $activiteId->getAuteur()->getUsername();
 		$result['user']['photo'] = $activiteId->getAuteur()->getPhoto();
-		$result['date'] = $activiteId->getDate()->format('d-m-Y');;
-		$result['heure'] = $activiteId->getHeure()->format('H:i');;
+		$result['date'] = $activiteId->getDate()->format('d-m-Y');
+		$result['heure'] = $activiteId->getHeure()->format('H:i');
 		$result['dateclair'] = $activiteId->getDateEnClair();
 		$result['nbVues'] = $activiteId->getNbVues();
 		$result['prix'] = $activiteId->getPrixIndividu();
