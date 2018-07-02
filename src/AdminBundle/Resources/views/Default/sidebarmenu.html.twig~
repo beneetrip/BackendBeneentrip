@@ -7,6 +7,7 @@
 	<ul class="nav nav-pills nav-stacked">
 		<li><a href="{{ path('listeActivites') }}">Toutes les Activités</a></li>
 		<li><a href="{{ path('ajouterActivite') }}">Ajouter une Activité</a></li>
+		<li><a href="{{ path('rechercherActivites') }}">Rechercher une Activité</a></li>
 	</ul>
 </li>
 
@@ -15,11 +16,25 @@
 	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Réservation </span></a>
 	<ul class="nav nav-pills nav-stacked">
 		<li><a href="{{ path('listeReservations') }}">Toutes les Réservation</a></li>
-		<li><a href="{{ path('ajouterReservation') }}">Ajouter une Réservations</a></li>
+		<li><a href="{{ path('ajouterReservation') }}">Ajouter une Réservation</a></li>
 	</ul>
 </li>
 
+<li class="accordion">
+	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Discussion </span></a>
+	<ul class="nav nav-pills nav-stacked">
+		<li><a href="{{ path('listeDiscussions') }}">Toutes les Discussions</a></li>
+		<li><a href="{{ path('ajouterDiscussion') }}">Ajouter une Discussion</a></li>
+	</ul>
+</li>
 
+<li class="accordion">
+	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Langue </span></a>
+	<ul class="nav nav-pills nav-stacked">
+		<li><a href="{{ path('listeLangues') }}">Toutes les Langues</a></li>
+		<li><a href="{{ path('ajouterLangue') }}">Ajouter une Langue</a></li>
+	</ul>
+</li>
 
 <li class="accordion">
 	<a href="#page"><i class="fa fa-book"></i><span> Page </span></a>
@@ -72,5 +87,5 @@
 
 <li class="nav-header hidden-md">Paramètres</li>
 
-<li><a href="{{ path('fos_user_change') }}"><i class="fa fa-cog"></i><span> paramètres généraux </span></a></li>
+<li><a href="{{ path('fos_user_change_password') }}"><i class="fa fa-cog"></i><span> paramètres généraux </span></a></li>
 

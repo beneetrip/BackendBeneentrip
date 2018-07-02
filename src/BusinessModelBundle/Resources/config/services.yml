@@ -45,3 +45,8 @@ services:
          class: BusinessModelBundle\Form\Type\LangueType
          tags:
             - { name: form.type, alias: businessmodelbundle_langue }
+
+     model_search.registration.form.type:
+         class: BusinessModelBundle\Form\Type\SearchActiviteType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_searchactivite }

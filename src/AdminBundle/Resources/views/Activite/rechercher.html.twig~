@@ -50,48 +50,57 @@
 				
             </div>
             <div class="box-content">
- {% if app.session.flashbag.get('info') is defined %} 
-{% for message in app.session.flashbag.get('info') %}
-<div class="alert alert-success">
-<p>{{ message }}</p>
-</div>
-{% endfor %}
-{% endif %}
+ 
 					{% block contentForm %}
 
 					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : activite.id|default('0') })}) }}
 					{{ form_errors(form) }}
 					<div class="form-group">
-					{{ form_label(form.libelle) }}
-					{{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.libelle) }} 
+					{{ form_label(form.lieuDestinations) }}
+					<div class="controls">
+					{{ form_widget(form.lieuDestinations, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
+					</div>
 					</div>
 					<div class="form-group">
-					{{ form_label(form.lieuDestination) }}
-					{{ form_widget(form.lieuDestination, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.lieuDestination) }} 
+					{{ form_label(form.dateDebut) }}
+					{{ form_widget(form.dateDebut, { 'attr': {'class': 'datepicker form-control'}}) }}
+					{{ form_errors(form.dateDebut) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.date) }}
-					{{ form_widget(form.date, { 'attr': {'class': 'datepicker form-control'}}) }}
-					{{ form_errors(form.date) }} 
+					{{ form_label(form.dateFin) }}
+					{{ form_widget(form.dateFin, { 'attr': {'class': 'datepicker form-control'}}) }}
+					{{ form_errors(form.dateFin) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.heure) }}
-					{{ form_widget(form.heure, { 'attr': {'class': 'timepicker form-control'}}) }}
-					{{ form_errors(form.heure) }} 
+					{{ form_label(form.heureDebut) }}
+					{{ form_widget(form.heureDebut, { 'attr': {'class': 'timepicker form-control'}}) }}
+					{{ form_errors(form.heureDebut) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.nbParticipants) }}
-					{{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.nbParticipants) }} 
+					{{ form_label(form.heureFin) }}
+					{{ form_widget(form.heureFin, { 'attr': {'class': 'timepicker form-control'}}) }}
+					{{ form_errors(form.heureFin) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.prixIndividu) }}
-					{{ form_widget(form.prixIndividu, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.prixIndividu) }} 
+					{{ form_label(form.prixIndividuMin) }}
+					{{ form_widget(form.prixIndividuMin, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.prixIndividuMin) }} 
 					</div>
-
+					<div class="form-group">
+					{{ form_label(form.prixIndividuMax) }}
+					{{ form_widget(form.prixIndividuMax, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.prixIndividuMax) }} 
+					</div>
+					<div class="form-group">
+					{{ form_label(form.nbParticipantsMin) }}
+					{{ form_widget(form.nbParticipantsMin, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nbParticipantsMin) }} 
+					</div>
+					<div class="form-group">
+					{{ form_label(form.nbParticipantsMax) }}
+					{{ form_widget(form.nbParticipantsMax, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nbParticipantsMax) }} 
+					</div>
 					<div class="control-group">
 					{{ form_label(form.categorie) }}
 					<div class="controls">
@@ -99,37 +108,13 @@
 					</div>
 					</div>
 					<br/>
-					<div class="form-group">
-					{{ form_label(form.description) }}
-					{{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.description) }} 
-					</div>
-					
-					<div class="form-group" id="divImagePrincipale">
-					{{ form_label(form.imagePrincipale) }}
-					{{ form_widget(form.imagePrincipale) }}
-					{{ form_errors(form.imagePrincipale) }} 
-					</div>
-
-					
-					<div class="form-group" id="divImages">
-					<br/>
-					<!-- {{ form_label(form.images) }} -->
-					{{ form_widget(form.images) }}
-					
-					<!-- on genere tous les urls des fichiers images de l'activite pour la communication entre Twig et javascript -->
-					<div id="divUrls">
-					{% if activite is defined   %} 															
-					{% for image in activite.images %}
-					<span id="{{ image.url }}" hidden>{{ asset(image.url) }}</span>
-					{% endfor %}
-					{% endif %}
+					<div class="control-group">
+					{{ form_label(form.auteur) }}
+					<div class="controls">
+					{{ form_widget(form.auteur, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 					</div>
-
-					
 				
-					
      <div class="form-group">
 <button id="button-submit" type="submit" class="btn btn-default" data-loading-text=" <i class='fa fa-refresh fa-spin fa-lg'></i> Envoie en cours ...">{{bouton}}</button>
 <button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                    
@@ -347,129 +332,16 @@
 	
 </script>
 
-{# Voici le script en question pour ajouter les images a une activite: #}
+{# Voici le script en question pour rechercher sur une activite: #}
 <script type="text/javascript">
 $(document).ready(function() {
 //On affiche bien nos dates et heures avec des beaux widgets
 $('.datepicker').datepicker();
 $('.timepicker').timepicker({showMeridian: false});//false pour activer le mode 24h voir https://jdewit.github.io/bootstrap-timepicker/
-//On formatte les champs pour l'Image principale
-$('#businessmodelbundle_activite_imagePrincipale_nom').attr('class','form-control');
-$('#businessmodelbundle_activite_imagePrincipale_fichier').attr('accept','.jpg, .jpeg, .png');
-$('#businessmodelbundle_activite_imagePrincipale_fichier').attr('style','display: none;');
-$('#businessmodelbundle_activite_imagePrincipale_fichier').attr('onchange',"previsualiserImage('businessmodelbundle_activite_imagePrincipale_fichier','zoneImage');");
-$('#divImagePrincipale').children('label').first().html('<legend>Image Principale</legend>');
-document.getElementById('divImagePrincipale').innerHTML+=`
-<br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
-					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; width: 30%;" 
-{% if activite.imagePrincipale is not defined or activite.imagePrincipale.url is null %} 															
-					src="{{ asset('bundles/admin/img/image.jpg') }}" 
-{% else %}
-					src="{{ asset(activite.imagePrincipale.url) }}"
-{% endif %}/></center>`;							
-					
-// On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-var $container = $('div#businessmodelbundle_activite_images');
-//On recupere le div des images et on va ajouter notre bouton ajout pour qu'il apparaisse toujours a la fin des images qu'on ajoute
-var $divImages= $('div#divImages');
-// On ajoute un lien pour ajouter une nouvelle catégorie
-var $lienAjout = $('<center><br/><br/><a href="#" id="ajout_image" class="btn btn-primary">Ajouter autre Image</a><br/><br/></center>');
-$divImages.append($lienAjout);
-// On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-$lienAjout.click(function(e) {
-ajouterImage($container);
-e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-return false;
-});
-// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement en utilisant le nombre de div d'images
-var index = $container.children('div').length;
-// On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
-if (index == 0) {
-//ajouterImage($container);
-} else {
-// Pour chaque image déjà existante, on ajoute un lien de suppression
-$container.children('div').each(function() {
-//On decore un peu avec les fieldsets
-$(this).children('label').first().html('<legend>Image numero ' + ($(this).index()+1)+'</legend>');
 
-//Ayant generer les urls on peut les prendre respectivement par les index des fils span dans divUrls
-var elt=$('#divUrls').children('span').eq($(this).index()).html();
-
-$(this).html('<fieldset>'+$(this).html()+`
-<center><img id="img`+($(this).index())+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+($(this).index())+`_fichier').click();" 
-					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; width: 25%;" src="`+elt+`" /></center></fieldset>`
-);
-
-//Et on ajoute l'attribut class=form-control a tous les input type text
-for (var i = 0; i < $(this).find(':input').length; i++){
-if($(this).find(':input')[i].type == 'text')
-$($(this).find(':input')[i]).attr('class','form-control');
-else if($(this).find(':input')[i].type == 'file'){
-$($(this).find(':input')[i]).attr('accept','.jpg, .jpeg, .png');
-$($(this).find(':input')[i]).attr('style','display: none;');
-var idElt='businessmodelbundle_activite_images_'+($(this).index())+'_fichier';
-var idImg='img'+($(this).index());
-$($(this).find(':input')[i]).attr('onchange',"previsualiserImage('"+idElt+"','"+idImg+"');");
-}
-}
-ajouterLienSuppression($(this));
-});
-}
-// La fonction qui ajoute un formulaire Image 
-function ajouterImage($container) {
-// Dans le contenu de l'attribut « data-prototype », on remplace : 
-//- le texte "__name__label__" qu'il contient par le label du champ
-// - le texte "__name__" qu'il contient par le numéro du champ
-// Et on decore un peu avec des fieldsets
-var $prototype = $('<fieldset>'+$container.attr('data-prototype').replace(/__name__label__/g, '<legend>Image numero ' + (index+1)+'</legend>').replace(/__name__/g, index)
-+`<center><img id="img`+(index)+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+(index)+`_fichier').click();" 
-					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
-					pointer; width: 25%;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
-`
-+'</fieldset>');
-//Et on ajoute l'attribut class=form-control a tous les input type text
-for (var i = 0; i < $prototype.find(':input').length; i++){
-if($prototype.find(':input')[i].type == 'text')
-$($prototype.find(':input')[i]).attr('class','form-control');
-else if($prototype.find(':input')[i].type == 'file'){
-$($prototype.find(':input')[i]).attr('accept','.jpg, .jpeg, .png');
-$($prototype.find(':input')[i]).attr('style','display: none;');
-var idElt='businessmodelbundle_activite_images_'+(index)+'_fichier';
-var idImg='img'+(index);
-$($prototype.find(':input')[i]).attr('onchange',"previsualiserImage('"+idElt+"','"+idImg+"');");
-}
-}
-// On ajoute au prototype un lien pour pouvoir supprimer l'Image
-ajouterLienSuppression($prototype);
-// On ajoute le prototype modifié à la fin de la balise <div>
-$container.append($prototype);
-// Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-index++;
-}
-// La fonction qui ajoute un lien de suppression d'une Image
-function ajouterLienSuppression($prototype) {
-// Création du lien
-$lienSuppression = $('<br/><a href="#" class="btn btn-danger">Supprimer</a><br/><br/>');
-// Ajout du lien
-$prototype.append($lienSuppression);
-// Ajout du listener sur le clic du lien
-$lienSuppression.click(function(e) {
-$prototype.remove();
-e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-return false;
-});
-}
 });
 </script>
-			<script type="text/javascript">
-				CKEDITOR.replace( 'businessmodelbundle_activite_description' );
-			</script>
-
-
-			
-						
+					
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}
 {% endblock %}
 

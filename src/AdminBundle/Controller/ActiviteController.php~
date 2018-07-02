@@ -11,6 +11,8 @@ use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\Activite;
 use BusinessModelBundle\Entity\Image;
 use BusinessModelBundle\Form\Type\ActiviteType;
+use BusinessModelBundle\Form\Type\SearchActiviteType;
+use Symfony\Component\Form\FormError;
 
 class ActiviteController extends Controller
 {
@@ -20,9 +22,9 @@ class ActiviteController extends Controller
 		$activite= new Activite();
 		$form = $this->createForm('businessmodelbundle_activite', $activite);   
 		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>'Enregistrer')); 	  	
-	 }
+	}
 
-	 public function creerAction()
+	public function creerAction()
     {
 		$activite= new Activite();
 		$image= new Image();
@@ -91,12 +93,9 @@ class ActiviteController extends Controller
     {
 		$activiteId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_activite', $activiteId);
-<<<<<<< HEAD
-		//var_dump($activiteId->getDateEnClair());   
-=======
+
 		//var_dump($activiteId->getDateEnClair());
 		//var_dump($activiteId->getDescriptionEnClair());      
->>>>>>> a4bdd826617c2760b24cd1579b01e1a65794e80a
 		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
 	 }
 	 
@@ -155,5 +154,96 @@ class ActiviteController extends Controller
 		return $this->render('AdminBundle:Discussion:liste.html.twig',array('listeDiscussions' => $listeDiscussions));
     }
 
+
+ 	 //Fonction speciale permettant de rechercher des activites selon des criteres
+    public function searchActiviteAction()
+    {
+    	$listeDest=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations(); 
+    	$form = $this->createForm(new SearchActiviteType($listeDest));
+		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 'bouton'=>'Rechercher'));
+    }
+    
+    //Fonction speciale permettant d'obtenir la liste des activites selon des criteres
+    public function searchListActiviteAction()
+    {
+    	$listeDest=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations(); 
+    	$form = $this->createForm(new SearchActiviteType($listeDest));
+    	$request = $this->get('request');
+    	if ($request->getMethod() == 'POST') {
+		// On fait le lien Requête <-> Formulaire
+		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
+		$form->bind($request);
+		
+		if($form->isValid() && $this->checkParameters($request,$form)) {
+		
+		$registrationArray = $request->get('businessmodelbundle_searchactivite');
+		$lieuDestination=$listeDest[intval($registrationArray['lieuDestinations'])];		
+		$dateDebut = $registrationArray['dateDebut'];
+		$dateFin = $registrationArray['dateFin'];
+		$heureDebut = $registrationArray['heureDebut'];
+		$heureFin = $registrationArray['heureFin'];
+		$prixIndividuMin = $registrationArray['prixIndividuMin'];
+		$prixIndividuMax = $registrationArray['prixIndividuMax'];
+		$nbParticipantsMin = $registrationArray['nbParticipantsMin'];
+		$nbParticipantsMax = $registrationArray['nbParticipantsMax'];
+		$categorie= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne(intval($registrationArray['categorie']))->getNom();
+		$auteur= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['auteur']))->getNomComplet();
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
+		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 
+		$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur);
+    	
+    	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+		}  
+		}
+		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 'bouton'=>'Rechercher'));
+    }
+    
+    
+    //Fonction qui permet de tester s'il les contraintes de comparaisons sur les champs sont respectees
+    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form){
+		
+		$registrationArray = $request->get('businessmodelbundle_searchactivite');
+		
+		$dateDebut = ($registrationArray['dateDebut']!=null) ? (new \DateTime($registrationArray['dateDebut'])) : null;
+		$dateFin = ($registrationArray['dateFin']!=null) ? (new \DateTime($registrationArray['dateFin'])) : null;
+		$heureDebut = ($registrationArray['heureDebut']!=null) ? (new \DateTime($registrationArray['heureDebut'])) : null;
+		$heureFin = ($registrationArray['heureFin']!=null) ? (new \DateTime($registrationArray['heureFin'])) : null;
+		$prixIndividuMin = ($registrationArray['prixIndividuMin']!=null) ? (floatval($registrationArray['prixIndividuMin'])) : null;
+		$prixIndividuMax = ($registrationArray['prixIndividuMax']!=null) ? (floatval($registrationArray['prixIndividuMax'])) : null;
+		$nbParticipantsMin = ($registrationArray['nbParticipantsMin']!=null) ? (intval($registrationArray['nbParticipantsMin'])) : null;
+		$nbParticipantsMax = ($registrationArray['nbParticipantsMax']!=null) ? (intval($registrationArray['nbParticipantsMax'])) : null;
+
+		$error=false;		
+		if(($dateDebut!=null && $dateFin !=null) && ($dateDebut > $dateFin)){
+		$form->get('dateDebut')->addError(new FormError('La date de debut doit etre inferieure a celle de fin'));
+		$form->get('dateFin')->addError(new FormError('La date de debut doit etre inferieure a celle de fin'));
+		$error=true;
+		}
+		
+		if(($heureDebut!=null && $heureFin !=null) && ($heureDebut > $heureFin)){
+		$form->get('heureDebut')->addError(new FormError('L\'heure de debut doit etre inferieure a celle de fin'));
+		$form->get('heureFin')->addError(new FormError('L\'heure de debut doit etre inferieure a celle de fin'));
+		$error=true;
+		}
+		
+		if(($prixIndividuMin!=null && $prixIndividuMax !=null) && ($prixIndividuMin > $prixIndividuMax)){
+		$form->get('prixIndividuMin')->addError(new FormError('Le prix Min doit etre inferieure a celui Max'));
+		$form->get('prixIndividuMax')->addError(new FormError('Le prix Min doit etre inferieure a celui Max'));
+		$error=true;
+		}
+		
+		if(($nbParticipantsMin!=null && $nbParticipantsMax !=null) && ($nbParticipantsMin > $nbParticipantsMax)){
+		$form->get('nbParticipantsMin')->addError(new FormError('Le nombre de participants Min doit etre inferieure a celui Max'));
+		$form->get('nbParticipantsMax')->addError(new FormError('Le nombre de participants Min doit etre inferieure a celui Max'));
+		$error=true;
+		}
+				
+		//S'il ya erreur on retourne false : les parametres sont mauvais		
+		if($error)
+		return false;
+		
+		return true;
+	 }
 
 }

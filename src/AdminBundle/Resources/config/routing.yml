@@ -152,6 +152,14 @@ voirDiscussionsActivite:
     defaults: { _controller: AdminBundle:Activite:voirDiscussions }
     requirements:
               id: \d+
+
+rechercherActivites:
+    path:     /admin/rechercherActivites
+    defaults: { _controller: AdminBundle:Activite:searchActivite }
+
+ListeRechercherActivites:
+    path:     /admin/ListeRechercherActivites
+    defaults: { _controller: AdminBundle:Activite:searchListActivite }
               
 ajouterReservation:
     path:     /admin/reservation/ajouter

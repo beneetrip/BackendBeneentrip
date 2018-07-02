@@ -60,6 +60,7 @@
 					{% block contentForm %}
 
 					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : activite.id|default('0') })}) }}
+					{{ form_errors(form) }}
 					<div class="form-group">
 					{{ form_label(form.libelle) }}
 					{{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
@@ -73,10 +74,12 @@
 					<div class="form-group">
 					{{ form_label(form.date) }}
 					{{ form_widget(form.date, { 'attr': {'class': 'datepicker form-control'}}) }}
+					{{ form_errors(form.date) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.heure) }}
 					{{ form_widget(form.heure, { 'attr': {'class': 'timepicker form-control'}}) }}
+					{{ form_errors(form.heure) }} 
 					</div>
 					<div class="form-group">
 					{{ form_label(form.nbParticipants) }}
@@ -460,9 +463,9 @@ return false;
 }
 });
 </script>
-<script type="text/javascript">
-				//CKEDITOR.replace( 'businessmodelbundle_activite_description' );
-			</script>
+<!-- <script type="text/javascript">
+				CKEDITOR.replace( 'businessmodelbundle_activite_description' );
+			</script> -->
 
 
 			

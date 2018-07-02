@@ -33,9 +33,9 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->where('a.lieuDestination LIKE :lieuDestination')
 			->setParameter('lieuDestination','%'.$lieuDestination.'%');
 			/*print_r(array(
-        'sql'        => $qb->getQuery()->getSQL(),
-        'parameters' => $qb->getQuery()->getParameters(),
-        ));*/
+			'sql'        => $qb->getQuery()->getSQL(),
+			'parameters' => $qb->getQuery()->getParameters(),
+			));*/
 			return $qb->getQuery()->getArrayResult();
 			} 
 			
@@ -76,35 +76,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			->setParameter('auteur', '%'.$auteur.'%');
 			return $qb->getQuery()->getArrayResult();
 			}
-			
-			
-			/*Fonction pour les recherches selon les criteres specifiques sur les activites
-			public function myFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
-			{
-			//On initialise notre liste de retour au tableau vide			
-			$listeRetour=[];
-			//Ensuite on teste les criteres en parametres celui qui est non null on appelle sa methode de recherche
-			
-			if($lieuDestination!=null)
-			$listeRetour=array_merge($listeRetour,$this->myFindByLieuDestination($lieuDestination));
-			
-			//print_r($this->myFindByLieuDestination($lieuDestination));
-			if($dateDebut!=null && $dateFin!=null)
-			$listeRetour=array_merge($listeRetour,$this->myFindByDate($dateDebut, $dateFin));
-			
-			if($heureDebut!=null && $heureFin!=null)
-			$listeRetour=array_merge($listeRetour,$this->myFindByHeure($heureDebut, $heureFin));
-			
-			if($categorie!=null)
-			$listeRetour=array_merge($listeRetour,$this->myFindByCategorie($categorie));
-			
-			if($auteur!=null)
-			$listeRetour=array_merge($listeRetour,$this->myFindByAuteur($auteur));			
-			
-			return array_slice($listeRetour, $indexDebut, ($indexDebut+$nbResults));			
-			}
-			*/
-			
+	
 			
 			public function myFindListeDestinations()
 			{
@@ -115,9 +87,8 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			foreach ($qb->getQuery()->getArrayResult() as $elt)
 			$retour[]=$elt['lieuDestination'];			
 			
-			return $retour;
+			return array_unique(array_map("strtoupper", $retour));
 			}
-		
 			
 			//Fonction pour les recherches selon les criteres specifiques sur les activites
 			public function myFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
@@ -128,35 +99,71 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						
 						
 						if($lieuDestination!=null){
+						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
+						// Si lieuDestination contient des virgules						
+						if(strpos($lieuDestination,",")!== false)
+						$tabMots = explode(",",str_replace(' ', '', $lieuDestination));
+						else
+						$tabMots = explode(" ",$lieuDestination);
+						//S'il ya plusieurs mots on va faire les requetes avec chaque mots en evitant les mots vides						
+						if(count($tabMots) > 1){
+						if(trim($tabMots[0])!="")	
+						$qb->where('a.lieuDestination LIKE :mot0')
+						->setParameter('mot0','%'.$tabMots[0].'%');
+						for($i = 1; $i < count($tabMots); $i++){
+						if(trim($tabMots[$i])!="")						
+						$qb->orWhere('a.lieuDestination LIKE :mot'.$i)
+						->setParameter('mot'.$i,'%'.$tabMots[$i].'%');
+						}
+						}	
+						else 
 						$qb->where('a.lieuDestination LIKE :lieuDestination')
 						->setParameter('lieuDestination','%'.$lieuDestination.'%');
 						$nbhits++;						
 						}
 						
 						
-						if($dateDebut!=null && $dateFin!=null){
-						if($nbhits>0)	
-						$qb->andWhere('a.date BETWEEN :dateDebut AND :dateFin')
-						->setParameter('dateDebut', new \Datetime($dateDebut))
-						->setParameter('dateFin', new \Datetime($dateFin));
+						if($dateDebut!=null){
+						if($nbhits>0)
+						$qb->andWhere('a.date >= :dateDebut')
+						->setParameter('dateDebut', $dateDebut);
 						else 
-						$qb->where('a.date BETWEEN :dateDebut AND :dateFin')
-						->setParameter('dateDebut', new \Datetime($dateDebut))
-						->setParameter('dateFin', new \Datetime($dateFin));
+						$qb->where('a.date >= :dateDebut')
+						->setParameter('dateDebut', $dateDebut);
+						
+						$nbhits++;						
+						}
+						
+						if($dateFin!=null){
+						if($nbhits>0)
+						$qb->andWhere('a.date <= :dateFin')
+						->setParameter('dateFin', $dateFin);
+						else 
+						$qb->where('a.date <= :dateFin')
+						->setParameter('dateFin', $dateFin);
 						
 						$nbhits++;						
 						}
 						
 						
-						if($heureDebut!=null && $heureFin!=null){
+						if($heureDebut!=null){
 						if($nbhits>0)	
-						$qb->andWhere('a.heure BETWEEN :heureDebut AND :heureFin')
-						->setParameter('heureDebut', new \Datetime($heureDebut))
-						->setParameter('heureFin', new \Datetime($heureFin));
+						$qb->andWhere('a.heure >= :heureDebut')
+						->setParameter('heureDebut', $heureDebut);
 						else 
-						$qb->where('a.heure BETWEEN :heureDebut AND :heureFin')
-						->setParameter('heureDebut', new \Datetime($heureDebut))
-						->setParameter('heureFin', new \Datetime($heureFin));
+						$qb->where('a.heure >= :heureDebut')
+						->setParameter('heureDebut', $heureDebut);
+						
+						$nbhits++;						
+						}
+						
+						if($heureFin!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.heure <= :heureFin')
+						->setParameter('heureFin', $heureFin);
+						else 
+						$qb->where('a.heure <= :heureFin')
+						->setParameter('heureFin', $heureFin);
 						
 						$nbhits++;						
 						}
@@ -188,6 +195,157 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						
 						return array_slice($listeRetour, $indexDebut, $nbResults);			 
 						
+			}
+			
+			//Fonction pour les recherches en profondeur selon les criteres specifiques sur les activites
+			public function myDeepFindSurActivites($lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin
+			,$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur)
+			{
+				
+				$qb = $this->createQueryBuilder('a');
+						$nbhits=0;//Ce compteur est pour le nombre de criteres valides
+						
+						
+						if($lieuDestination!=null){
+						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
+						// Si lieuDestination contient des virgules						
+						if(strpos($lieuDestination,",")!== false)
+						$tabMots = explode(",",str_replace(' ', '', $lieuDestination));
+						else
+						$tabMots = explode(" ",$lieuDestination);
+						//S'il ya plusieurs mots on va faire les requetes avec chaque mots en evitant les mots vides						
+						if(count($tabMots) > 1){
+						if(trim($tabMots[0])!="")	
+						$qb->where('a.lieuDestination LIKE :mot0')
+						->setParameter('mot0','%'.$tabMots[0].'%');
+						for($i = 1; $i < count($tabMots); $i++){
+						if(trim($tabMots[$i])!="")						
+						$qb->orWhere('a.lieuDestination LIKE :mot'.$i)
+						->setParameter('mot'.$i,'%'.$tabMots[$i].'%');
+						}
+						}	
+						else 
+						$qb->where('a.lieuDestination LIKE :lieuDestination')
+						->setParameter('lieuDestination','%'.$lieuDestination.'%');
+						$nbhits++;						
+						}
+						
+						
+						if($dateDebut!=null){
+						if($nbhits>0)
+						$qb->andWhere('a.date >= :dateDebut')
+						->setParameter('dateDebut', $dateDebut);
+						else 
+						$qb->where('a.date >= :dateDebut')
+						->setParameter('dateDebut', $dateDebut);
+						
+						$nbhits++;						
+						}
+						
+						if($dateFin!=null){
+						if($nbhits>0)
+						$qb->andWhere('a.date <= :dateFin')
+						->setParameter('dateFin', $dateFin);
+						else 
+						$qb->where('a.date <= :dateFin')
+						->setParameter('dateFin', $dateFin);
+						
+						$nbhits++;						
+						}
+						
+						
+						if($heureDebut!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.heure >= :heureDebut')
+						->setParameter('heureDebut', $heureDebut);
+						else 
+						$qb->where('a.heure >= :heureDebut')
+						->setParameter('heureDebut', $heureDebut);
+						
+						$nbhits++;						
+						}
+						
+						if($heureFin!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.heure <= :heureFin')
+						->setParameter('heureFin', $heureFin);
+						else 
+						$qb->where('a.heure <= :heureFin')
+						->setParameter('heureFin', $heureFin);
+						
+						$nbhits++;						
+						}
+						
+						if($prixIndividuMin!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.prixIndividu >= :prixIndividuMin')
+						->setParameter('prixIndividuMin', floatval($prixIndividuMin));
+						else 
+						$qb->where('a.prixIndividu >= :prixIndividuMin')
+						->setParameter('prixIndividuMin', floatval($prixIndividuMin));
+						
+						$nbhits++;						
+						}
+						
+						if($prixIndividuMax!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.prixIndividu <= :prixIndividuMax')
+						->setParameter('prixIndividuMax', floatval($prixIndividuMax));
+						else 
+						$qb->where('a.prixIndividu <= :prixIndividuMax')
+						->setParameter('prixIndividuMax', floatval($prixIndividuMax));
+						
+						$nbhits++;						
+						}
+						
+						if($nbParticipantsMin!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.nbParticipants >= :nbParticipantsMin')
+						->setParameter('nbParticipantsMin', intval($nbParticipantsMin));
+						else 
+						$qb->where('a.nbParticipants >= :nbParticipantsMin')
+						->setParameter('nbParticipantsMin', intval($nbParticipantsMin));
+						
+						$nbhits++;						
+						}
+						
+						if($nbParticipantsMax!=null){
+						if($nbhits>0)	
+						$qb->andWhere('a.nbParticipants <= :nbParticipantsMax')
+						->setParameter('nbParticipantsMax', intval($nbParticipantsMax));
+						else 
+						$qb->where('a.nbParticipants <= :nbParticipantsMax')
+						->setParameter('nbParticipantsMax', intval($nbParticipantsMax));
+						
+						$nbhits++;						
+						}
+						
+						if($categorie!=null){
+						$qb->join('a.categorie', 'c', 'WITH', 'c.nom = :categorie')
+						->setParameter('categorie', $categorie);							
+						$nbhits++;										
+						}
+						
+						
+						if($auteur!=null){
+						$qb->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
+						->setParameter('auteur', '%'.$auteur.'%');						
+						$nbhits++;										
+						}
+						
+						/*print_r(array(
+        				'sql'        => $qb->getQuery()->getSQL(),
+        				'parameters' => $qb->getQuery()->getParameters(),
+        				));*/					
+					
+						
+						//Et pour finir on prend les resultats avec tous les criteres en compte
+						$listeRetour=$qb->getQuery()->getResult();
+						
+						//print_r($listeRetour);
+						
+						return $listeRetour;
+				
 			}
 			
 }

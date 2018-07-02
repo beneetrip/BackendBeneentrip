@@ -21,7 +21,7 @@ class ActiviteType extends AbstractType
         $builder
             ->add('libelle')
             ->add('lieuDestination')
-            ->add('date', 'date', array('widget' =>'single_text','format' =>'dd/MM/yyyy'))
+            ->add('date', 'date', array('widget' =>'single_text','format' =>'MM/dd/yyyy'))
             ->add('heure', 'datetime', array('widget' =>'single_text','format' =>'HH:mm'))
             ->add('nbParticipants')
             ->add('prixIndividu')
