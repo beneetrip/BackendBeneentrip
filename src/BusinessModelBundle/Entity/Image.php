@@ -437,7 +437,8 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 	$nameTemp="temp.".$extension; 	
 	
 			// Redimensionner
-        $thumb = imagecreatetruecolor($dimension[0], $dimension[1]) or die('Impossible de creer l\'image de destination pour la miniature');
+        //$thumb = imagecreatetruecolor($dimension[0], $dimension[1]) or die('Impossible de creer l\'image de destination pour la miniature');
+			 $thumb = imagecreatetruecolor($largeur, $hauteur) or die('Impossible de creer l\'image de destination pour la miniature');        
          
         // Les fonctions imagesx et imagesy renvoient la largeur et la hauteur d'une image
         $largeur_source = imagesx($img_src);
@@ -449,9 +450,9 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         imagecopyresampled($thumb, $img_src, 0, 0, 0, 0, $largeur_thumb, $hauteur_thumb, $largeur_source, $hauteur_source);
 		 //Puis j'enregistre la miniature, sinon, la suite ne marche pas. j'ai fait trop d'essais
 		 $method2="image".strtolower($extension);
-		 $method2($thumb, $nomThumb);	
-       //$method2($thumb, $dir.'/'.$nameTemp);
-       /*
+		 //$method2($thumb, $nomThumb);	
+       $method2($thumb, $dir.'/'.$nameTemp);
+       
        // =================================
 		// Melange des images
 		// ================================
@@ -479,7 +480,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         $method2($fond,$nomThumb);
 			// Pour finir je supprime la première image que j'ai enregistré.
         unlink($dir.'/'.$nameTemp);
-        */
+        
 	}
 
 	public function linkThumb($largeur, $hauteur){
