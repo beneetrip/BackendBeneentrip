@@ -448,9 +448,10 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         // On crée la miniature
         imagecopyresampled($thumb, $img_src, 0, 0, 0, 0, $largeur_thumb, $hauteur_thumb, $largeur_source, $hauteur_source);
 		 //Puis j'enregistre la miniature, sinon, la suite ne marche pas. j'ai fait trop d'essais
-		 $method2="image".strtolower($extension);	
-       $method2($thumb, $dir.'/'.$nameTemp);
-       
+		 $method2="image".strtolower($extension);
+		 $method2($thumb, $nomThumb);	
+       //$method2($thumb, $dir.'/'.$nameTemp);
+       /*
        // =================================
 		// Melange des images
 		// ================================
@@ -478,6 +479,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
         $method2($fond,$nomThumb);
 			// Pour finir je supprime la première image que j'ai enregistré.
         unlink($dir.'/'.$nameTemp);
+        */
 	}
 
 	public function linkThumb($largeur, $hauteur){

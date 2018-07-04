@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `activite` (
   `id` int(11) NOT NULL,
-  `categorie_id` int(11) NOT NULL,
+  `categorie_id` int(11) DEFAULT NULL,
   `image_principale_id` int(11) NOT NULL,
   `auteur_id` int(11) NOT NULL,
   `libelle` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
