@@ -46,7 +46,6 @@
 	<!-- <link  href="{{ asset('bundles/admin/css/elfinder.theme.css') }}" rel="stylesheet"> -->
 	<link type="text/css" rel="stylesheet" href="{{ asset('bundles/admin/bower_components/bootstrap-timepicker/css/bootstrap.min.css') }}" />
    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/admin/bower_components/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" />
-
 	<!-- /elFinder -->
 
 
@@ -121,9 +120,11 @@
             <ul class="collapse navbar-collapse nav navbar-nav top-menu">
                 <li><a href="#" title="site" target="_bank"><i class="glyphicon glyphicon-globe"></i> Site</a></li>
                 {% if  app.user.id is not defined %}
-                <li><a href="{{ path('fos_user_security_login')}}" title="connexion"><i class="glyphicon glyphicon-log-in"></i> Connexion</a></li>
-                <li><a href="{{ path('fos_user_registration_register')}}" title="inscription"><i class="glyphicon glyphicon-registration-mark"></i> Inscription</a></li>
+                <li><a href="{{ path('fos_user_security_login')}}" title="connexion"><i class="glyphicon glyphicon-log-in"></i>{{ 'Connexion'|trans }}</a></li>
+                <li><a href="{{ path('fos_user_registration_register')}}" title="inscription"><i class="glyphicon glyphicon-registration-mark"></i>{{ 'Inscription'|trans }}</a></li>
                 {% endif %}
+                <li><a href="{{ path('setLanguage', { 'langue': 'fr' }) }}"><i class="glyphicon"></i> Français</a></li>
+                <li><a href="{{ path('setLanguage', { 'langue': 'en' }) }}"><i class="glyphicon"></i> English</a></li>
             </ul>
 
         </div>
@@ -296,6 +297,7 @@
 
 <script src="{{ asset('bundles/admin/bower_components/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
 <script src="{{ asset('bundles/admin/bower_components/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+
 
 {% block scriptsElFinder %}
 		

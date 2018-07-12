@@ -97,6 +97,17 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*/
 		private $nbVues=0;
 
+		
+		/**
+		* @var string $langueParlee
+		*
+		* @ORM\Column(name="langueParlee", type="string", length=255)
+		* @Assert\Length(
+      *      min = 3
+      * )
+		*/
+		private $langueParlee;
+
 
 		/**
 		 * @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Categorie",inversedBy="activites")
@@ -571,4 +582,28 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 	 return strip_tags($this->getDescription());
     }
 
+
+    /**
+     * Set langueParlee
+     *
+     * @param string $langueParlee
+     *
+     * @return Activite
+     */
+    public function setLangueParlee($langueParlee)
+    {
+        $this->langueParlee = $langueParlee;
+
+        return $this;
+    }
+
+    /**
+     * Get langueParlee
+     *
+     * @return string
+     */
+    public function getLangueParlee()
+    {
+        return $this->langueParlee;
+    }
 }

@@ -18,3 +18,9 @@ fos_user_change:
 
 fos_user_edit:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+
+setLanguage:
+    pattern:  /language/{langue}
+    defaults: { _controller: AdminBundle:Default:language }
+    requirements:
+        _locale: fr|en

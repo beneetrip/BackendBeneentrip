@@ -40,7 +40,8 @@ CREATE TABLE `activite` (
   `description` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
   `dateModification` datetime DEFAULT NULL,
-  `nbVues` int(11) NOT NULL DEFAULT '0'
+  `nbVues` int(11) NOT NULL DEFAULT '0',
+  `langueParlee` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
