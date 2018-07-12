@@ -101,10 +101,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		/**
 		* @var string $langueParlee
 		*
-		* @ORM\Column(name="langueParlee", type="string", length=255)
-		* @Assert\Length(
-      *      min = 3
-      * )
+		* @ORM\Column(name="langueParlee", type="string", length=255, nullable=true)
 		*/
 		private $langueParlee;
 

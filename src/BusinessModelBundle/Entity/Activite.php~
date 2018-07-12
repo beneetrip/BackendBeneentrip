@@ -101,10 +101,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		/**
 		* @var string $langueParlee
 		*
-		* @ORM\Column(name="langueParlee", type="string", length=255)
-		* @Assert\Length(
-      *      min = 3
-      * )
+		* @ORM\Column(name="langueParlee", type="string", length=255, nullable=true)
 		*/
 		private $langueParlee;
 
@@ -582,4 +579,28 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 	 return strip_tags($this->getDescription());
     }
 
+
+    /**
+     * Set langueParlee
+     *
+     * @param string $langueParlee
+     *
+     * @return Activite
+     */
+    public function setLangueParlee($langueParlee)
+    {
+        $this->langueParlee = $langueParlee;
+
+        return $this;
+    }
+
+    /**
+     * Get langueParlee
+     *
+     * @return string
+     */
+    public function getLangueParlee()
+    {
+        return $this->langueParlee;
+    }
 }
