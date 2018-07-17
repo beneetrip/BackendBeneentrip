@@ -29,14 +29,20 @@ class LanguageListener
             return;
         }
         $request = $event->getRequest();
-        if ('fr' == $request->getLocale()) {
+        
         	$locale = $request->getSession()->get('_locale');
+			//$locale = $request->getLocale();        	
+        	//On recupere l'url car elle contient la langue 
+        	//$url=$request->headers->get('referer');
+	       //$locale=$request->get('locale');
+        	 //var_dump($locale.">>>>>>>>");
             if ($locale != null) {
                 $request->setLocale($locale);
+                $request->getSession()->set('_locale', $locale);
             } else {
                 $request->setLocale($request->getPreferredLanguage(array('fr')));
             }
-        }
+        
     }
 
     /**

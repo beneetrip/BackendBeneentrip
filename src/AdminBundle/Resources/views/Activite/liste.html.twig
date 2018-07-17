@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Activite
+				{{ 'Barre.Activité.Mot'|trans }}
 	</li>
 	
 {% endblock %}
@@ -19,17 +19,17 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-1" data-field="libelle" data-sortable="true">Libelle</th>
-	<th class="col-xs-1" data-field="lieuDestination" data-sortable="true">Destination</th>
-	<th class="col-xs-1" data-field="date" data-sortable="true">Date</th>
-	<th class="col-xs-1" data-field="heure" data-sortable="true">Heure</th>
-	<th class="col-xs-1" data-field="nbParticipants" data-sortable="true">Nb. pers</th>
-	<th class="col-xs-1" data-field="prixIndividu" data-sortable="true">Prix/Pers</th>
-<!--   <th class="col-xs-1" data-field="description" data-sortable="true">Description</th> -->
-   <th class="col-xs-1" data-field="nomCategorie" data-sortable="true">Categorie</th>
-   <th class="col-xs-1" data-field="auteur" data-sortable="true">Auteur</th>
-   <th class="col-xs-1" data-field="images" data-sortable="false">Images</th>
-   <th class="col-xs-1" data-field="discussion" data-sortable="false">Discussions</th>
+	<th class="col-xs-1" data-field="libelle" data-sortable="true">{{'Activité.libelle'|trans}}</th>
+	<th class="col-xs-1" data-field="lieuDestination" data-sortable="true">{{'Activité.lieuDestination'|trans}}</th>
+	<th class="col-xs-1" data-field="date" data-sortable="true">{{'Activité.date'|trans}}</th>
+	<th class="col-xs-1" data-field="heure" data-sortable="true">{{'Activité.heure'|trans}}</th>
+	<th class="col-xs-1" data-field="nbParticipants" data-sortable="true">{{'Activité.nbParticipants'|trans}}</th>
+	<th class="col-xs-1" data-field="prixIndividu" data-sortable="true">{{'Activité.prixIndividu'|trans}}</th>
+<!--   <th class="col-xs-1" data-field="description" data-sortable="true">{{'Activité.description'|trans}}</th> -->
+   <th class="col-xs-1" data-field="nomCategorie" data-sortable="true">{{'Activité.categorie'|trans}}</th>
+   <th class="col-xs-1" data-field="auteur" data-sortable="true">{{'Activité.auteur'|trans}}</th>
+   <th class="col-xs-1" data-field="images" data-sortable="false">{{'Activité.images'|trans}}</th>
+   <th class="col-xs-1" data-field="discussion" data-sortable="false">{{'Activité.discussions'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -57,12 +57,12 @@
 		</td>
 		<td>
 		<a class="" href="{{ path('voirImagesActivite',{'id': activite.id}) }}">		
-		Ici.
+		{{'Action.Ici'|trans }}
 		</a>
 		</td>
 		<td>
 		<a class="" href="{{ path('voirDiscussionsActivite',{'id': activite.id}) }}">		
-		Ici.
+		{{'Action.Ici'|trans }}
 		</a>
 		</td>
 		<td class="center">
@@ -75,14 +75,14 @@
                     <li>
 						<a class="" href="{{ path('prendreActivite',{'id': activite.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
-							Modifier
+							{{'Action.Modifier'|trans }}
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
 						<a class="delete-content" href="{{ path('supprimerActivite',{'id': activite.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

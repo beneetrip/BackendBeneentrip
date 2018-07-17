@@ -10,6 +10,12 @@ admin_tablepage:
     path:     /admin/table
     defaults: { _controller: AdminBundle:Default:table }
 
+setLanguage:
+    path:  /language/{langue}
+    defaults: { _controller: AdminBundle:Default:language }
+    requirements:
+        _locale: fr|en
+
 admin_checklogin:
     path:     /checklogin
     defaults: { _controller: AdminBundle:User:checkLogin }

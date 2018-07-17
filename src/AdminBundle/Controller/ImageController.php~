@@ -18,7 +18,8 @@ class ImageController extends Controller
     {
 		$img= new Image();
 		$form = $this->createForm('businessmodelbundle_image', $img);   
-		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,13 +38,15 @@ class ImageController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($img);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Image creee avec Succes');
+		     $elt=$this->get('translator')->trans('Barre.Galerie.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 				return $this->redirect( $this->generateUrl('ajouterImage') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterImage') );
-		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerImage', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -61,7 +64,8 @@ class ImageController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($imgId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Image supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Galerie.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeImages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindAll();
 		return $this->render('AdminBundle:Image:liste.html.twig',array('listeImages' => $listeImages));
     }
@@ -69,9 +73,10 @@ class ImageController extends Controller
      public function prendreAction($id)
     {
 		$imgId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Image')->myFindOne($id);
-		$imgId->createThumb(500,500);
-		//$form = $this->createForm('businessmodelbundle_image', $imgId);   
-		//return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  		 
+		//$imgId->createThumb(500,500);
+		$form = $this->createForm('businessmodelbundle_image', $imgId);   
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'image' => $imgId)); 	  		 
 	 }
 	 
 	 public function modifierAction($id)
@@ -93,13 +98,15 @@ class ImageController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Image modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Galerie.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterImage') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterImage') );
-		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>'Modifier','image' => $imgId)); 	  	
+		return $this->render('AdminBundle:Image:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierImage', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'image' => $imgId)); 	  	
 	 }
 
 

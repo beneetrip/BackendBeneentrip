@@ -18,7 +18,8 @@ class CategorieController extends Controller
     {
 		$categorie= new Categorie();
 		$form = $this->createForm('businessmodelbundle_categorie', $categorie);   
-		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerCategorie', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerCategorie', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,13 +38,15 @@ class CategorieController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($categorie);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Categorie creee avec Succes');
+		           $elt=$this->get('translator')->trans('Barre.Catégorie.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterCategorie') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterCategorie') );
-		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerCategorie', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerCategorie', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -61,7 +64,8 @@ class CategorieController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($categorieId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Categorie supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Catégorie.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeCategories = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindAll();
 		return $this->render('AdminBundle:Categorie:liste.html.twig',array('listeCategories' => $listeCategories));
     }
@@ -70,7 +74,8 @@ class CategorieController extends Controller
     {
 		$categorieId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_categorie', $categorieId);   
-		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierCategorie', 'bouton'=>'Modifier','idCategorie' => $id)); 	  	
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierCategorie', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idCategorie' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -92,13 +97,15 @@ class CategorieController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Categorie modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Catégorie.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterCategorie') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterCategorie') );
-		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierCategorie', 'bouton'=>'Modifier','idCategorie' => $id)); 	  	
+		return $this->render('AdminBundle:Categorie:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierCategorie', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idCategorie' => $id)); 	  	
 	 }
 
 

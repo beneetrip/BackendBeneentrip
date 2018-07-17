@@ -8,7 +8,7 @@
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
                 
-				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
+				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} {{ 'InscriptionForm'|trans }} {% endblock %}</h2>
 
                 <!-- <div class="box-icon">
                     <a href="#" class="btn btn-setting btn-round btn-default">
@@ -27,37 +27,37 @@
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
 		{{ form_errors(form) }} 
 		<div class="form-group">
-		{{ form_label(form.nomComplet) }}
+		{{ form_label(form.nomComplet,'Utilisateur.nomComplet'|trans) }}
 		{{ form_widget(form.nomComplet, { 'attr': {'class': 'form-control'} }) }}
 		</div>
 		<div class="form-group">
-		{{ form_label(form.age) }}
+		{{ form_label(form.age,'Utilisateur.age'|trans) }}
 		{{ form_widget(form.age, { 'attr': {'class': 'form-control'} }) }}
 		</div>
 		<div class="form-group">
-		{{ form_label(form.genre) }}
+		{{ form_label(form.genre,'Utilisateur.genre'|trans) }}
 		<div class="controls">
 		{{ form_widget(form.genre, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 		</div>
 		</div>
 		<div class="form-group">
-		{{ form_label(form.typeUtilisateur) }}
+		{{ form_label(form.typeUtilisateur,'Utilisateur.typeUtilisateur'|trans) }}
 		<div class="controls">
 		{{ form_widget(form.typeUtilisateur, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 		</div>
 		</div>
 		<div class="form-group">
-		{{ form_label(form.username) }}
+		{{ form_label(form.username,'Utilisateur.username'|trans) }}
 		{{ form_widget(form.username, { 'attr': {'class': 'form-control'} }) }}
 		{{ form_errors(form.username) }} 
 		</div>
 		<div class="form-group">
-		{{ form_label(form.email) }}
+		{{ form_label(form.email,'Utilisateur.email'|trans) }}
 		{{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
 		{{ form_errors(form.email) }} 
 		</div>
 		<div class="control-group">
-		{{ form_label(form.email) }}
+		{{ form_label(form.langues,'Utilisateur.langues'|trans) }}
 		<div class="controls">
 		{{ form_widget(form.langues, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
 		</div>

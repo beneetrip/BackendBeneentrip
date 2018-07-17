@@ -1,46 +1,46 @@
-<li><a class="ajax-link" href="{{ path('admin_homepage') }}"><i class="glyphicon glyphicon-home"></i><span> Tableau de bord </span></a></li>
+<li><a class="ajax-link" href="{{ path('admin_homepage') }}"><i class="glyphicon glyphicon-home"></i><span> {{ 'Barre.Tableau_bord'|trans }} </span></a></li>
                         
-<li class="nav-header">Contenu</li>
+<li class="nav-header"> {{ 'Barre.Contenu'|trans }} </li>
 
 <li class="accordion">
-	<a href="#textloi"><i class="glyphicon glyphicon-plus"></i><span> Activité</span></a>
+	<a href="#textloi"><i class="glyphicon glyphicon-plus"></i><span> {{ 'Barre.Activité.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeActivites') }}">Toutes les Activités</a></li>
-		<li><a href="{{ path('ajouterActivite') }}">Ajouter une Activité</a></li>
-		<li><a href="{{ path('rechercherActivites') }}">Rechercher une Activité</a></li>
+		<li><a href="{{ path('listeActivites') }}">{{ 'Barre.Activité.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterActivite') }}">{{ 'Barre.Activité.Add'|trans }}</a></li>
+		<li><a href="{{ path('rechercherActivites') }}">{{ 'Barre.Activité.Search'|trans }}</a></li>
 	</ul>
 </li>
 
 
 <li class="accordion">
-	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Réservation </span></a>
+	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> {{ 'Barre.Réservation.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeReservations') }}">Toutes les Réservation</a></li>
-		<li><a href="{{ path('ajouterReservation') }}">Ajouter une Réservation</a></li>
+		<li><a href="{{ path('listeReservations') }}">{{ 'Barre.Réservation.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterReservation') }}">{{ 'Barre.Réservation.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 <li class="accordion">
-	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Discussion </span></a>
+	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> {{ 'Barre.Discussion.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeDiscussions') }}">Toutes les Discussions</a></li>
-		<li><a href="{{ path('ajouterDiscussion') }}">Ajouter une Discussion</a></li>
+		<li><a href="{{ path('listeDiscussions') }}">{{ 'Barre.Discussion.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterDiscussion') }}">{{ 'Barre.Discussion.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 <li class="accordion">
-	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> Langue </span></a>
+	<a href="#documentation"><i class="glyphicon glyphicon-plus"></i><span> {{ 'Barre.Langue.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeLangues') }}">Toutes les Langues</a></li>
-		<li><a href="{{ path('ajouterLangue') }}">Ajouter une Langue</a></li>
+		<li><a href="{{ path('listeLangues') }}">{{ 'Barre.Langue.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterLangue') }}"> {{ 'Barre.Langue.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 <li class="accordion">
-	<a href="#page"><i class="fa fa-book"></i><span> Page </span></a>
+	<a href="#page"><i class="fa fa-book"></i><span> {{ 'Barre.Page.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listePages') }}">Toutes les Pages</a></li>
-		<li><a href="{{ path('ajouterPage') }}">Ajouter une Page</a></li>
+		<li><a href="{{ path('listePages') }}">{{ 'Barre.Page.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterPage') }}">{{ 'Barre.Page.Add'|trans }}</a></li>
 	</ul>
 </li>
 
@@ -53,39 +53,39 @@
 </li> -->
 
 <li class="accordion">
-	<a href="#galerie"><i class="glyphicon glyphicon-picture"></i><span> Galerie </span></a>
+	<a href="#galerie"><i class="glyphicon glyphicon-picture"></i><span> {{ 'Barre.Galerie.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeImages') }}">Toutes les Images</a></li>
-		<li><a href="{{ path('ajouterImage') }}">Ajouter une Image</a></li>
+		<li><a href="{{ path('listeImages') }}">{{ 'Barre.Galerie.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterImage') }}">{{ 'Barre.Galerie.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 <!-- <li><a href="#"><i class="glyphicon glyphicon-picture"></i><span> Galeries </span></a></li> -->
 
 
-<li class="nav-header">Organisation du Contenu</li>
+<li class="nav-header">{{ 'Barre.Organisation_Contenu'|trans }}</li>
 <li class="accordion">
-	<a href="#categorie"><i class="fa fa-folder"></i><span> Catégorie</span></a>
+	<a href="#categorie"><i class="fa fa-folder"></i><span> {{ 'Barre.Catégorie.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeCategories') }}">Toutes les catégories</a></li>
-		<li><a href="{{ path('ajouterCategorie') }}">Ajouter une catégorie</a></li>
+		<li><a href="{{ path('listeCategories') }}">{{ 'Barre.Catégorie.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterCategorie') }}">{{ 'Barre.Catégorie.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 
 
-<li class="nav-header hidden-md">Sécurité</li>
+<li class="nav-header hidden-md">{{ 'Barre.Sécurité'|trans }}</li>
 						
 <li class="accordion">
-	<a href="#user"><i class="fa fa-user"></i><span> Utilisateur </span></a>
+	<a href="#user"><i class="fa fa-user"></i><span> {{ 'Barre.Utilisateur.Mot'|trans }} </span></a>
 	<ul class="nav nav-pills nav-stacked">
-		<li><a href="{{ path('listeUtilisateurs') }}"> Tous les utilisateurs </a></li>
-		<li><a href="{{ path('ajouterUtilisateur') }}"> Ajouter un utilisateur </a></li>
+		<li><a href="{{ path('listeUtilisateurs') }}">{{ 'Barre.Utilisateur.All'|trans }}</a></li>
+		<li><a href="{{ path('ajouterUtilisateur') }}">{{ 'Barre.Utilisateur.Add'|trans }}</a></li>
 	</ul>
 </li>
 
 
-<li class="nav-header hidden-md">Paramètres</li>
+<li class="nav-header hidden-md">{{ 'Barre.Paramètres'|trans }}</li>
 
-<li><a href="{{ path('fos_user_change_password') }}"><i class="fa fa-cog"></i><span> paramètres généraux </span></a></li>
+<li><a href="{{ path('fos_user_change_password') }}"><i class="fa fa-cog"></i><span> {{ 'Barre.Paramètres_Généraux'|trans }} </span></a></li>
 

@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Galerie
+	{{ 'Barre.Galerie.Mot'|trans }}
 	</li>
 	
 {% endblock %}
@@ -10,15 +10,17 @@
 {% block contentInfo %}
 {% if app.session.flashbag.get('info') is defined %} 
 {% for message in app.session.flashbag.get('info') %}
+<div class="alert alert-success">
 <p>{{ message }}</p>
+</div>
 {% endfor %}
 {% endif %}
 {% endblock %}
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom</th>
-	<th class="col-xs-2" data-field="image" data-sortable="true">Image</th>
+	<th class="col-xs-2" data-field="nom" data-sortable="true">{{'Galerie.nom'|trans}}</th>
+	<th class="col-xs-2" data-field="image" data-sortable="true">{{'Galerie.fichier'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -28,8 +30,9 @@
 	<tr>
 		<td>{{ image.id }}</td>
 		<td>{{ image.nom }}</td>
-		<td>
+		<td><center>
 <img src="{{ asset(image.url) }}" height="100" width="100" style="border-radius: 50%;" />		
+		</center>
 		</td>
 		<td class="center">
 			<div class="btn-group pull-right">
@@ -41,14 +44,14 @@
                     <li>
 						<a class="" href="{{ path('prendreImage',{'id': image.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
-							Modifier
+							{{'Action.Modifier'|trans }}
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
 						<a class="delete-content" href="{{ path('supprimerImage',{'id': image.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

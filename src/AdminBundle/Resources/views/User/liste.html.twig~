@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		<a href="#">Utilisateurs</a>
+		<a href="#">{{ 'Barre.Utilisateur.Mot'|trans }}</a>
 	</li>
 {% endblock %}
 
@@ -18,13 +18,13 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="nomPrenom" data-sortable="true">Nom & Prenom</th>
-	<th class="col-xs-1" data-field="genre" data-sortable="true">Genre</th>
-	<th class="col-xs-1" data-field="age" data-sortable="true">Age</th>
-	<th class="col-xs-1" data-field="email" data-sortable="true">Email</th>
-	<th class="col-xs-1" data-field="type" data-sortable="true">Type Utilisateur</th>
-	<th class="col-xs-1" data-field="langues" data-sortable="true">Langues</th>
-   <th class="col-xs-1" data-field="photo" data-sortable="false">Photo</th>
+	<th class="col-xs-2" data-field="nomPrenom" data-sortable="true">{{'Utilisateur.nomComplet'|trans}}</th>
+	<th class="col-xs-1" data-field="genre" data-sortable="true">{{'Utilisateur.genre'|trans}}</th>
+	<th class="col-xs-1" data-field="age" data-sortable="true">{{'Utilisateur.age'|trans}}</th>
+	<th class="col-xs-1" data-field="email" data-sortable="true">{{'Utilisateur.email'|trans}}</th>
+	<th class="col-xs-1" data-field="type" data-sortable="true">{{'Utilisateur.typeUtilisateur'|trans}}</th>
+	<th class="col-xs-1" data-field="langues" data-sortable="true">{{'Utilisateur.langues'|trans}}</th>
+   <th class="col-xs-1" data-field="photo" data-sortable="false">{{'Utilisateur.fichierPhoto'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -60,14 +60,14 @@
                     <li>
 						<a class="" href="{{ path('prendreUtilisateur',{'id': user.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
-							Modifier
+							{{'Action.Modifier'|trans }}
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
 						<a class="delete-content" href="{{ path('supprimerUtilisateur',{'id': user.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+							{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

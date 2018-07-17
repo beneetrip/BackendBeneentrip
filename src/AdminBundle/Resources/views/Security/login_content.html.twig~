@@ -1,4 +1,4 @@
-
+{% trans_default_domain 'FOSUserBundle' %}
 
 
 <div class="row">
@@ -32,22 +32,22 @@
     {% endif %}
     
     <div class="form-group">
-    <label for="username">{{ 'Login.username'|trans }}</label>
+    <label for="username">{{ 'security.login.username'|trans }}</label>
     <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" class="form-control" />
     </div>
 	
     <div class="form-group">
-    <label for="password">{{ 'Login.password'|trans }}</label>
+    <label for="password">{{ 'security.login.password'|trans }}</label>
     <input type="password" id="password" name="_password" required="required" class="form-control" />
     </div>
 
     <div class="form-group">
     <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    <label for="remember_me">{{ 'Login.remember_me'|trans }}</label>
+    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
     </div>
 
     <div class="form-group">
-    <input type="submit" id="_submit" name="_submit" value="{{ 'Login.submit'|trans }}" class="btn btn-default" />
+    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" class="btn btn-default" />
     </div>
 </form>
 							

@@ -18,7 +18,8 @@ class LangueController extends Controller
     {
 		$langue= new Langue();
 		$form = $this->createForm('businessmodelbundle_langue', $langue);   
-		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerLangue', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerLangue', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,13 +38,15 @@ class LangueController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($langue);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Langue creee avec Succes');
+		     $elt=$this->get('translator')->trans('Barre.Langue.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterLangue') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterLangue') );
-		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerLangue', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerLangue', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -61,7 +64,8 @@ class LangueController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($langueId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Langue supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Langue.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeLangues = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Langue')->myFindAll();
 		return $this->render('AdminBundle:Langue:liste.html.twig',array('listeLangues' => $listeLangues));
     }
@@ -70,7 +74,8 @@ class LangueController extends Controller
     {
 		$langueId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Langue')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_langue', $langueId);   
-		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierLangue', 'bouton'=>'Modifier','idLangue' => $id)); 	  	
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierLangue', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idLangue' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -91,13 +96,15 @@ class LangueController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Langue modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Langue.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterLangue') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterLangue') );
-		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierLangue', 'bouton'=>'Modifier','idLangue' => $id)); 	  	
+		return $this->render('AdminBundle:Langue:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierLangue', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idLangue' => $id)); 	  	
 	 }
 
 

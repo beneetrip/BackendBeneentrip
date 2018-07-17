@@ -18,7 +18,8 @@ class PageController extends Controller
     {
 		$page= new Page();
 		$form = $this->createForm('businessmodelbundle_page', $page);   
-		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,13 +38,15 @@ class PageController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($page);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Page creee avec Succes');
+		           $elt=$this->get('translator')->trans('Barre.Page.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterPage') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterPage') );
-	   return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>'Enregistrer')); 	  	
+	   return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerPage', 'bouton'=>
+	   $this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -61,7 +64,8 @@ class PageController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($pageId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Page supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Page.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listePages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Page')->myFindAll();
 		return $this->render('AdminBundle:Page:liste.html.twig',array('listePages' => $listePages));
     }
@@ -70,7 +74,8 @@ class PageController extends Controller
     {
 		$pageId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Page')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_page', $pageId);   
-		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>'Modifier','idPage' => $id)); 	  	
+		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idPage' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -91,12 +96,15 @@ class PageController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Page modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Page.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
+		return $this->redirect( $this->generateUrl('ajouterPage') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterPage') );
-		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>'Modifier','idPage' => $id)); 	  	
+		//return $this->redirect( $this->generateUrl('ajouterPage') );
+		return $this->render('AdminBundle:Page:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierPage', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idPage' => $id)); 	  	
 	 }
 
 

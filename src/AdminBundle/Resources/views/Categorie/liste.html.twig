@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		Categorie
+			{{ 'Barre.Catégorie.Mot'|trans }}
 	</li>
 	
 {% endblock %}
@@ -19,7 +19,7 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="nom" data-sortable="true">Nom Categorie</th>
+	<th class="col-xs-2" data-field="nom" data-sortable="true">{{'Catégorie.nom'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -39,14 +39,14 @@
                     <li>
 						<a class="" href="{{ path('prendreCategorie',{'id': categorie.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
-							Modifier
+							{{'Action.Modifier'|trans }}
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
 						<a class="delete-content" href="{{ path('supprimerCategorie',{'id': categorie.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

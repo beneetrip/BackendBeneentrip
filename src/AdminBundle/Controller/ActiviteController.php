@@ -21,7 +21,8 @@ class ActiviteController extends Controller
     {
 		$activite= new Activite();
 		$form = $this->createForm('businessmodelbundle_activite', $activite);   
-		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	}
 
 	public function creerAction()
@@ -56,14 +57,16 @@ class ActiviteController extends Controller
                 $em->persist($img);
             }
                 $em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Activite creee avec Succes');
+           $elt=$this->get('translator')->trans('Barre.Activité.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterActivite') );
 		    }
 		    //var_dump($form->getErrorsAsString());
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterActivite') );
-		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerActivite', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -84,7 +87,8 @@ class ActiviteController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($activiteId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Activite supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Activité.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindAll();
 		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
     }
@@ -96,7 +100,8 @@ class ActiviteController extends Controller
 
 		//var_dump($activiteId->getDateEnClair());
 		//var_dump($activiteId->getDescriptionEnClair());      
-		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'activite' => $activiteId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -126,13 +131,15 @@ class ActiviteController extends Controller
                 $em->persist($img);
             }
                 $em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Activite modifiee avec Succes');
+      $elt=$this->get('translator')->trans('Barre.Activité.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterActivite') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterActivite') );
-		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>'Modifier','activite' => $activiteId)); 	  	
+		return $this->render('AdminBundle:Activite:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierActivite', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'activite' => $activiteId)); 	  	
 	 }
 
     //Fonction speciale permettant de voir les images d'une activite
@@ -160,7 +167,8 @@ class ActiviteController extends Controller
     {
     	$listeDest=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations(); 
     	$form = $this->createForm(new SearchActiviteType($listeDest));
-		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 'bouton'=>'Rechercher'));
+		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
+		'bouton'=> $this->get('translator')->trans('Action.Rechercher')));
     }
     
     //Fonction speciale permettant d'obtenir la liste des activites selon des criteres
@@ -196,7 +204,8 @@ class ActiviteController extends Controller
     	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
 		}  
 		}
-		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 'bouton'=>'Rechercher'));
+		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
+		'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
     }
     
     
@@ -216,26 +225,26 @@ class ActiviteController extends Controller
 
 		$error=false;		
 		if(($dateDebut!=null && $dateFin !=null) && ($dateDebut > $dateFin)){
-		$form->get('dateDebut')->addError(new FormError('La date de debut doit etre inferieure a celle de fin'));
-		$form->get('dateFin')->addError(new FormError('La date de debut doit etre inferieure a celle de fin'));
+		$form->get('dateDebut')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
+		$form->get('dateFin')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
 		$error=true;
 		}
 		
 		if(($heureDebut!=null && $heureFin !=null) && ($heureDebut > $heureFin)){
-		$form->get('heureDebut')->addError(new FormError('L\'heure de debut doit etre inferieure a celle de fin'));
-		$form->get('heureFin')->addError(new FormError('L\'heure de debut doit etre inferieure a celle de fin'));
+		$form->get('heureDebut')->addError(new FormError($this->get('translator')->trans('Activité.heureDebutErrorMessage')));
+		$form->get('heureFin')->addError(new FormError($this->get('translator')->trans('Activité.heureDebutErrorMessage')));
 		$error=true;
 		}
 		
 		if(($prixIndividuMin!=null && $prixIndividuMax !=null) && ($prixIndividuMin > $prixIndividuMax)){
-		$form->get('prixIndividuMin')->addError(new FormError('Le prix Min doit etre inferieure a celui Max'));
-		$form->get('prixIndividuMax')->addError(new FormError('Le prix Min doit etre inferieure a celui Max'));
+		$form->get('prixIndividuMin')->addError(new FormError($this->get('translator')->trans('Activité.prixIndividuMinErrorMessage')));
+		$form->get('prixIndividuMax')->addError(new FormError($this->get('translator')->trans('Activité.prixIndividuMinErrorMessage')));
 		$error=true;
 		}
 		
 		if(($nbParticipantsMin!=null && $nbParticipantsMax !=null) && ($nbParticipantsMin > $nbParticipantsMax)){
-		$form->get('nbParticipantsMin')->addError(new FormError('Le nombre de participants Min doit etre inferieure a celui Max'));
-		$form->get('nbParticipantsMax')->addError(new FormError('Le nombre de participants Min doit etre inferieure a celui Max'));
+		$form->get('nbParticipantsMin')->addError(new FormError($this->get('translator')->trans('Activité.nbParticipantsMinErrorMessage')));
+		$form->get('nbParticipantsMax')->addError(new FormError($this->get('translator')->trans('Activité.nbParticipantsMinErrorMessage')));
 		$error=true;
 		}
 				

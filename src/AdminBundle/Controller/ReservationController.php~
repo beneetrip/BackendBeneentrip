@@ -18,7 +18,8 @@ class ReservationController extends Controller
     {
 		$reservation= new Reservation();
 		$form = $this->createForm('businessmodelbundle_reservation', $reservation);   
-		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerReservation', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerReservation', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,7 +38,8 @@ class ReservationController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($reservation);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Reservation creee avec Succes');
+		     $elt=$this->get('translator')->trans('Barre.Réservation.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		    }
 		    
 		}  
@@ -59,7 +61,8 @@ class ReservationController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($reservationId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Reservation supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listePages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
     }
@@ -68,7 +71,8 @@ class ReservationController extends Controller
     {
 		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_reservation', $reservationId);   
-		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierReservation', 'bouton'=>'Modifier','idReservation' => $id)); 	  	
+		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierReservation', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idReservation' => $id)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -89,6 +93,7 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
+		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
 		$this->get('session')->getFlashBag()->add('info', 'Reservation modifiee avec Succes');
 		    }
 		    

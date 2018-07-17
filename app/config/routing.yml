@@ -4,7 +4,9 @@ mobile_app:
 
 admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}/
+    requirements:
+            _locale: en|fr
 
 business_model:
     resource: "@BusinessModelBundle/Resources/config/routing.yml"
@@ -19,8 +21,20 @@ fos_user_change:
 fos_user_edit:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
 
-setLanguage:
-    pattern:  /language/{langue}
-    defaults: { _controller: AdminBundle:Default:language }
+fos_user_security_login:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:   /{_locale}/
     requirements:
-        _locale: fr|en
+            _locale: en|fr
+
+fos_user_security_logout:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:   /{_locale}/
+    requirements:
+            _locale: en|fr
+
+fos_user_registration_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix:   /{_locale}/register/
+    requirements:
+            _locale: en|fr

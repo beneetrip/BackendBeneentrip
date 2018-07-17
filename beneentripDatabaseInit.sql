@@ -62,8 +62,15 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`id`, `nom`, `dateCreation`, `dateModification`) VALUES
-(1, 'TOURISME', '2018-06-21 12:07:28', NULL),
-(2, 'VOYAGE', '2018-06-21 12:08:29', NULL);
+(1, 'TOURISME', '2018-06-21 12:00:00', NULL),
+(2, 'VOYAGE', '2018-06-21 12:00:00', NULL),
+(3, 'CULTURE', '2018-06-21 12:00:00', NULL),
+(4, 'SPORT', '2018-06-21 12:00:00', NULL),
+(5, 'SORTIE & NOURRITURE', '2018-06-21 12:00:00', NULL),
+(6, 'PLEIN AIR', '2018-06-21 12:00:00', NULL),
+(7, 'SENSATIONS FORTES', '2018-06-21 12:00:00', NULL),
+(8, 'EN FAMILLE', '2018-06-21 12:00:00', NULL),
+(9, 'TOUS', '2018-06-21 12:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -531,7 +538,7 @@ ALTER TABLE `activite`
 -- AUTO_INCREMENT for table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `discussion`
 --

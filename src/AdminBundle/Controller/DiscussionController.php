@@ -18,7 +18,8 @@ class DiscussionController extends Controller
     {
 		$discussion= new Discussion();
 		$form = $this->createForm('businessmodelbundle_discussion', $discussion);   
-		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerDiscussion', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerDiscussion', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -37,13 +38,15 @@ class DiscussionController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($discussion);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Discussion creee avec Succes');
+		     $elt=$this->get('translator')->trans('Barre.Discussion.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterDiscussion') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterDiscussion') );
-		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerDiscussion', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerDiscussion', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	public function listeAction()
@@ -61,7 +64,8 @@ class DiscussionController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($discussionId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Discussion supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Discussion.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeDiscussions = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Discussion')->myFindAll();
 		return $this->render('AdminBundle:Discussion:liste.html.twig',array('listeDiscussions' => $listeDiscussions));
     }
@@ -70,7 +74,8 @@ class DiscussionController extends Controller
     {
 		$discussionId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Discussion')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_discussion', $discussionId);   
-		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>'Modifier','idDiscussion' => $id)); 	  	
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idDiscussion' => $id)); 	  	
 	}
 	 
 	 
@@ -92,13 +97,15 @@ class DiscussionController extends Controller
 		// À partir de maintenant, la variable $userDB contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Discussion modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Discussion.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterDiscussion') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterDiscussion') );
-		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>'Modifier','idDiscussion' => $id)); 	  	
+		return $this->render('AdminBundle:Discussion:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierDiscussion', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'idDiscussion' => $id)); 	  	
 	 }
 	 
 	 //Fonction speciale permettant de voir l'activite d'une discussion

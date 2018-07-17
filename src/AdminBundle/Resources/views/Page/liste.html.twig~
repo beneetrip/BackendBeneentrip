@@ -2,7 +2,7 @@
 
 {% block page %}
 					<li>
-						<a href="#">Page</a>
+						<a href="#">{{ 'Barre.Page.Mot'|trans }}</a>
 					</li>
 {% endblock %}
 
@@ -18,8 +18,8 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="titre" data-sortable="true">Titre Page</th>
-	<th class="col-xs-2" data-field="contenu" data-sortable="true">Contenu</th>
+	<th class="col-xs-1" data-field="titre" data-sortable="true">{{'Page.titrePage'|trans}}</th>
+	<th class="col-xs-1" data-field="contenu" data-sortable="true">{{'Page.contenu'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -47,7 +47,7 @@
 					<li>
 						<a class="delete-content" href="{{ path('supprimerPage',{'id': page.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

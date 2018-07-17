@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		<a href="#">Reservation</a>
+		<a href="#">{{ 'Barre.Réservation.Mot'|trans }}</a>
 	</li>
 {% endblock %}
 
@@ -18,10 +18,10 @@
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
-	<th class="col-xs-2" data-field="libelleActivite" data-sortable="true">Libelle Activite</th>
-	<th class="col-xs-2" data-field="participants" data-sortable="true">Participants</th>
-	<th class="col-xs-2" data-field="dateCreation" data-sortable="true">Date creation</th>
-	<th class="col-xs-2" data-field="dateModification" data-sortable="true">Date Modification</th>
+	<th class="col-xs-2" data-field="libelleActivite" data-sortable="true">{{'Réservation.libelleActivite'|trans}}</th>
+	<th class="col-xs-2" data-field="participants" data-sortable="true">{{'Réservation.participants'|trans}}</th>
+	<th class="col-xs-2" data-field="dateCreation" data-sortable="true">{{'Date_Creation'|trans}}</th>
+	<th class="col-xs-2" data-field="dateModification" data-sortable="true">{{'Date_Modification'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
 {% endblock %}
 
@@ -58,14 +58,14 @@
                     <li>
 						<a class="" href="{{ path('prendreReservation',{'id': reservation.id}) }}">
 							<i class="glyphicon glyphicon-edit icon-white"></i>
-							Modifier
+							{{'Action.Modifier'|trans }}
 						</a>
 					</li>
 					 <li class="divider"></li>
 					<li>
 						<a class="delete-content" href="{{ path('supprimerReservation',{'id': reservation.id}) }}" >
 						<i class="glyphicon glyphicon-trash icon-white"></i>
-						Supprimer
+						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
                 </ul>

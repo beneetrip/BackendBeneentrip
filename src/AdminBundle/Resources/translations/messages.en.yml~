@@ -2,11 +2,6 @@ Connexion: 'Sign in'
 Inscription: 'Sign up'
 ConnexionForm: 'Sign in Form'
 InscriptionForm: 'sign up Form'
-Login.username: Username
-Login.password: Password
-Login.remember_me: 'Remember me'
-Login.submit: 'Log in'
-Registration.submit: Register
 Date_Creation: 'Created On'
 Date_Modification: 'Updated On'
 Utilisateur.Mot: User
@@ -113,9 +108,9 @@ Réservation.participants: Attenders
 Réservation.form: 'Reservation Form'
 Réservation.activite: Activity
 Réservation.utilisateurs: Users
-Discussion.libelleActivite: 'Activity Wording'
+Discussion.libelleActivite: Activity Wording
 Discussion.auteur: Author
 Discussion.destinataires: Receivers
 Discussion.message: Message
-Discussion.form: 'Discussion Form'
+Discussion.form: Discussion Form
 Discussion.activite: Activity

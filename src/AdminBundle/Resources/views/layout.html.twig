@@ -89,7 +89,7 @@
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-user"></i>
 					<span class="hidden-sm hidden-xs"> 
-					User
+					{{ 'Utilisateur.Mot'|trans }}
 					</span>
                     <span class="caret"></span>
                 </button>
@@ -97,11 +97,11 @@
                 <ul class="dropdown-menu">
                     <!-- <li><a href="#"><i class=" glyphicon glyphicon-cog"></i> Paramètres</a></li>
                     <li class="divider"></li> -->
-					<li><a href="{{ path('fos_user_profile_edit') }}"><i></i>Salut, {{app.user.nomComplet}} </a></li>
+					<li><a href="{{ path('fos_user_profile_edit') }}"><i></i>{{ 'Utilisateur.Salut'|trans }}, {{app.user.nomComplet}} </a></li>
 					<li class="divider"></li>
-					<li><a href="{{ path('fos_user_change_password') }}"><i class=" glyphicon glyphicon-cog"></i> Paramètres </a></li>
+					<li><a href="{{ path('fos_user_change_password') }}"><i class=" glyphicon glyphicon-cog"></i> {{ 'Utilisateur.Paramètres'|trans }} </a></li>
 					<li class="divider"></li>
-					<li><a href="{{ path('fos_user_security_logout') }}"><i class="glyphicon glyphicon-off"></i> Déconnection</a></li>
+					<li><a href="{{ path('fos_user_security_logout') }}"><i class="glyphicon glyphicon-off"></i> {{ 'Utilisateur.Déconnection'|trans }} </a></li>
                 </ul>
 
             </div>
@@ -167,11 +167,11 @@
 							 {% if  app.user.id is defined %}
 				<ul class="breadcrumb">
 					<li>
-						<a href="#">Accueil</a>
+						<a href="#">{{ 'Utilisateur.Accueil'|trans }}</a>
 					</li>
 					{% block page %}
 					<li>
-						<a href="#">Tableau de bord</a>
+						<a href="#">{{ 'Utilisateur.Tableau_Bord'|trans }}</a>
 					</li>
 					{% endblock %}
 				</ul>

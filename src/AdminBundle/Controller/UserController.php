@@ -19,7 +19,8 @@ class UserController extends Controller
     {
 		$user= new User();
 		$form = $this->createForm('businessmodelbundle_user', $user);   
-		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 
 	 public function creerAction()
@@ -40,13 +41,15 @@ class UserController extends Controller
 		$user->addRole($user->getPrivilege());
 		$em->persist($user);
 		$em->flush();
-		     $this->get('session')->getFlashBag()->add('info', 'Utilisateur cree avec Succes');
+		     $elt=$this->get('translator')->trans('Barre.Utilisateur.Mot');
+		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
 		     return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
-		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>'Enregistrer')); 	  	
+		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
@@ -64,7 +67,8 @@ class UserController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$em->remove($userId);
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Utilisateur supprimee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Utilisateur.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
 		$listeUsers = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindAll();
 		return $this->render('AdminBundle:User:liste.html.twig',array('listeUsers' => $listeUsers));
     }
@@ -73,7 +77,8 @@ class UserController extends Controller
     {
 		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
-		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
+		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'user' => $userId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
@@ -104,13 +109,15 @@ class UserController extends Controller
 		$userDB->removeRole($privilege);
 		$userDB->addRole($userDB->getPrivilege());
 		$em->flush();
-		$this->get('session')->getFlashBag()->add('info', 'Utilisateur modifiee avec Succes');
+		$elt=$this->get('translator')->trans('Barre.Utilisateur.Mot');
+		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
 		return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
 		    }
 		    
 		}  
 		//return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
-		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
+		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'user' => $userId)); 	  	
 	 }
 	 
 	 
@@ -118,19 +125,22 @@ class UserController extends Controller
     {
 		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
-		return $this->render('AdminBundle:User:ajouterPhoto.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>'Modifier','user' => $userId)); 	  	
+		return $this->render('AdminBundle:User:ajouterPhoto.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'user' => $userId)); 	  	
 	 }
 	 
 	 public function checkLoginAction()
     {   
-		return $this->render('AdminBundle:User:checkLogin.html.twig',array('path' => 'business_model_login', 'bouton'=>'Check Login'));  	
+		return $this->render('AdminBundle:User:checkLogin.html.twig',array('path' => 'business_model_login', 'bouton'=>
+		$this->get('translator')->trans('Action.checkLogin')));  	
 	 }
 	 
 	 public function checkRegisterAction()
     {
     	$user= new User();
 		$form = $this->createForm('businessmodelbundle_user', $user);   
-		return $this->render('AdminBundle:User:checkRegister.html.twig',array('form' => $form->createView(),'path' => 'business_model_register', 'bouton'=>'Check Registration'));  	
+		return $this->render('AdminBundle:User:checkRegister.html.twig',array('form' => $form->createView(),'path' => 'business_model_register', 'bouton'=>
+		$this->get('translator')->trans('Action.checkRegistration')));  	
 	 }
 	 
 	 
@@ -146,11 +156,11 @@ class UserController extends Controller
 		$userBDByEmail = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($email);
 		$error=false;		
 		if($userBDByName!=null && $userBDByName->getId()!=$idUser){
-		$form->get('username')->addError(new FormError('Nom utilisateur déjà utilisé'));
+		$form->get('username')->addError(new FormError($this->get('translator')->trans('Utilisateur.usernameErrorMessage')));
 		$error=true;
 		}		
 		if($userBDByEmail!=null && $userBDByEmail->getId()!=$idUser){
-		$form->get('email')->addError(new FormError('Email utilisateur déjà utilisé'));
+		$form->get('email')->addError(new FormError($this->get('translator')->trans('Utilisateur.emailErrorMessage')));
 		$error=true;
 		}		
 

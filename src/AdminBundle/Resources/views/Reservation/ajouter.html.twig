@@ -2,7 +2,7 @@
 
 {% block page %}
 	<li>
-		<a href="#">Reservation</a>
+		<a href="#">{{ 'Barre.Réservation.Mot'|trans }}</a>
 	</li>
 {% endblock %}
 
@@ -34,7 +34,7 @@
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
                 
-				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
+				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} {{ 'Réservation.form'|trans }} {% endblock %}</h2>
 
                 <!-- <div class="box-icon">
                     <a href="#" class="btn btn-setting btn-round btn-default">
@@ -59,14 +59,14 @@
 
 					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idReservation|default('0') })}) }}
     <div class="control-group">
-					{{ form_label(form.activite) }}
+					{{ form_label(form.activite,'Réservation.activite'|trans) }}
 					<div class="controls">
 					{{ form_widget(form.activite, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 	</div>
 	<br/>
 	 <div class="control-group">
-					{{ form_label(form.utilisateurs) }}
+					{{ form_label(form.utilisateurs,'Réservation.utilisateurs'|trans) }}
 					<div class="controls">
 					{{ form_widget(form.utilisateurs, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
 					</div>
@@ -75,7 +75,7 @@
 	<br/>
      <div class="form-group">
 <button id="button-submit" type="submit" class="btn btn-default" data-loading-text=" <i class='fa fa-refresh fa-spin fa-lg'></i> Envoie en cours ...">{{bouton}}</button>
-<button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                                        
+<button type="reset" class="btn btn-default">{{'Action.Annuler'|trans }}</button>                                        
                     </div>
        
     

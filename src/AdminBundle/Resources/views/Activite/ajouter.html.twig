@@ -3,7 +3,7 @@
 
 {% block page %}
 	<li>
-		Activite
+		{{ 'Barre.Activité.Mot'|trans }}
 	</li>
 	
 {% endblock %}
@@ -36,7 +36,7 @@
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
                 
-				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} Form Elements {% endblock %}</h2>
+				<h2><i class="glyphicon glyphicon-edit"></i> {% block formTitle %} {{ 'Activité.form'|trans }} {% endblock %}</h2>
 
                 <!-- <div class="box-icon">
                     <a href="#" class="btn btn-setting btn-round btn-default">
@@ -62,51 +62,51 @@
 					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : activite.id|default('0') })}) }}
 					{{ form_errors(form) }}
 					<div class="form-group">
-					{{ form_label(form.libelle) }}
+					{{ form_label(form.libelle,'Activité.libelle'|trans) }}
 					{{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
 					{{ form_errors(form.libelle) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.lieuDestination) }}
+					{{ form_label(form.lieuDestination,'Activité.lieuDestination'|trans) }}
 					{{ form_widget(form.lieuDestination, { 'attr': {'class': 'form-control'} }) }}
 					{{ form_errors(form.lieuDestination) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.date) }}
+					{{ form_label(form.date,'Activité.date'|trans) }}
 					{{ form_widget(form.date, { 'attr': {'class': 'datepicker form-control'}}) }}
 					{{ form_errors(form.date) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.heure) }}
+					{{ form_label(form.heure,'Activité.heure'|trans) }}
 					{{ form_widget(form.heure, { 'attr': {'class': 'timepicker form-control'}}) }}
 					{{ form_errors(form.heure) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.nbParticipants) }}
+					{{ form_label(form.nbParticipants,'Activité.nbParticipants'|trans) }}
 					{{ form_widget(form.nbParticipants, { 'attr': {'class': 'form-control'} }) }}
 					{{ form_errors(form.nbParticipants) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.prixIndividu) }}
+					{{ form_label(form.prixIndividu,'Activité.prixIndividu'|trans) }}
 					{{ form_widget(form.prixIndividu, { 'attr': {'class': 'form-control'} }) }}
 					{{ form_errors(form.prixIndividu) }} 
 					</div>
 
 					<div class="control-group">
-					{{ form_label(form.categorie) }}
+					{{ form_label(form.categorie,'Activité.categorie'|trans) }}
 					<div class="controls">
 					{{ form_widget(form.categorie, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 					</div>
 					<br/>
 					<div class="form-group">
-					{{ form_label(form.description) }}
+					{{ form_label(form.description,'Activité.description'|trans) }}
 					{{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
 					{{ form_errors(form.description) }} 
 					</div>
 					
 					<div class="form-group" id="divImagePrincipale">
-					{{ form_label(form.imagePrincipale) }}
+					{{ form_label(form.imagePrincipale,'Activité.imagePrincipale'|trans) }}
 					{{ form_widget(form.imagePrincipale) }}
 					{{ form_errors(form.imagePrincipale) }} 
 					</div>
@@ -132,7 +132,7 @@
 					
      <div class="form-group">
 <button id="button-submit" type="submit" class="btn btn-default" data-loading-text=" <i class='fa fa-refresh fa-spin fa-lg'></i> Envoie en cours ...">{{bouton}}</button>
-<button type="reset" class="btn btn-default">Annuler toutes les modifications</button>                    
+<button type="reset" class="btn btn-default">{{'Action.Annuler'|trans }}</button>                    
                     </div>
        
     
@@ -358,7 +358,7 @@ $('#businessmodelbundle_activite_imagePrincipale_nom').attr('class','form-contro
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('accept','.jpg, .jpeg, .png');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('style','display: none;');
 $('#businessmodelbundle_activite_imagePrincipale_fichier').attr('onchange',"previsualiserImage('businessmodelbundle_activite_imagePrincipale_fichier','zoneImage');");
-$('#divImagePrincipale').children('label').first().html('<legend>Image Principale</legend>');
+$('#divImagePrincipale').children('label').first().html('<legend>{{'Activité.imagePrincipale'|trans }}</legend>');
 document.getElementById('divImagePrincipale').innerHTML+=`
 <br/><center><img id="zoneImage" onclick="document.getElementById('businessmodelbundle_activite_imagePrincipale_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
@@ -374,7 +374,7 @@ var $container = $('div#businessmodelbundle_activite_images');
 //On recupere le div des images et on va ajouter notre bouton ajout pour qu'il apparaisse toujours a la fin des images qu'on ajoute
 var $divImages= $('div#divImages');
 // On ajoute un lien pour ajouter une nouvelle catégorie
-var $lienAjout = $('<center><br/><br/><a href="#" id="ajout_image" class="btn btn-primary">Ajouter autre Image</a><br/><br/></center>');
+var $lienAjout = $('<center><br/><br/><a href="#" id="ajout_image" class="btn btn-primary">{{'Activité.addImage'|trans }}</a><br/><br/></center>');
 $divImages.append($lienAjout);
 // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
 $lienAjout.click(function(e) {
@@ -391,7 +391,7 @@ if (index == 0) {
 // Pour chaque image déjà existante, on ajoute un lien de suppression
 $container.children('div').each(function() {
 //On decore un peu avec les fieldsets
-$(this).children('label').first().html('<legend>Image numero ' + ($(this).index()+1)+'</legend>');
+$(this).children('label').first().html('<legend>{{'Activité.imageNumero'|trans }} ' + ($(this).index()+1)+'</legend>');
 
 //Ayant generer les urls on peut les prendre respectivement par les index des fils span dans divUrls
 var elt=$('#divUrls').children('span').eq($(this).index()).html();
@@ -423,7 +423,7 @@ function ajouterImage($container) {
 //- le texte "__name__label__" qu'il contient par le label du champ
 // - le texte "__name__" qu'il contient par le numéro du champ
 // Et on decore un peu avec des fieldsets
-var $prototype = $('<fieldset>'+$container.attr('data-prototype').replace(/__name__label__/g, '<legend>Image numero ' + (index+1)+'</legend>').replace(/__name__/g, index)
+var $prototype = $('<fieldset>'+$container.attr('data-prototype').replace(/__name__label__/g, '<legend>{{'Activité.imageNumero'|trans }} ' + (index+1)+'</legend>').replace(/__name__/g, index)
 +`<center><img id="img`+(index)+`" onclick="document.getElementById('businessmodelbundle_activite_images_`+(index)+`_fichier').click();" 
 					style="margin-left: 0%;background: #fff; border: 5px solid black;cursor: 
 					pointer; width: 25%;" src="{{ asset('bundles/admin/img/image.jpg') }}" /></center>	
@@ -451,7 +451,7 @@ index++;
 // La fonction qui ajoute un lien de suppression d'une Image
 function ajouterLienSuppression($prototype) {
 // Création du lien
-$lienSuppression = $('<br/><a href="#" class="btn btn-danger">Supprimer</a><br/><br/>');
+$lienSuppression = $('<br/><a href="#" class="btn btn-danger">{{'Action.Supprimer'|trans }}</a><br/><br/>');
 // Ajout du lien
 $prototype.append($lienSuppression);
 // Ajout du listener sur le clic du lien
@@ -464,7 +464,7 @@ return false;
 });
 </script>
 			<script type="text/javascript">
-				CKEDITOR.replace( 'businessmodelbundle_activite_description' );
+				//CKEDITOR.replace( 'businessmodelbundle_activite_description' );
 			</script>
 
 
