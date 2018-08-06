@@ -27,20 +27,12 @@ class SearchActiviteType extends AbstractType
     {
     	
         $builder
-            ->add('lieuDestinations', 'choice', array(
+            /*->add('lieuDestinations', 'choice', array(
        'choice_list' => new ChoiceList(
         $this->listeDestinations,
         $this->listeDestinations)
       ))
-            ->add('dateDebut', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
-            ->add('dateFin', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
-            ->add('heureDebut', 'datetime', array('widget' =>'single_text','format' =>'HH:mm','required' =>false))
-            ->add('heureFin', 'datetime', array('widget' =>'single_text','format' =>'HH:mm','required' =>false))
-            ->add('prixIndividuMin', 'number', array('required' =>false))
-            ->add('prixIndividuMax', 'number', array('required' =>false))
-            ->add('nbParticipantsMin', 'integer', array('required' =>false))
-            ->add('nbParticipantsMax', 'integer', array('required' =>false))
-            ->add('categorie','entity', array(
+      ->add('categorie','entity', array(
 				'class'
 				=> 'BusinessModelBundle:Categorie',
 				'property' => 'nom',
@@ -49,7 +41,19 @@ class SearchActiviteType extends AbstractType
 				'class'
 				=> 'BusinessModelBundle:User',
 				'property' => 'nomComplet',
-				'multiple' => false)) ;
+				'multiple' => false))*/
+				->add('lieuDestinations', 'text', array('required' =>false))
+      		->add('categorie', 'text', array('required' =>false))
+				->add('auteur', 'text', array('required' =>false))
+            ->add('dateDebut', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
+            ->add('dateFin', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
+            ->add('heureDebut', 'datetime', array('widget' =>'single_text','format' =>'HH:mm','required' =>false))
+            ->add('heureFin', 'datetime', array('widget' =>'single_text','format' =>'HH:mm','required' =>false))
+            ->add('prixIndividuMin', 'number', array('required' =>false))
+            ->add('prixIndividuMax', 'number', array('required' =>false))
+            ->add('nbParticipantsMin', 'integer', array('required' =>false))
+            ->add('nbParticipantsMax', 'integer', array('required' =>false))
+             ;
     }
     
     /**

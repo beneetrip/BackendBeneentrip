@@ -46,7 +46,17 @@ services:
          tags:
             - { name: form.type, alias: businessmodelbundle_langue }
 
-     model_search.registration.form.type:
+     model_searchActivite.registration.form.type:
          class: BusinessModelBundle\Form\Type\SearchActiviteType
          tags:
             - { name: form.type, alias: businessmodelbundle_searchactivite }
+            
+     model_searchReservation.registration.form.type:
+         class: BusinessModelBundle\Form\Type\SearchReservationType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_searchreservation }
+
+     model_print.registration.form.type:
+         class: BusinessModelBundle\Form\Type\PrintType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_print }

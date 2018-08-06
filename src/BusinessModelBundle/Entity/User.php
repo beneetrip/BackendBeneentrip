@@ -122,6 +122,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		private $langues;
     
     
+    
     /**
      * @Assert\File(
      *     maxSize = "6M",
@@ -352,13 +353,13 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		{
 		// On retourne le chemin relatif du dossier des images uploadees
 		return 'upload_images/users';
-		}
+		}		
+		
 		protected function getUploadRootDir()
 		{
 		// On retourne le chemin relatif vers l'image pour notre code PHP
 		return __DIR__.'/../../../web/'.$this->getUploadDir();
 		}
-	
 	
 	    /**
 	     * Set urlPhoto
@@ -578,5 +579,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		}
 
 	}
+	
 		
 }

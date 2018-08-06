@@ -1,0 +1,57 @@
+services:
+#    business_model.example:
+#        class: BusinessModelBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+
+     model_user.registration.form.type:
+         class: BusinessModelBundle\Form\Type\UserType
+         arguments: [%fos_user.model.user.class%]
+         tags:
+            - { name: form.type, alias: businessmodelbundle_user }
+
+     model_categorie.registration.form.type:
+         class: BusinessModelBundle\Form\Type\CategorieType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_categorie }
+     
+     model_page.registration.form.type:
+         class: BusinessModelBundle\Form\Type\PageType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_page }
+
+     model_activite.registration.form.type:
+         class: BusinessModelBundle\Form\Type\ActiviteType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_activite }
+
+     model_reservation.registration.form.type:
+         class: BusinessModelBundle\Form\Type\ReservationType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_reservation }
+
+
+     model_image.registration.form.type:
+         class: BusinessModelBundle\Form\Type\ImageType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_image }
+
+     model_discussion.registration.form.type:
+         class: BusinessModelBundle\Form\Type\DiscussionType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_discussion }
+
+     model_langue.registration.form.type:
+         class: BusinessModelBundle\Form\Type\LangueType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_langue }
+
+     model_searchActivite.registration.form.type:
+         class: BusinessModelBundle\Form\Type\SearchActiviteType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_searchactivite }
+            
+     model_searchReservation.registration.form.type:
+         class: BusinessModelBundle\Form\Type\SearchReservationType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_searchreservation }

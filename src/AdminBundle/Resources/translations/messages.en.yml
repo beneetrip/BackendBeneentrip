@@ -24,6 +24,8 @@ Barre.Activité.Search: 'Search Activity'
 Barre.Réservation.Mot: Reservation
 Barre.Réservation.All: 'All Reservations'
 Barre.Réservation.Add: 'New Reservation'
+Barre.Réservation.Search: 'Search Reservation'
+Barre.Réservation.Print: 'Invoice Print'
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: 'All Discussions'
 Barre.Discussion.Add: 'New Discussion'
@@ -54,6 +56,7 @@ Action.EnregistrerMessage: '%elt% saved successfully'
 Action.ModifierMessage: '%elt% updated successfully'
 Action.Annuler: Reset
 Action.Rechercher: Search
+Action.Imprimer: Print
 Action.Ici: Here
 Action.checkLogin: 'Check User'
 Action.checkRegistration: 'Check Registration'
@@ -108,11 +111,14 @@ Langue.form: 'Language Form'
 Page.titrePage: Title
 Page.contenu: Content
 Page.form: 'Page Form'
-Réservation.libelleActivite: 'Activity Wording'
+Réservation.libelleActivite: 'Activity Wordings'
 Réservation.participants: Attenders
 Réservation.form: 'Reservation Form'
-Réservation.activite: Activity
+Réservation.activites: Activities
 Réservation.utilisateurs: Users
+Réservation.paye: Paid?
+Réservation.Ok: Yes
+Réservation.nonOk: No
 Discussion.libelleActivite: 'Activity Wording'
 Discussion.auteur: Author
 Discussion.destinataires: Receivers

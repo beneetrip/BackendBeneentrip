@@ -20,6 +20,7 @@
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>
 	<th class="col-xs-2" data-field="libelleActivite" data-sortable="true">{{'Réservation.libelleActivite'|trans}}</th>
 	<th class="col-xs-2" data-field="participants" data-sortable="true">{{'Réservation.participants'|trans}}</th>
+	<th class="col-xs-1" data-field="paye" data-sortable="true">{{'Réservation.paye'|trans}}</th>
 	<th class="col-xs-2" data-field="dateCreation" data-sortable="true">{{'Date_Creation'|trans}}</th>
 	<th class="col-xs-2" data-field="dateModification" data-sortable="true">{{'Date_Modification'|trans}}</th>
 	<th class="col-xs-1" data-field="action" > </th>
@@ -31,9 +32,15 @@
 	<tr>
 		<td>{{ reservation.id }}</td>
 		<td>
-		<a class="" href="{{ path('voirActiviteReservation',{'id': reservation.id}) }}">		
-		{{ reservation.activite.libelle }}
+		{% if reservation.activites is defined %} 
+{% for activite in reservation.activites %}
+<p>
+<a class="" href="{{ path('voirActiviteReservation',{'id': activite.id}) }}">		
+{{activite.libelle}}
 		</a>
+</p>		
+{% endfor %}
+{% endif %}	
 		</td>
 		<td>
 {% if reservation.utilisateurs is defined %} 
@@ -42,6 +49,7 @@
 {% endfor %}
 {% endif %}		
 		</td>
+		<td>{{ reservation.paye ? 'Réservation.Ok'|trans:'Réservation.nonOk'|trans }}</td>
 		<td>{{ reservation.dateCreation|date('Y-m-d H:i:s') }}</td>
 		<td>
 {% if reservation.dateModification is not null %} 

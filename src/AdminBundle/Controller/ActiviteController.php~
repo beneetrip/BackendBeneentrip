@@ -185,7 +185,14 @@ class ActiviteController extends Controller
 		if($form->isValid() && $this->checkParameters($request,$form)) {
 		
 		$registrationArray = $request->get('businessmodelbundle_searchactivite');
+		/*
 		$lieuDestination=$listeDest[intval($registrationArray['lieuDestinations'])];		
+		$categorie= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne(intval($registrationArray['categorie']))->getNom();
+		$auteur= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['auteur']))->getNomComplet();
+		*/
+		$lieuDestination=$registrationArray['lieuDestinations'];
+		$categorie=$registrationArray['categorie'];
+		$auteur=$registrationArray['auteur']; 		
 		$dateDebut = $registrationArray['dateDebut'];
 		$dateFin = $registrationArray['dateFin'];
 		$heureDebut = $registrationArray['heureDebut'];
@@ -194,18 +201,16 @@ class ActiviteController extends Controller
 		$prixIndividuMax = $registrationArray['prixIndividuMax'];
 		$nbParticipantsMin = $registrationArray['nbParticipantsMin'];
 		$nbParticipantsMax = $registrationArray['nbParticipantsMax'];
-		$categorie= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne(intval($registrationArray['categorie']))->getNom();
-		$auteur= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['auteur']))->getNomComplet();
 		
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 
 		$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur);
     	
-    	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    	//return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
 		}  
 		}
-		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
-		'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
+		//return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
+		//'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
     }
     
     
@@ -225,26 +230,26 @@ class ActiviteController extends Controller
 
 		$error=false;		
 		if(($dateDebut!=null && $dateFin !=null) && ($dateDebut > $dateFin)){
-		$form->get('dateDebut')->addError(new FormError($this->get('translator')->trans('Action.dateDebutErrorMessage')));
-		$form->get('dateFin')->addError(new FormError($this->get('translator')->trans('Action.dateDebutErrorMessage')));
+		$form->get('dateDebut')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
+		$form->get('dateFin')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
 		$error=true;
 		}
 		
 		if(($heureDebut!=null && $heureFin !=null) && ($heureDebut > $heureFin)){
-		$form->get('heureDebut')->addError(new FormError($this->get('translator')->trans('Action.heureDebutErrorMessage')));
-		$form->get('heureFin')->addError(new FormError($this->get('translator')->trans('Action.heureDebutErrorMessage')));
+		$form->get('heureDebut')->addError(new FormError($this->get('translator')->trans('Activité.heureDebutErrorMessage')));
+		$form->get('heureFin')->addError(new FormError($this->get('translator')->trans('Activité.heureDebutErrorMessage')));
 		$error=true;
 		}
 		
 		if(($prixIndividuMin!=null && $prixIndividuMax !=null) && ($prixIndividuMin > $prixIndividuMax)){
-		$form->get('prixIndividuMin')->addError(new FormError($this->get('translator')->trans('Action.prixIndividuMinErrorMessage')));
-		$form->get('prixIndividuMax')->addError(new FormError($this->get('translator')->trans('Action.prixIndividuMinErrorMessage')));
+		$form->get('prixIndividuMin')->addError(new FormError($this->get('translator')->trans('Activité.prixIndividuMinErrorMessage')));
+		$form->get('prixIndividuMax')->addError(new FormError($this->get('translator')->trans('Activité.prixIndividuMinErrorMessage')));
 		$error=true;
 		}
 		
 		if(($nbParticipantsMin!=null && $nbParticipantsMax !=null) && ($nbParticipantsMin > $nbParticipantsMax)){
-		$form->get('nbParticipantsMin')->addError(new FormError($this->get('translator')->trans('Action.nbParticipantsMinErrorMessage')));
-		$form->get('nbParticipantsMax')->addError(new FormError($this->get('translator')->trans('Action.nbParticipantsMinErrorMessage')));
+		$form->get('nbParticipantsMin')->addError(new FormError($this->get('translator')->trans('Activité.nbParticipantsMinErrorMessage')));
+		$form->get('nbParticipantsMax')->addError(new FormError($this->get('translator')->trans('Activité.nbParticipantsMinErrorMessage')));
 		$error=true;
 		}
 				

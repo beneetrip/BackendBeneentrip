@@ -24,6 +24,8 @@ Barre.Activité.Search: Rechercher une Activité
 Barre.Réservation.Mot: Réservation
 Barre.Réservation.All: Toutes les Réservations
 Barre.Réservation.Add: Ajouter une Réservation
+Barre.Réservation.Search: Rechercher une Réservation
+Barre.Réservation.Print: Imprimer Facture
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: Toutes les Discussions
 Barre.Discussion.Add: Ajouter une Discussion
@@ -54,6 +56,7 @@ Action.EnregistrerMessage: %elt% créé(e) avec succès
 Action.ModifierMessage: %elt% modifié(e) avec succès
 Action.Annuler: Annuler les modifications
 Action.Rechercher: Rechercher
+Action.Imprimer: Imprimer
 Action.Ici: Ici
 Action.checkLogin: Vérifier Connexion
 Action.checkRegistration: Vérifier Inscription
@@ -108,11 +111,14 @@ Langue.form: Formulaire Langue
 Page.titrePage: Titre
 Page.contenu: Contenu
 Page.form: Formulaire Page
-Réservation.libelleActivite: Libellé Activité
+Réservation.libelleActivite: Libellés Activité
 Réservation.participants: Participants
 Réservation.form: Formulaire Réservation
-Réservation.activite: Activité
+Réservation.activites: Activités
 Réservation.utilisateurs: Utilisateurs
+Réservation.paye: Payée?
+Réservation.Ok: Oui
+Réservation.nonOk: Non
 Discussion.libelleActivite: Libellé Activité
 Discussion.auteur: Auteur
 Discussion.destinataires: Destinataires

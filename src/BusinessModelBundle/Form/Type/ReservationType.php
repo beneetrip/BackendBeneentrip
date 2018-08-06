@@ -16,15 +16,18 @@ class ReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('activite','entity', array(
+            ->add('activites','entity', array(
 				'class'
 				=> 'BusinessModelBundle:Activite',
 				'property' => 'libelle',
-				'multiple' => false))
+				'multiple' => true))
             ->add('utilisateurs', 'entity', array(
 				'class' => 'BusinessModelBundle:User',
 				'property' => 'nomComplet',
 				'multiple' => true))
+				->add('paye', 'checkbox', array(
+    								'value'     => false,
+    								'required'  => false))
 				        ;
     }
     

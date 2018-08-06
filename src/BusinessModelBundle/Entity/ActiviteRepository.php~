@@ -98,7 +98,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits=0;//Ce compteur est pour le nombre de criteres valides
 						
 						
-						if($lieuDestination!=null){
+						if(isset($lieuDestination)){
 						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
 						// Si lieuDestination contient des virgules						
 						if(strpos($lieuDestination,",")!== false)
@@ -108,22 +108,22 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						//S'il ya plusieurs mots on va faire les requetes avec chaque mots en evitant les mots vides						
 						if(count($tabMots) > 1){
 						if(trim($tabMots[0])!="")	
-						$qb->where('a.lieuDestination LIKE :mot0')
+						$qb->where('UPPER(a.lieuDestination) LIKE UPPER( :mot0 )')
 						->setParameter('mot0','%'.$tabMots[0].'%');
 						for($i = 1; $i < count($tabMots); $i++){
 						if(trim($tabMots[$i])!="")						
-						$qb->orWhere('a.lieuDestination LIKE :mot'.$i)
+						$qb->orWhere('UPPER(a.lieuDestination) LIKE UPPER( :mot'.$i.' )')
 						->setParameter('mot'.$i,'%'.$tabMots[$i].'%');
 						}
 						}	
 						else 
-						$qb->where('a.lieuDestination LIKE :lieuDestination')
+						$qb->where('UPPER(a.lieuDestination) LIKE UPPER( :lieuDestination )')
 						->setParameter('lieuDestination','%'.$lieuDestination.'%');
 						$nbhits++;						
 						}
 						
 						
-						if($dateDebut!=null){
+						if(isset($dateDebut)){
 						if($nbhits>0)
 						$qb->andWhere('a.date >= :dateDebut')
 						->setParameter('dateDebut', $dateDebut);
@@ -134,7 +134,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($dateFin!=null){
+						if(isset($dateFin)){
 						if($nbhits>0)
 						$qb->andWhere('a.date <= :dateFin')
 						->setParameter('dateFin', $dateFin);
@@ -146,7 +146,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if($heureDebut!=null){
+						if(isset($heureDebut)){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure >= :heureDebut')
 						->setParameter('heureDebut', $heureDebut);
@@ -157,7 +157,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($heureFin!=null){
+						if(isset($heureFin)){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure <= :heureFin')
 						->setParameter('heureFin', $heureFin);
@@ -169,15 +169,15 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if($categorie!=null){
-						$qb->join('a.categorie', 'c', 'WITH', 'c.nom = :categorie')
-						->setParameter('categorie', $categorie);							
+						if(isset($categorie)){
+						$qb->join('a.categorie', 'c', 'WITH', 'UPPER(c.nom) LIKE UPPER( :categorie )')
+						->setParameter('categorie', '%'.$categorie.'%');							
 						$nbhits++;										
 						}
 						
 						
-						if($auteur!=null){
-						$qb->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
+						if(isset($auteur)){
+						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nomComplet) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
 						->setParameter('auteur', '%'.$auteur.'%');						
 						$nbhits++;										
 						}
@@ -206,7 +206,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits=0;//Ce compteur est pour le nombre de criteres valides
 						
 						
-						if($lieuDestination!=null){
+						if(isset($lieuDestination)){
 						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
 						// Si lieuDestination contient des virgules						
 						if(strpos($lieuDestination,",")!== false)
@@ -216,22 +216,22 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						//S'il ya plusieurs mots on va faire les requetes avec chaque mots en evitant les mots vides						
 						if(count($tabMots) > 1){
 						if(trim($tabMots[0])!="")	
-						$qb->where('a.lieuDestination LIKE :mot0')
+						$qb->where('UPPER(a.lieuDestination) LIKE UPPER( :mot0 )')
 						->setParameter('mot0','%'.$tabMots[0].'%');
 						for($i = 1; $i < count($tabMots); $i++){
 						if(trim($tabMots[$i])!="")						
-						$qb->orWhere('a.lieuDestination LIKE :mot'.$i)
+						$qb->orWhere('UPPER(a.lieuDestination) LIKE UPPER( :mot'.$i.' )')
 						->setParameter('mot'.$i,'%'.$tabMots[$i].'%');
 						}
 						}	
 						else 
-						$qb->where('a.lieuDestination LIKE :lieuDestination')
+						$qb->where('UPPER(a.lieuDestination) LIKE UPPER( :lieuDestination )')
 						->setParameter('lieuDestination','%'.$lieuDestination.'%');
 						$nbhits++;						
 						}
 						
 						
-						if($dateDebut!=null){
+						if(isset($dateDebut)){
 						if($nbhits>0)
 						$qb->andWhere('a.date >= :dateDebut')
 						->setParameter('dateDebut', $dateDebut);
@@ -242,7 +242,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($dateFin!=null){
+						if(isset($dateFin)){
 						if($nbhits>0)
 						$qb->andWhere('a.date <= :dateFin')
 						->setParameter('dateFin', $dateFin);
@@ -254,7 +254,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if($heureDebut!=null){
+						if(isset($heureDebut)){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure >= :heureDebut')
 						->setParameter('heureDebut', $heureDebut);
@@ -265,7 +265,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($heureFin!=null){
+						if(isset($heureFin)){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure <= :heureFin')
 						->setParameter('heureFin', $heureFin);
@@ -276,7 +276,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($prixIndividuMin!=null){
+						if(isset($prixIndividuMin)){
 						if($nbhits>0)	
 						$qb->andWhere('a.prixIndividu >= :prixIndividuMin')
 						->setParameter('prixIndividuMin', floatval($prixIndividuMin));
@@ -287,7 +287,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($prixIndividuMax!=null){
+						if(isset($prixIndividuMax)){
 						if($nbhits>0)	
 						$qb->andWhere('a.prixIndividu <= :prixIndividuMax')
 						->setParameter('prixIndividuMax', floatval($prixIndividuMax));
@@ -298,7 +298,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($nbParticipantsMin!=null){
+						if(isset($nbParticipantsMin)){
 						if($nbhits>0)	
 						$qb->andWhere('a.nbParticipants >= :nbParticipantsMin')
 						->setParameter('nbParticipantsMin', intval($nbParticipantsMin));
@@ -309,7 +309,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($nbParticipantsMax!=null){
+						if(isset($nbParticipantsMax)){
 						if($nbhits>0)	
 						$qb->andWhere('a.nbParticipants <= :nbParticipantsMax')
 						->setParameter('nbParticipantsMax', intval($nbParticipantsMax));
@@ -320,15 +320,15 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if($categorie!=null){
-						$qb->join('a.categorie', 'c', 'WITH', 'c.nom = :categorie')
-						->setParameter('categorie', $categorie);							
+						if(isset($categorie)){
+						$qb->join('a.categorie', 'c', 'WITH', 'UPPER(c.nom) LIKE UPPER( :categorie )')
+						->setParameter('categorie', '%'.$categorie.'%');							
 						$nbhits++;										
 						}
 						
 						
-						if($auteur!=null){
-						$qb->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
+						if(isset($auteur)){
+						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nomComplet) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
 						->setParameter('auteur', '%'.$auteur.'%');						
 						$nbhits++;										
 						}

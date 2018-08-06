@@ -185,7 +185,14 @@ class ActiviteController extends Controller
 		if($form->isValid() && $this->checkParameters($request,$form)) {
 		
 		$registrationArray = $request->get('businessmodelbundle_searchactivite');
+		/*
 		$lieuDestination=$listeDest[intval($registrationArray['lieuDestinations'])];		
+		$categorie= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne(intval($registrationArray['categorie']))->getNom();
+		$auteur= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['auteur']))->getNomComplet();
+		*/
+		$lieuDestination=$registrationArray['lieuDestinations'];
+		$categorie=$registrationArray['categorie'];
+		$auteur=$registrationArray['auteur']; 		
 		$dateDebut = $registrationArray['dateDebut'];
 		$dateFin = $registrationArray['dateFin'];
 		$heureDebut = $registrationArray['heureDebut'];
@@ -194,8 +201,6 @@ class ActiviteController extends Controller
 		$prixIndividuMax = $registrationArray['prixIndividuMax'];
 		$nbParticipantsMin = $registrationArray['nbParticipantsMin'];
 		$nbParticipantsMax = $registrationArray['nbParticipantsMax'];
-		$categorie= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Categorie')->myFindOne(intval($registrationArray['categorie']))->getNom();
-		$auteur= $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['auteur']))->getNomComplet();
 		
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 

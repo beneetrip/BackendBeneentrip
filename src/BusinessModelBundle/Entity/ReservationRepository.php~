@@ -21,7 +21,50 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('r')
 			->where('r.id = :id')
 			->setParameter('id', $id);
-			return $qb->getQuery()->getResult()[0];
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+			}
+			
+			//Fonction pour les recherches selon les criteres specifiques sur les Reservations
+			public function myFindSurReservations($activites, $utilisateurs, $paye)
+			{
+
+			$qb = $this->createQueryBuilder('r');
+			$nbhits=0;//Ce compteur est pour le nombre de criteres valides	
+			
+			if(isset($activites)){
+			$qb->join('r.activites', 'a', 'WITH', 'UPPER(a.lieuDestination) LIKE UPPER( :activites ) OR UPPER(a.libelle) LIKE UPPER( :activites )')
+			->setParameter('activites', '%'.$activites.'%');							
+			$nbhits++;
+			}
+			
+			if(isset($utilisateurs)){
+			$qb->join('r.utilisateurs', 'u', 'WITH', 'UPPER(u.nomComplet) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
+			->setParameter('utilisateurs', '%'.$utilisateurs.'%');						
+			$nbhits++;										
+			}
+			
+			if(isset($paye)){
+			if($nbhits>0)	
+			$qb->andWhere('r.paye = :paye')
+			->setParameter('paye', $paye);
+			else 
+			$qb->where('r.paye = :paye')
+			->setParameter('paye', $paye);
+			$nbhits++;						
+			}
+			/*print_r(array(
+  			'sql'  => $qb->getQuery()->getSQL(),
+  			'parameters' => $qb->getQuery()->getParameters(),
+  			));*/				
+		
+			
+			//Et pour finir on prend les resultats avec tous les criteres en compte
+			$listeRetour=$qb->getQuery()->getResult();
+			
+			//print_r($listeRetour);
+			
+			return $listeRetour;
+				
 			}
 
 }

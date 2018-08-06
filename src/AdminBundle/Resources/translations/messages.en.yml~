@@ -2,6 +2,11 @@ Connexion: 'Sign in'
 Inscription: 'Sign up'
 ConnexionForm: 'Sign in Form'
 InscriptionForm: 'sign up Form'
+Login.username: Username
+Login.password: Password
+Login.remember_me: 'Remember me'
+Login.submit: 'Log in'
+Registration.submit: Register
 Date_Creation: 'Created On'
 Date_Modification: 'Updated On'
 Utilisateur.Mot: User
@@ -19,6 +24,8 @@ Barre.Activité.Search: 'Search Activity'
 Barre.Réservation.Mot: Reservation
 Barre.Réservation.All: 'All Reservations'
 Barre.Réservation.Add: 'New Reservation'
+Barre.Réservation.Search: 'Search Reservation'
+Barre.Réservation.Print: 'Invoice Print'
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: 'All Discussions'
 Barre.Discussion.Add: 'New Discussion'
@@ -49,6 +56,7 @@ Action.EnregistrerMessage: '%elt% saved successfully'
 Action.ModifierMessage: '%elt% updated successfully'
 Action.Annuler: Reset
 Action.Rechercher: Search
+Action.Imprimer: Print
 Action.Ici: Here
 Action.checkLogin: 'Check User'
 Action.checkRegistration: 'Check Registration'
@@ -106,11 +114,14 @@ Page.form: 'Page Form'
 Réservation.libelleActivite: 'Activity Wording'
 Réservation.participants: Attenders
 Réservation.form: 'Reservation Form'
-Réservation.activite: Activity
+Réservation.activites: Activities
 Réservation.utilisateurs: Users
-Discussion.libelleActivite: Activity Wording
+Réservation.paye: Paid?
+Réservation.Ok: Yes
+Réservation.nonOk: No
+Discussion.libelleActivite: 'Activity Wording'
 Discussion.auteur: Author
 Discussion.destinataires: Receivers
 Discussion.message: Message
-Discussion.form: Discussion Form
+Discussion.form: 'Discussion Form'
 Discussion.activite: Activity

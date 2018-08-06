@@ -363,7 +363,8 @@ CREATE TABLE `reservation` (
   `id` int(11) NOT NULL,
   `activite_id` int(11) NOT NULL,
   `dateCreation` datetime NOT NULL,
-  `dateModification` datetime DEFAULT NULL
+  `dateModification` datetime DEFAULT NULL,
+  `paye` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -438,6 +439,18 @@ INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `em
 (1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$IAB5PagRHNjhgCOsG/1TEO/q7H7Vb5.nA6KCaR.MSAVFPJs7V8.g2', '2018-06-22 10:02:14', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', 26, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-06-22 13:09:39'),
 (2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', 32, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22'),
 (3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$fQcM44IYpir1I5KLdPJhNeyMlzIQMKgXwIDw0JerAgW9LK6pycYEC', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', 31, NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-22 13:31:49');
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservation_activite`
+--
+
+CREATE TABLE `reservation_activite` (
+  `reservation_id` int(11) NOT NULL,
+  `activite_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -524,6 +537,15 @@ ALTER TABLE `utilisateurs`
   ADD UNIQUE KEY `UNIQ_497B315E92FC23A8` (`username_canonical`),
   ADD UNIQUE KEY `UNIQ_497B315EA0D96FBF` (`email_canonical`),
   ADD UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`);
+
+
+--
+-- Indexes for table `reservation_activite`
+--
+ALTER TABLE `reservation_activite`
+  ADD PRIMARY KEY (`reservation_id`,`activite_id`),
+  ADD KEY `IDX_25C0B701B83297E7` (`reservation_id`),
+  ADD KEY `IDX_25C0B7019B0F88B1` (`activite_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -620,6 +642,14 @@ ALTER TABLE `reservation_user`
 ALTER TABLE `user_langue`
   ADD CONSTRAINT `FK_F6056EB32AADBACD` FOREIGN KEY (`langue_id`) REFERENCES `langue` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_F6056EB3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `utilisateurs` (`id`) ON DELETE CASCADE;
+
+
+--
+-- Constraints for table `reservation_activite`
+--
+ALTER TABLE `reservation_activite`
+  ADD CONSTRAINT `FK_25C0B7019B0F88B1` FOREIGN KEY (`activite_id`) REFERENCES `activite` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_25C0B701B83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

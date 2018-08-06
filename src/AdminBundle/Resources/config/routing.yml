@@ -198,10 +198,26 @@ modifierReservation:
               id: \d+
 
 voirActiviteReservation:
-    path:     /admin/reservation/{id}/activite
+    path:     /admin/reservation/activites/{id}
     defaults: { _controller: AdminBundle:Reservation:voirActivite }
     requirements:
               id: \d+
+
+rechercherReservations:
+    path:     /admin/rechercherReservations
+    defaults: { _controller: AdminBundle:Reservation:searchReservation }
+
+ListeRechercherReservations:
+    path:     /admin/ListeRechercherReservations
+    defaults: { _controller: AdminBundle:Reservation:searchListReservation }
+
+imprimerReservations:
+    path:     /admin/imprimerReservations
+    defaults: { _controller: AdminBundle:Reservation:printReservation }
+
+imprimerPDF:
+    path:     /admin/imprimerPDF
+    defaults: { _controller: AdminBundle:Reservation:printPDF }
 
 ajouterImage:
     path:     /admin/image/ajouter

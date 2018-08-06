@@ -132,12 +132,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*/
 		private $discussions;
 		
-
-		/**
-		* @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Reservation",cascade={"persist", "remove"}, mappedBy="activite")
-		*/
-		private $reservations;
-		
 		
 		/**
 		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\User",inversedBy="activites")
@@ -436,40 +430,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     public function getDiscussions()
     {
         return $this->discussions;
-    }
-
-    /**
-     * Add reservation
-     *
-     * @param \BusinessModelBundle\Entity\Reservation $reservation
-     *
-     * @return Activite
-     */
-    public function addReservation(\BusinessModelBundle\Entity\Reservation $reservation)
-    {
-        $this->reservations[] = $reservation;
-
-        return $this;
-    }
-
-    /**
-     * Remove reservation
-     *
-     * @param \BusinessModelBundle\Entity\Reservation $reservation
-     */
-    public function removeReservation(\BusinessModelBundle\Entity\Reservation $reservation)
-    {
-        $this->reservations->removeElement($reservation);
-    }
-
-    /**
-     * Get reservations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReservations()
-    {
-        return $this->reservations;
     }
 
     /**

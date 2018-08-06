@@ -31,11 +31,16 @@ use Doctrine\ORM\Mapping as ORM;
 		
 		
 		/**
-		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="reservations")
-		* @ORM\JoinColumn(nullable=false)
+		* @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Activite")
 		*/
-		private $activite;
+		private $activites;
 		
+		
+		/**
+       * @ORM\Column(name="paye", type="boolean", options={"default":false})
+       */
+      private $paye;	
+      	
 		
 		/**
 		 * @ORM\PrePersist()
@@ -99,29 +104,6 @@ use Doctrine\ORM\Mapping as ORM;
     }
 
     /**
-     * Set activite
-     *
-     * @param \BusinessModelBundle\Entity\Activite $activite
-     *
-     * @return Reservation
-     */
-    public function setActivite(\BusinessModelBundle\Entity\Activite $activite = null)
-    {
-        $this->activite = $activite;
-
-        return $this;
-    }
-
-    /**
-     * Get activite
-     *
-     * @return \BusinessModelBundle\Entity\Activite
-     */
-    public function getActivite()
-    {
-        return $this->activite;
-    }
-    /**
      * Constructor
      */
     public function __construct()
@@ -175,5 +157,63 @@ use Doctrine\ORM\Mapping as ORM;
     public function getDateModification()
     {
         return $this->dateModification;
+    }
+
+    /**
+     * Set paye
+     *
+     * @param boolean $paye
+     *
+     * @return Reservation
+     */
+    public function setPaye($paye)
+    {
+        $this->paye = $paye;
+
+        return $this;
+    }
+
+    /**
+     * Get paye
+     *
+     * @return boolean
+     */
+    public function getPaye()
+    {
+        return $this->paye;
+    }
+
+    /**
+     * Add activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     *
+     * @return Reservation
+     */
+    public function addActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites[] = $activite;
+
+        return $this;
+    }
+
+    /**
+     * Remove activite
+     *
+     * @param \BusinessModelBundle\Entity\Activite $activite
+     */
+    public function removeActivite(\BusinessModelBundle\Entity\Activite $activite)
+    {
+        $this->activites->removeElement($activite);
+    }
+
+    /**
+     * Get activites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivites()
+    {
+        return $this->activites;
     }
 }

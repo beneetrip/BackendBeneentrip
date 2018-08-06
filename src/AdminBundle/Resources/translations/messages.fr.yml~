@@ -1,0 +1,127 @@
+Connexion: Connexion
+Inscription: Inscription
+ConnexionForm: Formulaire Connexion
+InscriptionForm: Formulaire Inscription
+Login.username: Nom d'utilisateur
+Login.password: Mot de passe
+Login.remember_me: Se souvenir de moi
+Login.submit: Connexion
+Registration.submit: Créer un compte
+Date_Creation: Date Création
+Date_Modification: Date Modification
+Utilisateur.Mot: Utilisateur
+Utilisateur.Salut: Salut
+Utilisateur.Paramètres: Paramètres
+Utilisateur.Déconnection: Déconnection
+Utilisateur.Accueil: Accueil
+Utilisateur.Tableau_Bord: Tableau de Bord
+Barre.Tableau_bord: Tableau de Bord
+Barre.Contenu: Contenu
+Barre.Activité.Mot: Activité
+Barre.Activité.All: Toutes les Activités
+Barre.Activité.Add: Ajouter une Activité
+Barre.Activité.Search: Rechercher une Activité
+Barre.Réservation.Mot: Réservation
+Barre.Réservation.All: Toutes les Réservations
+Barre.Réservation.Add: Ajouter une Réservation
+Barre.Réservation.Search: Rechercher une Réservation
+Barre.Réservation.Print: Imprimer Facture
+Barre.Discussion.Mot: Discussion
+Barre.Discussion.All: Toutes les Discussions
+Barre.Discussion.Add: Ajouter une Discussion
+Barre.Langue.Mot: Langue
+Barre.Langue.All: Toutes les Langues
+Barre.Langue.Add: Ajouter une Langue
+Barre.Page.Mot: Page
+Barre.Page.All: Toutes les Pages
+Barre.Page.Add: Ajouter une Page
+Barre.Galerie.Mot: Galerie
+Barre.Galerie.All: Toutes les Images
+Barre.Galerie.Add: Ajouter une Image
+Barre.Organisation_Contenu: Organisation du Contenu
+Barre.Catégorie.Mot: Catégorie
+Barre.Catégorie.All: Toutes les Catégories
+Barre.Catégorie.Add: Ajouter une Catégorie
+Barre.Sécurité: Sécurité
+Barre.Utilisateur.Mot: Utilisateur
+Barre.Utilisateur.All: Tous les Utilisateurs
+Barre.Utilisateur.Add: Ajouter un Utilisateur
+Barre.Paramètres: Paramètres
+Barre.Paramètres_Généraux: Paramètres Généraux
+Action.Supprimer: Supprimer
+Action.Enregistrer: Enregistrer
+Action.Modifier: Modifier
+Action.SupprimerMessage: %elt% supprimé(e) avec succès
+Action.EnregistrerMessage: %elt% créé(e) avec succès
+Action.ModifierMessage: %elt% modifié(e) avec succès
+Action.Annuler: Annuler les modifications
+Action.Rechercher: Rechercher
+Action.Imprimer: Imprimer
+Action.Ici: Ici
+Action.checkLogin: Vérifier Connexion
+Action.checkRegistration: Vérifier Inscription
+Activité.libelle: Libellé
+Activité.lieuDestination: Lieu de Destination
+Activité.date: Date
+Activité.heure: Heure
+Activité.nbParticipants: Nombre de Participants
+Activité.prixIndividu: Prix par Individu
+Activité.categorie: Catégorie
+Activité.description: Description
+Activité.imagePrincipale: Image Principale
+Activité.addImage: 'Ajouter Autre Image'
+Activité.imageNumero: 'Image Numéro'
+Activité.auteur: 'Auteur'
+Activité.images: 'Images'
+Activité.discussions: 'Discussions'
+Activité.dateDebut: Date de Début
+Activité.dateFin:  Date de Fin
+Activité.heureDebut: Heure de Début
+Activité.heureFin: Heure de Fin
+Activité.prixIndividuMin: Prix Minimum par Individu
+Activité.prixIndividuMax: Prix Maximum par Individu
+Activité.nbParticipantsMin: Nombre de Participants Minimum
+Activité.nbParticipantsMax: Nombre de Participants Maximum
+Activité.dateDebutErrorMessage: La date de Début doit être inférieure à celle de Fin
+Activité.heureDebutErrorMessage: L'heure de Début doit être inférieure à celle de Fin
+Activité.prixIndividuMinErrorMessage: Le prix individuel Min doit être inférieure à celui Max
+Activité.nbParticipantsMinErrorMessage: Le nombre de participants Min doit être inférieure à celui Max
+Activité.form: Formulaire Activité
+Utilisateur.fichierPhoto: Photo
+Utilisateur.nomComplet: Noms & Prénoms
+Utilisateur.age: Age
+Utilisateur.typeUtilisateur: Type Utilisateur
+Utilisateur.genre: Genre
+Utilisateur.username: Alias (Pseudo)
+Utilisateur.email: Email
+Utilisateur.langues: Langue(s) Parlée(s)
+Utilisateur.enabled: Actif?
+Utilisateur.privilege: Droits Utilisateur
+Utilisateur.usernameErrorMessage: Nom utilisateur déjà utilisé
+Utilisateur.emailErrorMessage: Email utilisateur déjà utilisé
+Utilisateur.form: Formulaire Utilisateur
+Catégorie.nom: Nom Catégorie
+Catégorie.form: Formulaire Catégorie
+Galerie.nom:  Nom
+Galerie.fichier: Fichier
+Galerie.form: Formulaire Galérie
+Langue.code: Code
+Langue.nom: Nom
+Langue.form: Formulaire Langue
+Page.titrePage: Titre
+Page.contenu: Contenu
+Page.form: Formulaire Page
+Réservation.libelleActivite: Libellé Activité
+Réservation.participants: Participants
+Réservation.form: Formulaire Réservation
+Réservation.activites: Activités
+Réservation.utilisateurs: Utilisateurs
+Réservation.paye: Payée?
+Réservation.Ok: Oui
+Réservation.nonOk: Non
+Discussion.libelleActivite: Libellé Activité
+Discussion.auteur: Auteur
+Discussion.destinataires: Destinataires
+Discussion.message: Message
+Discussion.form: Formulaire Discussion
+Discussion.activite: Activité

@@ -132,12 +132,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*/
 		private $discussions;
 		
-
-		/**
-		* @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Reservation",cascade={"persist", "remove"}, mappedBy="activite")
-		*/
-		private $reservations;
-		
 		
 		/**
 		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\User",inversedBy="activites")
