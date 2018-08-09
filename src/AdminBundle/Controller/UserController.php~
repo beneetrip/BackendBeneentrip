@@ -76,6 +76,7 @@ class UserController extends Controller
      public function prendreAction($id)
     {
 		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
+		$phoneNumber = $container->get('libphonenumber.phone_number_util')->parse($userId->getTelephone(), PhoneNumberUtil::UNKNOWN_REGION);
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
 		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>
 		$this->get('translator')->trans('Action.Modifier'),'user' => $userId)); 	  	
@@ -156,11 +157,11 @@ class UserController extends Controller
 		$userBDByEmail = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($email);
 		$error=false;		
 		if($userBDByName!=null && $userBDByName->getId()!=$idUser){
-		$form->get('username')->addError(new FormError($this->get('translator')->trans('Action.usernameErrorMessage')));
+		$form->get('username')->addError(new FormError($this->get('translator')->trans('Utilisateur.usernameErrorMessage')));
 		$error=true;
 		}		
 		if($userBDByEmail!=null && $userBDByEmail->getId()!=$idUser){
-		$form->get('email')->addError(new FormError($this->get('translator')->trans('Action.emailErrorMessage')));
+		$form->get('email')->addError(new FormError($this->get('translator')->trans('Utilisateur.emailErrorMessage')));
 		$error=true;
 		}		
 

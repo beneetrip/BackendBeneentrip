@@ -68,12 +68,20 @@
 					</div>					
 							
 					<div class="form-group">
-					{{ form_widget(form.nomComplet, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					{{ form_widget(form.nom, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					</div> 
+					
+					<div class="form-group">
+					{{ form_widget(form.prenom, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
 					</div> 					
  							
 					<div class="form-group">
-					{{ form_widget(form.age, { 'attr': {'class': 'form-control', 'style': 'display: none;'} }) }}
+					{{ form_widget(form.dateNaissance, { 'attr': {'class': 'datepicker form-control', 'style': 'display: none;'} }) }}
 					</div>
+					
+					<div class="form-group">
+					{{ form_widget(form.telephone, { 'attr': {'style': 'display: none;'} }) }}
+					</div>					
 					
 					<div class="control-group">
 					<div class="controls" style='display: none;'>
@@ -109,7 +117,7 @@
 					</div>
 					</div>					
 					<br/>
-               <div id="passe" style='display: none;'>
+               <div id="passe">
 					{{ form_widget(form) }}
 					</div>										
 					

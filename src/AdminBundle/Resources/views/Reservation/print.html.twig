@@ -59,7 +59,17 @@
 					</div>
 	</div>
 	<br/>
-	
+	<div class="form-group">
+					{{ form_label(form.dateDebut,'Activité.dateDebut'|trans) }}
+					{{ form_widget(form.dateDebut, { 'attr': {'class': 'datepicker form-control'}}) }}
+					{{ form_errors(form.dateDebut) }} 
+					</div>
+					<div class="form-group">
+					{{ form_label(form.dateFin,'Activité.dateFin'|trans) }}
+					{{ form_widget(form.dateFin, { 'attr': {'class': 'datepicker form-control'}}) }}
+					{{ form_errors(form.dateFin) }} 
+					</div>
+	<br/>
 	<div class="form-group">
 						{{ form_label(form.paye,'Réservation.paye'|trans) }}
 					<div class="controls">
@@ -285,7 +295,14 @@
 	
 </script>
 
+<script type="text/javascript">
+$(document).ready(function() {
+//On affiche bien nos dates et heures avec des beaux widgets
+$('.datepicker').datepicker();
+$('.timepicker').timepicker({showMeridian: false});//false pour activer le mode 24h voir https://jdewit.github.io/bootstrap-timepicker/
 
+});
+</script>
 
 {####### on affiche les forms ici car il ont besoin des bioblotheques js ######}
 {% endblock %}

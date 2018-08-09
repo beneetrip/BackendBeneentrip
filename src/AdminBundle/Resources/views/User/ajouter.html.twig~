@@ -77,14 +77,25 @@
 					</div> 					
  									
 					<div class="form-group">
-					{{ form_label(form.nomComplet,'Utilisateur.nomComplet'|trans) }}
-					{{ form_widget(form.nomComplet, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.nomComplet) }} 
+					{{ form_label(form.nom,'Utilisateur.nom'|trans) }}
+					{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.nom) }} 
 					</div>
 					<div class="form-group">
-					{{ form_label(form.age,'Utilisateur.age'|trans) }}
-					{{ form_widget(form.age, { 'attr': {'class': 'form-control'} }) }}
-					{{ form_errors(form.age) }} 
+					{{ form_label(form.prenom,'Utilisateur.prenom'|trans) }}
+					{{ form_widget(form.prenom, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.prenom) }} 
+					</div>
+					<div class="form-group">
+					{{ form_label(form.dateNaissance,'Utilisateur.dateNaissance'|trans) }}
+					{{ form_widget(form.dateNaissance, { 'attr': {'class': 'datepicker form-control'} }) }}
+					{{ form_errors(form.dateNaissance) }} 
+					</div>
+					
+					<div class="form-group">
+					{{ form_label(form.telephone,'Utilisateur.telephone'|trans) }}
+					{{ form_widget(form.telephone, { 'attr': {'class': 'form-control'} }) }}
+					{{ form_errors(form.telephone) }} 
 					</div>
 					
 					<div class="control-group">
@@ -362,6 +373,7 @@
 {# Voici le script en question pour formatter les champs de mot de passe #}
 <script type="text/javascript">
 $(document).ready(function() {
+$('.datepicker').datepicker();
 var $container = $('div#passe');
 for (var i = 0; i < $container.find(':input').length; i++){
 if($container.find(':input')[i].type == 'password')

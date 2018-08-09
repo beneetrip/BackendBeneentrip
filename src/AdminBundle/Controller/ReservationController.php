@@ -12,6 +12,7 @@ use BusinessModelBundle\Entity\Reservation;
 use BusinessModelBundle\Form\Type\ReservationType;
 use BusinessModelBundle\Form\Type\SearchReservationType;
 use BusinessModelBundle\Form\Type\PrintType;
+use Symfony\Component\Form\FormError;
 //use BusinessModelBundle\Util\tcpdf\TCPDF;
 
 class ReservationController extends Controller
@@ -145,17 +146,21 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid()) {
+		if($form->isValid() && $this->checkParameters($request,$form,true)) {
 		
 		$registrationArray = $request->get('businessmodelbundle_searchreservation');
 		
 		$utilisateurs=$registrationArray['utilisateurs'];
 		$activites=$registrationArray['activites'];
+		$dateDebut = $registrationArray['dateDebut'];
+		$dateFin = $registrationArray['dateFin'];
 		//Si on a selectionne l'option de valeur 0 du select alors ce n'est ni oui ni non paye est equivalent a null
 		$paye=($registrationArray['paye'] =='2')? null: $registrationArray['paye'];
+		
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations
-		($activites, $utilisateurs, $paye);
-    	
+		($activites, $utilisateurs, $paye, $dateDebut, $dateFin);
+    	//var_dump($dateDebut);
+    	//var_dump($dateFin);
     	return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
 		}  
 		}
@@ -194,26 +199,58 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid()) {
+		if($form->isValid() && $this->checkParameters($request,$form,false) ) {
 		
 		$registrationArray = $request->get('businessmodelbundle_print');
 		
-		$utilisateurs=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['utilisateurs']))->getNomComplet();
+		$utilisateurs=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['utilisateurs']))->getNom();
+		
+		$dateDebut = $registrationArray['dateDebut'];
+		$dateFin = $registrationArray['dateFin'];		
 		
 		//Si on a selectionne l'option de valeur 0 du select alors ce n'est ni oui ni non paye est equivalent a null
 		$paye=($registrationArray['paye'] =='2')? null: $registrationArray['paye'];
 		
-		//var_dump($utilisateurs);
-    	//var_dump($this->genererFactureHTML($listeReservations));
-    	$this->creerFacturePDF($this->genererFactureCodeHTML($utilisateurs,$paye),$this->genererFactureCodeCSS());
-return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $form->createView(),'path' => 'imprimerPDF', 
+    	/*$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations
+		(null, $utilisateurs, $paye, $dateDebut, $dateFin);
+    	print_r($listeReservations);*/
+    	$this->creerFacturePDF($this->genererFactureCodeHTML($utilisateurs,$dateDebut,$dateFin,$paye),$this->genererFactureCodeCSS());
+		
+		return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $form->createView(),'path' => 'imprimerPDF', 
 		'bouton'=> $this->get('translator')->trans('Action.Imprimer')));
 		}  
 		}
-return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $form->createView(),'path' => 'imprimerPDF', 
+		
+		return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $form->createView(),'path' => 'imprimerPDF', 
 		'bouton'=> $this->get('translator')->trans('Action.Imprimer')));
     }
     
+    
+    	//Fonction qui permet de tester s'il les contraintes de comparaisons sur les champs sont respectees
+    	//le parametres estformsearch nous indique si la verification concerne un formulaire de recherche sur reservation ou pas
+    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form, $estformsearch){
+		
+		if($estformsearch)
+		$registrationArray = $request->get('businessmodelbundle_searchreservation');
+		else 		
+		$registrationArray = $request->get('businessmodelbundle_print');
+		
+		$dateDebut = ($registrationArray['dateDebut']!=null) ? (new \DateTime($registrationArray['dateDebut'])) : null;
+		$dateFin = ($registrationArray['dateFin']!=null) ? (new \DateTime($registrationArray['dateFin'])) : null;
+
+		$error=false;		
+		if(($dateDebut!=null && $dateFin !=null) && ($dateDebut > $dateFin)){
+		$form->get('dateDebut')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
+		$form->get('dateFin')->addError(new FormError($this->get('translator')->trans('Activité.dateDebutErrorMessage')));
+		$error=true;
+		}
+				
+		//S'il ya erreur on retourne false : les parametres sont mauvais		
+		if($error)
+		return false;
+		
+		return true;
+	 }
     
     	function calculerMontantTotal($listeReservations)
     	{
@@ -229,7 +266,7 @@ return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $
 		
 		
 		
-		function genererFactureCodeHTML($nomUser, $paye)
+		function genererFactureCodeHTML($nomUser, $dateDebut, $dateFin, $paye)
 		{
 		
 		//IMPORTANT : On va utiliser des quotes simples au lieu des quotes doubles ceci a cause du HTML qu'on va generer pour envoyer a l'impression
@@ -239,22 +276,38 @@ return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $
 		//La balise <SUP> pour mettre en exposant et <SUB> pour mettre en indice
 		
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations
-		(null, $nomUser, $paye);
+		(null, $nomUser, $paye, $dateDebut, $dateFin);
 		
 		$nowDate=new \DateTime();	
+
+		if(isset($dateDebut) && trim($dateDebut,'')!=""){
+		$date1=new \DateTime($dateDebut);
+		$dateDebut=$date1->format('d/m/Y');		
+		}
+		else 
+		$dateDebut="---";
+		
+		if(isset($dateFin) && trim($dateFin,'')!=""){
+		$date2=new \DateTime($dateFin);
+		$dateFin=$date2->format('d/m/Y');		
+		}
+		else		
+		$dateFin="---";		
 		
 		$html='<div class="fond">';
 		
-		$html=$html.'<h1>FACTURE N<SUP>o</SUP> '.$nowDate->format('dmYHis').' DE '.strtoupper($nomUser).'</h1><br/><br/><br/><br/>'.
+		$html=$html.'<h1>'.$this->get('translator')->trans('Facture.mot').' '.strtoupper($nomUser).' N<SUP>o</SUP> '.$nowDate->format('dmYHis').'</h1><br/><br/><br/><br/>'.
+		$html=$html.'<h4>'.$this->get('translator')->trans('Facture.debut').' '.$dateDebut.' '.
+		$this->get('translator')->trans('Facture.fin').' '.$dateFin.'</h4><br/><br/><br/><br/>'.		
 		'<table>'.
 		'<thead>'.
 		'<tr>'.
-		'<th>Activite</th>'.
-		'<th>Destination</th>'.
-		'<th>Date</th>'.
-		'<th>Heure</th>'.
-		'<th>Prix</th>'.
-		'<th>Paye</th>'.
+		'<th>'.$this->get('translator')->trans('Barre.Activité.Mot').'</th>'.
+		'<th>'.$this->get('translator')->trans('Activité.lieuDestination').'</th>'.
+		'<th>'.$this->get('translator')->trans('Activité.date').'</th>'.
+		'<th>'.$this->get('translator')->trans('Activité.heure').'</th>'.
+		'<th>'.$this->get('translator')->trans('Activité.prixIndividu').'</th>'.
+		'<th>'.$this->get('translator')->trans('Réservation.paye').'</th>'.
 		'</tr>'.
 		'</thead>';
 		
@@ -284,9 +337,11 @@ return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $
 		}
 		
 		}
-		$html=$html. '<tr>'.
-		'<td colspan="6">';
-		$html=$html.'MONTANT TOTAL : '.$this->calculerMontantTotal($listeReservations).
+		$html=$html. '<tr class="totalRow">'.
+		'<td colspan="4">';
+		$html=$html.' '.$this->get('translator')->trans('Facture.total').' : '.
+		'</td>'.
+		'<td colspan="2">'.$this->calculerMontantTotal($listeReservations).
 		'</td>'.
 		'</tr>';
 		$html=$html. '</table>'.
@@ -336,7 +391,7 @@ $css=<<<EOF
 			.fond{
 			background-color: #fff;
 			}
-			h1{
+			h1, h4{
 			text-align: center;
 			}
 			</style>

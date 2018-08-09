@@ -6,6 +6,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;//for validation groups voir http://symfony.com/doc/current/validation.html#validation-groups
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 	/**
 	 * @ORM\Entity(repositoryClass="BusinessModelBundle\Entity\UserRepository")
@@ -34,23 +35,39 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     
     
     /**
-    * @var string $nomComplet
+    * @var string $nom
     *
-    * @ORM\Column(name="nomcomplet", type="string", length=255)
+    * @ORM\Column(name="nom", type="string", length=255)
     * @Assert\Length(
     *      min = 3
     * )
     */
-    protected $nomComplet;
-        
+    protected $nom;
     
     /**
-    * @var integer $age
+    * @var string $prenom
     *
-    * @ORM\Column(name="age", type="integer")
-    * @Assert\GreaterThan(17)
+    * @ORM\Column(name="prenom", type="string", length=255)
+    * @Assert\Length(
+    *      min = 3
+    * )
     */
-    protected $age;
+    protected $prenom;
+        
+    
+	 /**
+		* @var date $dateNaissance
+		*
+		* @ORM\Column(name="dateNaissance", type="date")
+		* @Assert\LessThan("-17 years")
+		*/
+		private $dateNaissance;    
+    
+	   /**
+	   * @ORM\Column(type="string", length=50, nullable=true)
+	   * @AssertPhoneNumber(type="mobile")
+	   */
+	    protected $telephone;
     
     
     /**
@@ -179,44 +196,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		return $this->genre;
 		}
 		
-		/**
-	     * Set nomComplet
-	     *
-	     * @param string $nomComplet
-	    */
-		public function setNomComplet($nomComplet)
-		{
-		$this->nomComplet = $nomComplet;
-		}
-		/**
-		* Get nomComplet
-		*
-		* @return string
-		*/
-		public function getNomComplet()
-		{
-		return $this->nomComplet;
-		}
-		
-		
-		/**
-	     * Set age
-	     *
-	     * @param integer $age
-	    */
-		public function setAge($age)
-		{
-		$this->age = $age;
-		}
-		/**
-		* Get age
-		*
-		* @return integer
-		*/
-		public function getAge()
-		{
-		return $this->age;
-		}
 		
 		/**
 	     * Set photo
@@ -580,5 +559,113 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 
 	}
 	
+	//Fonction speciale pour retourner le nom complet de l'utlisateur dans un dropdown
+	public function getNomComplet()
+	{
+    return $this->prenom.'  '.$this->nom;
+	}
+	
+	//Fonction speciale pour retourner l'age de l'utlisateur
+	public function getAge()
+	{
+	 $datetime1 = new \DateTime();                // date actuelle
+    $datetime2 = new \DateTime(date_format($this->getDateNaissance(),'Y-m-d'));
+    $interval = $datetime1->diff($datetime2);	
+    //var_dump($interval);
+    return $interval->y;
+	}
+	
 		
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return User
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     * @return User
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string 
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     * @return User
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     * @return User
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string 
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
 }

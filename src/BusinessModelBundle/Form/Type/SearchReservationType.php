@@ -26,6 +26,8 @@ class SearchReservationType extends AbstractType
         $builder
 				->add('utilisateurs', 'text', array('required' =>false))
       		->add('activites', 'text', array('required' =>false))
+      		->add('dateDebut', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
+            ->add('dateFin', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
 				//->add('paye', 'checkbox', array('required'  => false))
 				->add('paye', 'choice', array(
        'choice_list' => new ChoiceList(

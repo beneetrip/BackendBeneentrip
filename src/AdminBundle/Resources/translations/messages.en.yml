@@ -88,7 +88,11 @@ Activité.prixIndividuMinErrorMessage: 'Minimum Individual Price should be less 
 Activité.nbParticipantsMinErrorMessage: 'Minimum Participants Number should be less than Maximum Participants Number'
 Activité.form: 'Activity Form'
 Utilisateur.fichierPhoto: Picture
-Utilisateur.nomComplet: 'Full Name'
+Utilisateur.nom: 'Last Name'
+Utilisateur.prenom: 'First Name'
+Utilisateur.telephone: Phone Number
+Utilisateur.dateNaissance: Birth Date
+Utilisateur.nomComplet: Full Name
 Utilisateur.age: Age
 Utilisateur.typeUtilisateur: 'User Type'
 Utilisateur.genre: Gender
@@ -125,3 +129,7 @@ Discussion.destinataires: Receivers
 Discussion.message: Message
 Discussion.form: 'Discussion Form'
 Discussion.activite: Activity
+Facture.mot: BILL FOR
+Facture.debut: From
+Facture.fin: To
+Facture.total: TOTAL AMOUNT

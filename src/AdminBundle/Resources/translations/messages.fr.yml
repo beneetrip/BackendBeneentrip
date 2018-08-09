@@ -88,6 +88,10 @@ Activité.prixIndividuMinErrorMessage: Le prix individuel Min doit être inféri
 Activité.nbParticipantsMinErrorMessage: Le nombre de participants Min doit être inférieure à celui Max
 Activité.form: Formulaire Activité
 Utilisateur.fichierPhoto: Photo
+Utilisateur.nom: Nom
+Utilisateur.prenom: Prénom
+Utilisateur.telephone: Téléphone
+Utilisateur.dateNaissance: Date naissance
 Utilisateur.nomComplet: Noms & Prénoms
 Utilisateur.age: Age
 Utilisateur.typeUtilisateur: Type Utilisateur
@@ -125,3 +129,7 @@ Discussion.destinataires: Destinataires
 Discussion.message: Message
 Discussion.form: Formulaire Discussion
 Discussion.activite: Activité
+Facture.mot: FACTURE POUR
+Facture.debut: Du
+Facture.fin: Au
+Facture.total: MONTANT TOTAL

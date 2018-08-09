@@ -201,6 +201,7 @@ class ActiviteController extends Controller
 		$prixIndividuMax = $registrationArray['prixIndividuMax'];
 		$nbParticipantsMin = $registrationArray['nbParticipantsMin'];
 		$nbParticipantsMax = $registrationArray['nbParticipantsMax'];
+				
 		
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 

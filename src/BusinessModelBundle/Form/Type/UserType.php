@@ -21,8 +21,10 @@ class UserType extends BaseType
         array('Homme', 'Femme'))
       ));
         
-        $builder->add('nomComplet');
-        $builder->add('age');
+        $builder->add('nom');
+        $builder->add('prenom');
+        $builder->add('dateNaissance','birthday', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false));
+        $builder->add('telephone');
         $builder->add('typeUtilisateur', 'choice', array(
        'choice_list' => new ChoiceList(
         array('Touriste','Guide'),

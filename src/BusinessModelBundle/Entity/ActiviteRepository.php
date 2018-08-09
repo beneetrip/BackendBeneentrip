@@ -72,7 +72,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 			$qb = $this->createQueryBuilder('a')
-			->join('a.auteur', 'u', 'WITH', 'u.nomComplet LIKE :auteur OR u.username LIKE :auteur')
+			->join('a.auteur', 'u', 'WITH', 'u.nom LIKE :auteur OR u.prenom LIKE :auteur OR u.username LIKE :auteur')
 			->setParameter('auteur', '%'.$auteur.'%');
 			return $qb->getQuery()->getArrayResult();
 			}
@@ -98,7 +98,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits=0;//Ce compteur est pour le nombre de criteres valides
 						
 						
-						if(isset($lieuDestination)){
+						if(isset($lieuDestination) && trim($lieuDestination,'')!=""){
 						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
 						// Si lieuDestination contient des virgules						
 						if(strpos($lieuDestination,",")!== false)
@@ -123,7 +123,12 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if(isset($dateDebut)){
+						if(isset($dateDebut) && trim($dateDebut,'')!=""){
+							
+						//On formatte bien notre date pour les requetes			
+						$date1=new \DateTime($dateDebut);
+					   $dateDebut=$date1->format('Y-m-d');
+		   	
 						if($nbhits>0)
 						$qb->andWhere('a.date >= :dateDebut')
 						->setParameter('dateDebut', $dateDebut);
@@ -134,7 +139,13 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($dateFin)){
+						if(isset($dateFin) && trim($dateFin,'')!=""){
+							
+							
+						//On formatte bien notre date pour les requetes			
+						$date2=new \DateTime($dateFin);
+					   $dateFin=$date2->format('Y-m-d');
+					   
 						if($nbhits>0)
 						$qb->andWhere('a.date <= :dateFin')
 						->setParameter('dateFin', $dateFin);
@@ -146,7 +157,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if(isset($heureDebut)){
+						if(isset($heureDebut) && trim($heureDebut,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure >= :heureDebut')
 						->setParameter('heureDebut', $heureDebut);
@@ -157,7 +168,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($heureFin)){
+						if(isset($heureFin) && trim($heureFin,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure <= :heureFin')
 						->setParameter('heureFin', $heureFin);
@@ -169,15 +180,15 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if(isset($categorie)){
+						if(isset($categorie) && trim($categorie,'')!=""){
 						$qb->join('a.categorie', 'c', 'WITH', 'UPPER(c.nom) LIKE UPPER( :categorie )')
 						->setParameter('categorie', '%'.$categorie.'%');							
 						$nbhits++;										
 						}
 						
 						
-						if(isset($auteur)){
-						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nomComplet) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
+						if(isset($auteur) && trim($auteur,'')!=""){
+						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nom) LIKE UPPER( :auteur ) OR UPPER(u.prenom) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
 						->setParameter('auteur', '%'.$auteur.'%');						
 						$nbhits++;										
 						}
@@ -206,7 +217,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits=0;//Ce compteur est pour le nombre de criteres valides
 						
 						
-						if(isset($lieuDestination)){
+						if(isset($lieuDestination) && trim($lieuDestination,'')!=""){
 						//On va voir d'abord si lieuDestination n'est pas constituer de plusieurs mots avec des separateurs virgules ou espaces
 						// Si lieuDestination contient des virgules						
 						if(strpos($lieuDestination,",")!== false)
@@ -231,7 +242,12 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if(isset($dateDebut)){
+						if(isset($dateDebut) && trim($dateDebut,'')!=""){
+						
+						//On formatte bien notre date pour les requetes			
+						$date1=new \DateTime($dateDebut);
+					   $dateDebut=$date1->format('Y-m-d');							
+							
 						if($nbhits>0)
 						$qb->andWhere('a.date >= :dateDebut')
 						->setParameter('dateDebut', $dateDebut);
@@ -242,7 +258,12 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($dateFin)){
+						if(isset($dateFin) && trim($dateFin,'')!=""){
+							
+						//On formatte bien notre date pour les requetes			
+						$date2=new \DateTime($dateFin);
+					   $dateFin=$date2->format('Y-m-d');
+		   	
 						if($nbhits>0)
 						$qb->andWhere('a.date <= :dateFin')
 						->setParameter('dateFin', $dateFin);
@@ -254,7 +275,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						}
 						
 						
-						if(isset($heureDebut)){
+						if(isset($heureDebut) && trim($heureDebut,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure >= :heureDebut')
 						->setParameter('heureDebut', $heureDebut);
@@ -265,7 +286,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($heureFin)){
+						if(isset($heureFin) && trim($heureFin,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.heure <= :heureFin')
 						->setParameter('heureFin', $heureFin);
@@ -276,7 +297,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($prixIndividuMin)){
+						if(isset($prixIndividuMin) && trim($prixIndividuMin,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.prixIndividu >= :prixIndividuMin')
 						->setParameter('prixIndividuMin', floatval($prixIndividuMin));
@@ -287,7 +308,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($prixIndividuMax)){
+						if(isset($prixIndividuMax) && trim($prixIndividuMax,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.prixIndividu <= :prixIndividuMax')
 						->setParameter('prixIndividuMax', floatval($prixIndividuMax));
@@ -298,7 +319,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($nbParticipantsMin)){
+						if(isset($nbParticipantsMin) && trim($nbParticipantsMin,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.nbParticipants >= :nbParticipantsMin')
 						->setParameter('nbParticipantsMin', intval($nbParticipantsMin));
@@ -309,7 +330,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($nbParticipantsMax)){
+						if(isset($nbParticipantsMax) && trim($nbParticipantsMax,'')!=""){
 						if($nbhits>0)	
 						$qb->andWhere('a.nbParticipants <= :nbParticipantsMax')
 						->setParameter('nbParticipantsMax', intval($nbParticipantsMax));
@@ -320,15 +341,15 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;						
 						}
 						
-						if(isset($categorie)){
+						if(isset($categorie) && trim($categorie,'')!=""){
 						$qb->join('a.categorie', 'c', 'WITH', 'UPPER(c.nom) LIKE UPPER( :categorie )')
 						->setParameter('categorie', '%'.$categorie.'%');							
 						$nbhits++;										
 						}
 						
 						
-						if(isset($auteur)){
-						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nomComplet) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
+						if(isset($auteur) && trim($auteur,'')!=""){
+						$qb->join('a.auteur', 'u', 'WITH', 'UPPER(u.nom) LIKE UPPER( :auteur ) OR UPPER(u.prenom) LIKE UPPER( :auteur ) OR UPPER(u.username) LIKE UPPER( :auteur )')
 						->setParameter('auteur', '%'.$auteur.'%');						
 						$nbhits++;										
 						}
@@ -336,7 +357,7 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						/*print_r(array(
         				'sql'        => $qb->getQuery()->getSQL(),
         				'parameters' => $qb->getQuery()->getParameters(),
-        				));*/					
+        				));*/			
 					
 						
 						//Et pour finir on prend les resultats avec tous les criteres en compte
@@ -346,6 +367,6 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						
 						return $listeRetour;
 				
-			}
+			} 
 			
 }

@@ -201,16 +201,17 @@ class ActiviteController extends Controller
 		$prixIndividuMax = $registrationArray['prixIndividuMax'];
 		$nbParticipantsMin = $registrationArray['nbParticipantsMin'];
 		$nbParticipantsMax = $registrationArray['nbParticipantsMax'];
+				
 		
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 
 		$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur);
     	
-    	//return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
 		}  
 		}
-		//return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
-		//'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
+		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
+		'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
     }
     
     
