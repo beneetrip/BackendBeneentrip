@@ -361,7 +361,6 @@ INSERT INTO `page` (`id`, `titrePage`, `contenu`, `dateCreation`, `dateModificat
 
 CREATE TABLE `reservation` (
   `id` int(11) NOT NULL,
-  `activite_id` int(11) NOT NULL,
   `dateCreation` datetime NOT NULL,
   `dateModification` datetime DEFAULT NULL,
   `paye` tinyint(1) NOT NULL DEFAULT '0'
@@ -512,8 +511,7 @@ ALTER TABLE `page`
 -- Indexes for table `reservation`
 --
 ALTER TABLE `reservation`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_42C849559B0F88B1` (`activite_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `reservation_user`
@@ -625,11 +623,7 @@ ALTER TABLE `discussion_user`
 ALTER TABLE `image`
   ADD CONSTRAINT `FK_C53D045F9B0F88B1` FOREIGN KEY (`activite_id`) REFERENCES `activite` (`id`);
 
---
--- Constraints for table `reservation`
---
-ALTER TABLE `reservation`
-  ADD CONSTRAINT `FK_42C849559B0F88B1` FOREIGN KEY (`activite_id`) REFERENCES `activite` (`id`);
+
 
 --
 -- Constraints for table `reservation_user`

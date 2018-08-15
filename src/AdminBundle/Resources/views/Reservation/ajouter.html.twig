@@ -57,12 +57,13 @@
 {% endif %}
 					{% block contentForm %}
 
-					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : idReservation|default('0') })}) }}
+					{{ form_start(form, {'method': 'post', 'action': path(path,{ 'id' : reservation.id|default('0') })}) }}
     <div class="control-group">
 					{{ form_label(form.activites,'Réservation.activites'|trans) }}
 					<div class="controls">
 					{{ form_widget(form.activites, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
 					</div>
+					{{ form_errors(form.activites) }} 					
 	</div>
 	<br/>
 	 <div class="control-group">
@@ -70,6 +71,7 @@
 					<div class="controls">
 					{{ form_widget(form.utilisateurs, { 'attr': {'data-rel': 'chosen', 'class': 'form-control', 'multiple': ''} }) }}
 					</div>
+					{{ form_errors(form.utilisateurs) }} 					
 	</div>
 	<br/>
 	

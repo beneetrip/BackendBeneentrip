@@ -39,6 +39,14 @@ class UserController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		//On ajoute le privilege parmi les roles des utilisateurs FOSuserBundle
 		$user->addRole($user->getPrivilege());
+		
+		$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+      $user->setSalt($salt);
+      $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+		$encoded = $encoder->encodePassword($user->getPlainPassword(), $user->getSalt());
+		$user->setPassword($encoded);
+		$user->eraseCredentials();
+      
 		$em->persist($user);
 		$em->flush();
 		     $elt=$this->get('translator')->trans('Barre.Utilisateur.Mot');
@@ -47,9 +55,9 @@ class UserController extends Controller
 		    }
 		    
 		}  
-		//return $this->redirect( $this->generateUrl('ajouterUtilisateur') );
 		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerUtilisateur', 'bouton'=>
-		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
+		$this->get('translator')->trans('Action.Enregistrer'))); 
+		  	
 	 }
 	 
 	 public function listeAction()
@@ -76,7 +84,6 @@ class UserController extends Controller
      public function prendreAction($id)
     {
 		$userId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne($id);
-		$phoneNumber = $container->get('libphonenumber.phone_number_util')->parse($userId->getTelephone(), PhoneNumberUtil::UNKNOWN_REGION);
 		$form = $this->createForm('businessmodelbundle_user', $userId);   
 		return $this->render('AdminBundle:User:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierUtilisateur', 'bouton'=>
 		$this->get('translator')->trans('Action.Modifier'),'user' => $userId)); 	  	
@@ -109,6 +116,14 @@ class UserController extends Controller
 		//on supprime l'ancien privilege et on ajoute le nouveau parmi les roles des utilisateurs FOSuserBundle
 		$userDB->removeRole($privilege);
 		$userDB->addRole($userDB->getPrivilege());
+		
+		$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+      $userDB->setSalt($salt);
+      $encoder = $this->container->get('security.encoder_factory')->getEncoder($userDB);
+		$encoded = $encoder->encodePassword($userDB->getPlainPassword(), $userDB->getSalt());
+		$userDB->setPassword($encoded);
+		$userDB->eraseCredentials();		
+		
 		$em->flush();
 		$elt=$this->get('translator')->trans('Barre.Utilisateur.Mot');
 		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
@@ -148,7 +163,7 @@ class UserController extends Controller
 	 public function checkParameters(Request $request,\Symfony\Component\Form\Form $form, $idUser){
 		
 		//On recupere toutes les donnees du formulaire de name 'businessmodelbundle_user' rempli par l'utilisateur 		
-		$registrationArray = $request->get('businessmodelbundle_user');
+		$registrationArray = $request->get('fos_user_registration');
 		
 		//On recupere le username et l'email et on verifie que cela ne se trouve pas deja en BD sinon on renvoit le form avec des erreurs
 		$username = $registrationArray['username'];
@@ -164,7 +179,7 @@ class UserController extends Controller
 		$form->get('email')->addError(new FormError($this->get('translator')->trans('Utilisateur.emailErrorMessage')));
 		$error=true;
 		}		
-
+		
 		//S'il ya erreur on retourne false : les parametres username ou email sont mauvais		
 		if($error)
 		return false;

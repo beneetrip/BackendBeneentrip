@@ -26,6 +26,16 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 			
+			
+			public function myFindByLibelle($libelle)
+			{
+			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+			$qb = $this->createQueryBuilder('a')
+			->where('a.libelle = :libelle')
+			->setParameter('libelle',$libelle);
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+			}
+			
 			public function myFindByLieuDestination($lieuDestination)
 			{
 			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple

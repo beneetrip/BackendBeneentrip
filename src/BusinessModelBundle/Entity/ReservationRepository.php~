@@ -73,8 +73,8 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 				
 
 			//On formatte bien notre date pour les requetes			
-			$date2=new \DateTime($dateDebut);
-		   $dateDebut=$date2->format('Y-m-d');				
+			$date2=new \DateTime($dateFin);
+		   $dateFin=$date2->format('Y-m-d');				
 				
 			if($nbhits>0)	
 			$qb->andWhere('r.dateCreation <= :dateFin')
@@ -99,5 +99,51 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 			return $listeRetour;
 				
 			}
+			
+			
+			//Fonction qui renvoit le nombre de participants de reservations en fonction d'un utilisateur et/ou d'une activite
+			public function nombreReservationsDeja($reservationId, $activiteId, $utilisateurId)
+			{
+				$qb = $this->createQueryBuilder('r');
+				
+			if(isset($reservationId) && trim($reservationId,'')!="")
+			{
+				$qb->where('r.id = :reservationId')
+			   ->setParameter('reservationId', $reservationId);
+		   }
+		      
+			if(isset($activiteId) && trim($activiteId,'')!=""){
+			$qb->join('r.activites', 'a', 'WITH', 'a.id = :activiteId')
+			->setParameter('activiteId', intval($activiteId));						
+			}
+			
+			if(isset($utilisateurId) && trim($utilisateurId,'')!=""){
+			$qb->join('r.utilisateurs', 'u', 'WITH', 'u.id = :utilisateurId')
+			->setParameter('utilisateurId', intval($utilisateurId));						
+			}
+			
+			/*print_r(array(
+  			'sql'  => $qb->getQuery()->getSQL(),
+  			'parameters' => $qb->getQuery()->getParameters(),
+  			));*/				
+		
+			
+			//Et pour finir on prend les resultats avec tous les criteres en compte
+			$listeRetour=$qb->getQuery()->getResult();
+			
+			//print_r($listeRetour);
+			
+			//On calcule le nombre total des participants de la liste des reservations			
+			$somme=0;
+			
+			foreach($listeRetour as $reservation)	
+			$somme+=count($reservation->getUtilisateurs());
+			
+			echo $somme.">>>>>>>>>>";
+			
+			return $somme;
+			
+			}
+			
 
 }

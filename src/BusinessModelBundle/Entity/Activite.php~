@@ -433,40 +433,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     }
 
     /**
-     * Add reservation
-     *
-     * @param \BusinessModelBundle\Entity\Reservation $reservation
-     *
-     * @return Activite
-     */
-    public function addReservation(\BusinessModelBundle\Entity\Reservation $reservation)
-    {
-        $this->reservations[] = $reservation;
-
-        return $this;
-    }
-
-    /**
-     * Remove reservation
-     *
-     * @param \BusinessModelBundle\Entity\Reservation $reservation
-     */
-    public function removeReservation(\BusinessModelBundle\Entity\Reservation $reservation)
-    {
-        $this->reservations->removeElement($reservation);
-    }
-
-    /**
-     * Get reservations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReservations()
-    {
-        return $this->reservations;
-    }
-
-    /**
      * Set auteur
      *
      * @param \BusinessModelBundle\Entity\User $auteur

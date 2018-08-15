@@ -39,7 +39,7 @@ class ActiviteController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid()) {
+		if($form->isValid() $this->checkParameters($request,$form,0)) {
 		//On lie notre activite a son Auteur
 		$activite->setAuteur($user);	
 		// On l'enregistre notre objet $activite dans la base de
@@ -116,7 +116,7 @@ class ActiviteController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid()) {
+		if($form->isValid() && $this->checkParameters($request,$form,$id)) {
 		$em = $this->getDoctrine()->getManager();
 		$activiteDB=$em->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_activite', $activiteDB);
@@ -182,7 +182,7 @@ class ActiviteController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid() && $this->checkParameters($request,$form)) {
+		if($form->isValid() && $this->checkParametersSearch($request,$form)) {
 		
 		$registrationArray = $request->get('businessmodelbundle_searchactivite');
 		/*
@@ -214,9 +214,28 @@ class ActiviteController extends Controller
 		'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
     }
     
+    //Fonction qui permet de tester s'il les contraintes sur le sur les champs sont respectees
+    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form, $idActivite){
+    	//On recupere toutes les donnees du formulaire de name 'businessmodelbundle_user' rempli par l'utilisateur 		
+		$registrationArray = $request->get('businessmodelbundle_activite');
+		
+		//On recupere le libelle  et on verifie que cela ne se trouve pas deja en BD sinon on renvoit le form avec des erreurs
+		$libelle = $registrationArray['libelle'];
+		$activityBDByLibelle = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindByLibelle($libelle);
+		$error=false;		
+		if($activityBDByLibelle!=null && $activityBDByLibelle->getId()!=$idActivite){
+		$form->get('libelle')->addError(new FormError($this->get('translator')->trans('Activité.libelleErrorMessage')));
+		$error=true;
+		}		
+		//S'il ya erreur on retourne false : le parametre libelle est mauvais		
+		if($error)
+		return false;
+		
+		return true;
+    }
     
     //Fonction qui permet de tester s'il les contraintes de comparaisons sur les champs sont respectees
-    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form){
+    public function checkParametersSearch(Request $request,\Symfony\Component\Form\Form $form){
 		
 		$registrationArray = $request->get('businessmodelbundle_searchactivite');
 		

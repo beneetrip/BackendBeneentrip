@@ -216,4 +216,59 @@ use Doctrine\ORM\Mapping as ORM;
     {
         return $this->activites;
     }
+    
+    
+    public function getBoutonPaiementPayPal(){
+			$paypal_url='https://www.sandbox.paypal.com/cgi-bin/webscr'; // Test Paypal API URL
+			//$paypal_url='https://www.paypal.com/cgi-bin/webscr'; // Pro Paypal API URL
+			$paypal_id='beneentrip@gmail.com'; // Business email ID
+			
+			
+			// output: BackendBeneentrip/web/app_dev.php/....
+			$currentPath = $_SERVER['PHP_SELF'];
+
+			// output: localhost
+			$hostName = $_SERVER['HTTP_HOST'];
+
+			// output: http://
+			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+
+			
+			//$imgbouton=$protocol.$hostName.'/'.$pathInfo.'/web/bundles/admin/img/BuyNow.png';
+			
+			$tab = explode("/",__DIR__);
+						
+			$nbelts=count($tab);
+			
+			$rootProject=$tab[$nbelts-4];
+			
+			$imgbouton='/'.$rootProject.'/web/bundles/admin/img/BuyNow.png';
+			
+			//$urlReturn=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/fr/admin';
+			
+			$url=$protocol.$hostName.$currentPath;		
+			
+			echo '<form action="'.$paypal_url.'" method="post" name="frmPayPal1">
+			 <input type="hidden" name="business" value="'.$paypal_id.'">
+			  <input type="hidden" name="cmd" value="_xclick"> 
+			 <input type="hidden" name="item_name" value="reservation_numero'.$this->getId().'">
+			 <input type="hidden" name="item_number" value="'.$this->getId().'">
+			 <input type="hidden" name="amount" value="'.$this->calculerMontantTotal().'">
+			 <input type="hidden" name="tax_rate" value="20.00">
+			 <input type="hidden" name="currency_code" value="EUR">
+			 <input type="hidden" name="cancel_return" value="'.$url.'">
+			 <input type="hidden" name="return" value="'.$url.'">
+			<input type="image" src="'.$imgbouton.'" border="0" name="submit" 
+			  alt="PayPal - The safer, easier way to pay online!">
+			 </form>';  
+    }
+    
+    function calculerMontantTotal()
+    	{
+    			$somme=0.0;
+    				
+    			foreach($this->getActivites() as $activite)	
+    			$somme+=floatval($activite->getPrixIndividu());	
+    			return $somme;	
+    	}
 }

@@ -86,6 +86,7 @@ Activité.dateDebutErrorMessage: La date de Début doit être inférieure à cel
 Activité.heureDebutErrorMessage: L'heure de Début doit être inférieure à celle de Fin
 Activité.prixIndividuMinErrorMessage: Le prix individuel Min doit être inférieure à celui Max
 Activité.nbParticipantsMinErrorMessage: Le nombre de participants Min doit être inférieure à celui Max
+Activité.libelleErrorMessage: Libellé activité déjà utilisé
 Activité.form: Formulaire Activité
 Utilisateur.fichierPhoto: Photo
 Utilisateur.nom: Nom
@@ -123,6 +124,10 @@ Réservation.utilisateurs: Utilisateurs
 Réservation.paye: Payée?
 Réservation.Ok: Oui
 Réservation.nonOk: Non
+Réservation.quotaErrorMessage: Activité " %activite% " a déjà atteint son quota de %quota% participations
+Réservation.reserveErrorMessage: Utilisateur " %utilisateur% " a déjà reservé pour l'activité " %activite% "
+Réservation.success: Paiment %elt% réussi avec succès.
+Réservation.failure: Paiment %elt% échoué !!!
 Discussion.libelleActivite: Libellé Activité
 Discussion.auteur: Auteur
 Discussion.destinataires: Destinataires

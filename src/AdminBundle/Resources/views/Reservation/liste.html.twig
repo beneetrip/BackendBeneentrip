@@ -14,6 +14,20 @@
 </div>
 {% endfor %}
 {% endif %}
+{% if app.session.flashbag.get('paypalSuccess') is defined %} 
+{% for message in app.session.flashbag.get('paypalSuccess') %}
+<div class="alert alert-info">
+<p>{{ message }}</p>
+</div>
+{% endfor %}
+{% endif %}
+{% if app.session.flashbag.get('paypalFailure') is defined %} 
+{% for message in app.session.flashbag.get('paypalFailure') %}
+<div class="alert alert-danger">
+<p>{{ message }}</p>
+</div>
+{% endfor %}
+{% endif %}
 {% endblock %}
 
 {% block contentTablehead %}
@@ -76,6 +90,14 @@
 						{{'Action.Supprimer'|trans }}
 					</a>
 					</li>
+					{% if reservation.paye== false %} 
+					 <li class="divider"></li>
+					<li>
+
+						{{reservation.boutonPaiementPayPal}}
+
+					</li>
+							{% endif %}
                 </ul>
             </div>
 			

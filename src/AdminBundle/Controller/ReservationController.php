@@ -37,22 +37,44 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid()) {
+		if($form->isValid() && $this->checkParameters($request,$form,$reservation,0)) {
 		// On l'enregistre notre objet $user dans la base de
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($reservation);
 		$em->flush();
 		     $elt=$this->get('translator')->trans('Barre.Réservation.Mot');
 		     $this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.EnregistrerMessage',array('%elt%' => $elt)));
+		     return $this->redirect( $this->generateUrl('ajouterReservation') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterReservation') );
+		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'creerReservation', 'bouton'=>
+		$this->get('translator')->trans('Action.Enregistrer'))); 	  	
 	 }
 	 
 	 public function listeAction()
     {
     	     
+		//Comme il est possible qu'on nous retourne apres un transaction d'achat sur paypal, on va donc tester notre transaction si elle a bien eu lieu
+		if(isset($_GET) && count($_GET)>0){		
+		$item_no            = $_GET['item_number'];//Id du produit de reservation
+		$item_transaction   = $_GET['tx']; // Paypal transaction ID
+		$item_price         = $_GET['amt']; // Paypal received amount
+		$item_currency      = $_GET['cc']; // Paypal received currency type
+		$item_transaction_status= $_GET['st']; // Paypal received currency type
+		
+		$em = $this->getDoctrine()->getManager();
+		$reservationId=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($item_no));
+		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
+		//On controle les donnees envoyees par Paypal en cas de transaction ok on met a jour notre reservation en mettant etat paye a true
+		if($reservationId!=null && $item_price>=$reservationId->calculerMontantTotal() && $item_currency=="EUR" && strtoupper($item_transaction_status)=="COMPLETED"){
+		$reservationId->setPaye(true);
+		$em->flush();
+		$this->get('session')->getFlashBag()->add('paypalSuccess', $this->get('translator')->trans('Réservation.success',array('%elt%' => $elt)));
+		}else
+		$this->get('session')->getFlashBag()->add('paypalFailure', $this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)));
+		}
+		
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		// L'appel de la vue ne change pas
 		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
@@ -76,21 +98,21 @@ class ReservationController extends Controller
 		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_reservation', $reservationId);   
 		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierReservation', 'bouton'=>
-		$this->get('translator')->trans('Action.Modifier'),'idReservation' => $id)); 	  	
+		$this->get('translator')->trans('Action.Modifier'),'reservation' => $reservationId)); 	  	
 	 }
 	 
 	 public function modifierAction($id)
     {
 		$reservation= new Reservation();
-		$form = $this->createForm('businessmodelbundle_reservation', $reservation); 
+		$form = $this->createForm('businessmodelbundle_reservation', $reservation);
+		$reservationId=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindOne($id); 
 		$request = $this->get('request');
 		// On vérifie qu'elle est de type POST
 		if ($request->getMethod() == 'POST') {
 		// On fait le lien Requête <-> Formulaire
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
-		
-		if($form->isValid()) {
+		if($form->isValid() && $this->checkParameters($request,$form,$reservation,$id)) {
 		$em = $this->getDoctrine()->getManager();
 		$reservationDB=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne($id);
 		$form = $this->createForm('businessmodelbundle_reservation', $reservationDB);
@@ -99,10 +121,12 @@ class ReservationController extends Controller
 		$em->flush();
 		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
 		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.ModifierMessage',array('%elt%' => $elt)));
+		//return $this->redirect( $this->generateUrl('ajouterReservation') );
 		    }
 		    
 		}  
-		return $this->redirect( $this->generateUrl('ajouterReservation') );
+		return $this->render('AdminBundle:Reservation:ajouter.html.twig',array('form' => $form->createView(),'path' => 'modifierReservation', 'bouton'=>
+		$this->get('translator')->trans('Action.Modifier'),'reservation' => $reservationId));
 	 }
 	 
 	 //Fonction speciale permettant de voir l'activite d'une reservation
@@ -146,7 +170,7 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid() && $this->checkParameters($request,$form,true)) {
+		if($form->isValid() && $this->checkParametersSearchPrint($request,$form,true)) {
 		
 		$registrationArray = $request->get('businessmodelbundle_searchreservation');
 		
@@ -199,7 +223,7 @@ class ReservationController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid() && $this->checkParameters($request,$form,false) ) {
+		if($form->isValid() && $this->checkParametersSearchPrint($request,$form,false) ) {
 		
 		$registrationArray = $request->get('businessmodelbundle_print');
 		
@@ -226,9 +250,88 @@ class ReservationController extends Controller
     }
     
     
+		
+		//Fonction qui permet de controler les resevervations sur les utilisateurs avant insertion ou modification
+		//Elle retourne un tableau contenant le resultat, un boolean; l'activite et l'utilisateur qui a cree le pb: 
+		//  array("resultat"=>val1, "activite"=>val2, "utilisateur"=> val3)
+		public function EstBonneReservation($reservation,$idParam)
+		{
+    			
+    			$retour=array("resultat"=>true,"activite"=>null,"utilisateur"=> null);				    			
+
+    			foreach($reservation->getActivites() as $activite)	{
+    				
+    			$nbParticipantsActivite=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')
+    			->nombreReservationsDeja(null,$activite->getId(),null);	
+    				
+    			foreach($reservation->getUtilisateurs() as $utilisateur){
+    				
+				$nbParticipantsActiviteUtilisateur=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')
+    			->nombreReservationsDeja(null,$activite->getId(),$utilisateur->getId());
+
+
+				if($idParam==0)//On sait qu'il s'agit de l'insertion d'une nouvelle reservation
+				{
+				//Si l'utilisateur a deja reserve l'activite on genere l'erreur
+				if($nbParticipantsActiviteUtilisateur>0)
+				return array("resultat"=>false,"activite"=>$activite,"utilisateur"=> $utilisateur);
+				//Sinon si le quota des activites est atteint on genere l'erreur
+				else if($activite->getNbParticipants()<=$nbParticipantsActivite)
+				return array("resultat"=>false,"activite"=>$activite,"utilisateur"=> null);    						
+    			}
+    			else//On sait qu'il s'agit d'une modification d'une reservation
+    			{
+				
+    			$nbParticipantsActiviteUtilisateurDeja=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')
+    			->nombreReservationsDeja($idParam,$activite->getId(),$utilisateur->getId());
+    			
+    			$nbParticipantsActiviteDeja=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')
+    			->nombreReservationsDeja($idParam,$activite->getId(),null);
+    			
+				//Si C'est un nouvel utilisateur dans la reservation et que l'utilisateur a deja reserve l'activite on genere l'erreur
+				if($nbParticipantsActiviteUtilisateurDeja<1 && $nbParticipantsActiviteUtilisateur>0)
+				return array("resultat"=>false,"activite"=>$activite,"utilisateur"=> $utilisateur);
+				
+				//Si si c'est un nouvel utilisateur dans la reservation et que le quota de l'activites est atteint on genere l'erreur
+				if($nbParticipantsActiviteUtilisateurDeja<1 && $activite->getNbParticipants()<=$nbParticipantsActivite)
+				return array("resultat"=>false,"activite"=>$activite,"utilisateur"=> null);
+				
+				//Sinon si c'est une nouvelle activite et que le quota de l'activites est atteint on genere l'erreur
+				else if($nbParticipantsActiviteDeja<1 && $activite->getNbParticipants()<=$nbParticipantsActivite)
+				return array("resultat"=>false,"activite"=>$activite,"utilisateur"=> null);    						    						
+    			}    				
+    				  			
+    			}
+    			
+    			}
+
+    			return $retour; 
+		}    
+    
+    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form, $reservation, $idParam){
+    		
+    		$retour=$this->EstBonneReservation($reservation,$idParam);
+    		
+    		if(!$retour["resultat"] && $retour["utilisateur"]==null){
+    		$form->get('activites')->addError(new FormError(
+    		$this->get('translator')->trans('Réservation.quotaErrorMessage',array('%activite%' => $retour["activite"]->getLibelle(),'%quota%' => $retour["activite"]->getNbParticipants()))));
+    		}
+    		else if(!$retour["resultat"] && $retour["utilisateur"]!=null){
+    		$form->get('utilisateurs')->addError(new FormError(
+    		$this->get('translator')->trans('Réservation.reserveErrorMessage',
+    		array('%activite%' => $retour["activite"]->getLibelle(),'%utilisateur%' => $retour["utilisateur"]->getNomComplet()))));
+    		}
+    		
+    		//S'il ya erreur on retourne false : les parametres sont mauvais		
+			if(!$retour["resultat"])
+			return false;
+			
+			return true;
+    }
+    
     	//Fonction qui permet de tester s'il les contraintes de comparaisons sur les champs sont respectees
     	//le parametres estformsearch nous indique si la verification concerne un formulaire de recherche sur reservation ou pas
-    public function checkParameters(Request $request,\Symfony\Component\Form\Form $form, $estformsearch){
+    public function checkParametersSearchPrint(Request $request,\Symfony\Component\Form\Form $form, $estformsearch){
 		
 		if($estformsearch)
 		$registrationArray = $request->get('businessmodelbundle_searchreservation');

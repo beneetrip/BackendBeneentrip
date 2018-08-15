@@ -86,6 +86,7 @@ Activité.dateDebutErrorMessage: 'Start Date should be less than End Date'
 Activité.heureDebutErrorMessage: 'Start Hour should be less than End Hour'
 Activité.prixIndividuMinErrorMessage: 'Minimum Individual Price should be less than Maximum Individual Price'
 Activité.nbParticipantsMinErrorMessage: 'Minimum Participants Number should be less than Maximum Participants Number'
+Activité.libelleErrorMessage: 'Activity wording already in use'
 Activité.form: 'Activity Form'
 Utilisateur.fichierPhoto: Picture
 Utilisateur.nom: 'Last Name'
@@ -123,6 +124,10 @@ Réservation.utilisateurs: Users
 Réservation.paye: Paid?
 Réservation.Ok: Yes
 Réservation.nonOk: No
+Réservation.quotaErrorMessage: Activity ' %activite% ' has already reached its participation quota of %quota%
+Réservation.reserveErrorMessage: User ' %utilisateur% ' has already reserved for activity ' %activite% '
+Réservation.success: %elt% payment Successful.
+Réservation.failure: %elt% payment Failed !!!
 Discussion.libelleActivite: 'Activity Wording'
 Discussion.auteur: Author
 Discussion.destinataires: Receivers
