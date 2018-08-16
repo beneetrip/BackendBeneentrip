@@ -8,14 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use BusinessModelBundle\Entity\Reservation;
 use BusinessModelBundle\Entity\User;
-use BusinessModelBundle\Form\Type\UserType;
+use BusinessModelBundle\Entity\Activite;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class UserController extends Controller
+class CommandController extends Controller
 {
 	
     public function loginAction()
