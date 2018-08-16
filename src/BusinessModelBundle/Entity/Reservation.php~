@@ -271,4 +271,13 @@ use Doctrine\ORM\Mapping as ORM;
     			$somme+=floatval($activite->getPrixIndividu());	
     			return $somme;	
     	}
+    	
+    	public function estDansReservation(\BusinessModelBundle\Entity\Activite $activite){
+    	
+    	foreach($this->getActivites() as $elem){
+    	if($elem->getId()==$activite->getId())
+    	return true;	
+    	}
+    	return false;	
+    	}
 }

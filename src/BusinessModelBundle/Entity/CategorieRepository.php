@@ -25,5 +25,14 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
 				->setParameter('id', $id);
 				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
+				
+				public function myFindByNom($nom)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('c')
+				->where('c.nom = :nom')
+				->setParameter('nom',$nom);
+				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+				}
 
 }

@@ -6,6 +6,10 @@ mobile_app_activity_searchpage:
     path:     /mobapp/activity/search
     defaults: { _controller: MobileAppBundle:Activity:search }
 
+mobile_app_activity_categoriespage:
+    path:     /mobapp/activity/categories
+    defaults: { _controller: MobileAppBundle:Activity:categories }
+
 mobile_app_activity_searchresultpage:
     path:     /mobapp/activity/searchresult/{page}
     defaults: { _controller: MobileAppBundle:Activity:searchresult }
@@ -49,3 +53,16 @@ mobile_app_user_registerpage:
 mobile_app_user_updatepage:
     path:     /mobapp/user/update
     defaults: { _controller: MobileAppBundle:User:update }
+
+mobile_app_reservation_editpage:
+    path:     /mobapp/reservation/editPanier
+    defaults: { _controller: MobileAppBundle:Reservation:editPanier }
+
+mobile_app_reservation_deletepage:
+    path:     /mobapp/reservation/deletePanier
+    defaults: { _controller: MobileAppBundle:Reservation:deletePanier }
+
+mobile_app_reservation_page:
+    path:     /mobapp/reservation/show/
+    defaults: { _controller: MobileAppBundle:Reservation:show }
+

@@ -16,77 +16,10 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class CommandController extends Controller
+class ReservationController extends Controller
 {
 	
-    public function loginAction()
-    {
-		$postdata = file_get_contents("php://input");
-		$request = json_decode($postdata);
-		
-		/* $user['id'] = 56;
-		$user['email'] = $request->email;
-		$user['password'] = $request->password; */
-		
-		/* $request = $this->get('request');
-		//on prepare notre reponse vide
-		$response = new Response(json_encode(array())); */
-		
-		// On vérifie qu'elle est de type POST
-		
-		$email = $request->email;
-		$password = $request->password;
-		
-		//Par defaut le retour est a false car on suppose que l'Utilisateur n'a pas ete trouve
-		$retour=false;
-		
-		//On essaie d'abord de voir si le username est correct		
-		$user = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($email);
-		//Si le mail est correct on compare ensuite les mots de passe
-		if($user!=null){
-			$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-			$retour=$encoder->isPasswordValid($user->getPassword(), $password, $user->getSalt());
-		}
-		
-		if($retour){
-			/* $encoders = array(new XmlEncoder(), new JsonEncoder());
-			$normalizers = array(new ObjectNormalizer());
-			$serializer = new Serializer($normalizers, $encoders);
-			$jsonContent = $serializer->serialize($user, 'json');
-			//$user = $serializer->deserialize($jsonContent, User::class, 'json');
-			$response = new Response(json_encode($jsonContent)); */
-			$userfind['id'] = $user->getId();
-			$userfind['email'] =  $user->getEmail();
-			$userfind['password'] = $user->getPassword();
-			$userfind['firstname'] = $user->getPrenom();
-			$userfind['lastname'] = $user->getNom();
-			$userfind['username'] = $user->getusername();
-			$userfind['birthday'] = $user->getDateNaissance();
-			$userfind['kind'] = $user->getGenre();
-			$userfind['phone'] = $user->getTelephone();
-			$userfind['type'] = $user->getTypeUtilisateur();
-			
-			$response = new Response(json_encode($userfind));
-		}
-		else 
-			$response = new Response(json_encode(array('failure'=>'Identifiants utilisateur invalides')));
-		
-		//$response = new Response(json_encode(array()));
-		
-		//header('Access-Control-Allow-Origin: *'); //allow everybody  
-		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
-		$response->headers->set('Access-Control-Allow-Origin', '*');
-		
-		$response->headers->set('Content-Type', 'application/json');
-		
-		return $response;	
-		
-    }
-	
-	
-	
-	
-	
+   
 	public function registerAction()
     {
 		
