@@ -19,3 +19,7 @@ business_model_supprimerActivite:
 business_model_listeDestinations:
     path:     /listeDestinations
     defaults: { _controller: BusinessModelBundle:Activite:listeDestinations }
+
+business_model_endPaymentpage:
+    path:     /payment/end
+    defaults: { _controller: BusinessModelBundle:Default:finalisePaiement }

@@ -206,6 +206,10 @@ class ActiviteController extends Controller
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 
 		$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur);
+		//$listeActivites = array_merge($this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites(
+		//$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, null,null, null),
+		//$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites(
+		//null, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $lieuDestination,null, null));
     	
     	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
 		}  

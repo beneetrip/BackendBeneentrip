@@ -206,15 +206,18 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						/*print_r(array(
         				'sql'        => $qb->getQuery()->getSQL(),
         				'parameters' => $qb->getQuery()->getParameters(),
-        				));						
-						*/
+        				));*/						
+						
 						
 						//Et pour finir on prend les resultats avec tous les criteres en compte
 						$listeRetour=$qb->getQuery()->getArrayResult();
 						
 						//print_r($listeRetour);
 						
-						return array_slice($listeRetour, $indexDebut, $nbResults);			 
+						if(isset($nbResults) && isset($indexDebut))
+						return array_slice($listeRetour, $indexDebut, $nbResults);
+						
+						return $listeRetour;			 
 						
 			}
 			

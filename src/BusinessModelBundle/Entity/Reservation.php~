@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 		class Reservation extends ClasseMere
 		{
 		
+		const TAX_RATE = "20.00";
 		
 		/**
 		* @var integer $id
@@ -219,6 +220,7 @@ use Doctrine\ORM\Mapping as ORM;
     
     
     public function getBoutonPaiementPayPal(){
+			
 			$paypal_url='https://www.sandbox.paypal.com/cgi-bin/webscr'; // Test Paypal API URL
 			//$paypal_url='https://www.paypal.com/cgi-bin/webscr'; // Pro Paypal API URL
 			$paypal_id='beneentrip@gmail.com'; // Business email ID
@@ -242,11 +244,19 @@ use Doctrine\ORM\Mapping as ORM;
 			
 			$rootProject=$tab[$nbelts-4];
 			
-			$imgbouton='/'.$rootProject.'/web/bundles/admin/img/BuyNow.png';
+			if($rootProject!="www")
+			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/BuyNow.png';
+			else
+			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/BuyNow.png';
 			
 			//$urlReturn=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/fr/admin';
 			
-			$url=$protocol.$hostName.$currentPath;		
+			if($rootProject!="www")
+			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/end';
+			else
+			$url=$protocol.$hostName.'/web/payment/end';
+			
+			//$url=$protocol.$hostName.$currentPath;		
 			
 			echo '<form action="'.$paypal_url.'" method="post" name="frmPayPal1">
 			 <input type="hidden" name="business" value="'.$paypal_id.'">
@@ -254,8 +264,9 @@ use Doctrine\ORM\Mapping as ORM;
 			 <input type="hidden" name="item_name" value="reservation_numero'.$this->getId().'">
 			 <input type="hidden" name="item_number" value="'.$this->getId().'">
 			 <input type="hidden" name="amount" value="'.$this->calculerMontantTotal().'">
-			 <input type="hidden" name="tax_rate" value="20.00">
+			 <input type="hidden" name="tax_rate" value="'.self::TAX_RATE.'">
 			 <input type="hidden" name="currency_code" value="EUR">
+			 <input type="hidden" name="custom" value="'.$this->getUtilisateurs()[0]->getId().'">
 			 <input type="hidden" name="cancel_return" value="'.$url.'">
 			 <input type="hidden" name="return" value="'.$url.'">
 			<input type="image" src="'.$imgbouton.'" border="0" name="submit" 
@@ -272,6 +283,7 @@ use Doctrine\ORM\Mapping as ORM;
     			return $somme;	
     	}
     	
+
     	public function estDansReservation(\BusinessModelBundle\Entity\Activite $activite){
     	
     	foreach($this->getActivites() as $elem){
@@ -280,4 +292,28 @@ use Doctrine\ORM\Mapping as ORM;
     	}
     	return false;	
     	}
+    	
+    	
+    	function calculerMontantTaxe()
+    	{	
+    			return (floatval(self::TAX_RATE) / 100) * $this->calculerMontantTotal();	
+    	}
+    	
+    	
+    	function calculerMontantTotalAvecTaxe()
+    	{	
+    			return ($this->calculerMontantTotal() + $this->calculerMontantTaxe());	
+    	}
+    	
+    	public function compterActivites()
+    	{
+    		$count=0;
+    		
+    		foreach($this->getActivites() as $elem)
+    		$count++;	
+    		
+    		return $count;
+    	}
+    	
+    	
 }

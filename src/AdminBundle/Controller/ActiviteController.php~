@@ -39,7 +39,7 @@ class ActiviteController extends Controller
 		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
 		$form->bind($request);
 		
-		if($form->isValid() $this->checkParameters($request,$form,0)) {
+		if($form->isValid() && $this->checkParameters($request,$form,0)) {
 		//On lie notre activite a son Auteur
 		$activite->setAuteur($user);	
 		// On l'enregistre notre objet $activite dans la base de
@@ -206,12 +206,16 @@ class ActiviteController extends Controller
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myDeepFindSurActivites(
 		$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $prixIndividuMin, 
 		$prixIndividuMax, $nbParticipantsMin, $nbParticipantsMax, $categorie, $auteur);
+		//$listeActivites = array_merge($this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites(
+		//$lieuDestination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, null,null, null),
+		//$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites(
+		//null, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $lieuDestination,null, null));
     	
-    	return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
+    	//return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
 		}  
 		}
-		return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
-		'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
+		//return $this->render('AdminBundle:Activite:rechercher.html.twig',array('form' => $form->createView(),'path' => 'ListeRechercherActivites', 
+		//'bouton'=>$this->get('translator')->trans('Action.Rechercher')));
     }
     
     //Fonction qui permet de tester s'il les contraintes sur le sur les champs sont respectees

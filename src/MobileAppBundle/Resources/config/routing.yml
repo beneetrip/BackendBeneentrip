@@ -14,6 +14,10 @@ mobile_app_activity_searchresultpage:
     path:     /mobapp/activity/searchresult/{page}
     defaults: { _controller: MobileAppBundle:Activity:searchresult }
 
+mobile_app_activity_searchresultallpage:
+    path:     /mobapp/activity/searchresult/all
+    defaults: { _controller: MobileAppBundle:Activity:searchresultall }
+
 mobile_app_activity_testpage:
     path:     /mobapp/test
     defaults: { _controller: MobileAppBundle:Activity:test }
@@ -22,9 +26,17 @@ mobile_app_activity_listpage:
     path:     /mobapp/activity/list/{page}
     defaults: { _controller: MobileAppBundle:Activity:list }
 
+mobile_app_activity_newspage:
+    path:     /mobapp/activity/new
+    defaults: { _controller: MobileAppBundle:Activity:new }
+
 mobile_app_activity_toplistpage:
     path:     /mobapp/activity/toplist/{page}
     defaults: { _controller: MobileAppBundle:Activity:toplist }
+
+mobile_app_activity_toppage:
+    path:     /mobapp/activity/top
+    defaults: { _controller: MobileAppBundle:Activity:top }
 
 mobile_app_activity_page:
     path:     /mobapp/activity/show/{id}
@@ -54,6 +66,10 @@ mobile_app_user_updatepage:
     path:     /mobapp/user/update
     defaults: { _controller: MobileAppBundle:User:update }
 
+mobile_app_user_languespage:
+    path:     /mobapp/user/langues
+    defaults: { _controller: MobileAppBundle:User:langues }
+
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier
     defaults: { _controller: MobileAppBundle:Reservation:editPanier }
@@ -63,6 +79,21 @@ mobile_app_reservation_deletepage:
     defaults: { _controller: MobileAppBundle:Reservation:deletePanier }
 
 mobile_app_reservation_page:
-    path:     /mobapp/reservation/show/
+    path:     /mobapp/reservation/show
     defaults: { _controller: MobileAppBundle:Reservation:show }
 
+mobile_app_reservation_nombrepage:
+    path:     /mobapp/reservation/number
+    defaults: { _controller: MobileAppBundle:Reservation:nombre }
+
+mobile_app_creerpayment_paypal_page:
+    path:     /mobapp/payment/creer/paypal
+    defaults: { _controller: MobileAppBundle:Payment:creerPaiementPaypal }
+
+mobile_app_executepayment_paypal_page:
+    path:     /mobapp/payment/execute/paypal
+    defaults: { _controller: MobileAppBundle:Payment:executerPaiementPaypal }
+
+mobile_app_page:
+    path:     /mobapp/page/{page}
+    defaults: { _controller: MobileAppBundle:Page:prendrepage }

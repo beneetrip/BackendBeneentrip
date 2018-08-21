@@ -453,6 +453,27 @@ CREATE TABLE `reservation_activite` (
   `activite_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+
+--
+-- Table structure for table `payment`
+--
+
+CREATE TABLE `payment` (
+  `id` int(11) NOT NULL,
+  `itemId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `transactionId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `amount` double NOT NULL,
+  `currencyCode` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'UNCOMPLETED',
+  `transactionToken` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dateCreation` datetime NOT NULL,
+  `dateModification` datetime DEFAULT NULL,
+  `utilisateur_id` int(11) NOT NULL,
+  `invoice` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `transactionPayer` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -548,6 +569,13 @@ ALTER TABLE `reservation_activite`
   ADD KEY `IDX_25C0B7019B0F88B1` (`activite_id`);
 
 --
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_6D28840DFB88E14F` (`utilisateur_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -591,6 +619,12 @@ ALTER TABLE `reservation`
 --
 ALTER TABLE `utilisateurs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
@@ -646,6 +680,12 @@ ALTER TABLE `user_langue`
 ALTER TABLE `reservation_activite`
   ADD CONSTRAINT `FK_25C0B7019B0F88B1` FOREIGN KEY (`activite_id`) REFERENCES `activite` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_25C0B701B83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `FK_6D28840DFB88E14F` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

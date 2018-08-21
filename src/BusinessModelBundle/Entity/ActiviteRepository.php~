@@ -33,10 +33,6 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('a')
 			->where('a.libelle = :libelle')
 			->setParameter('libelle',$libelle);
-			/*print_r(array(
-			'sql'        => $qb->getQuery()->getSQL(),
-			'parameters' => $qb->getQuery()->getParameters(),
-			));*/
 			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 			
@@ -207,18 +203,21 @@ class ActiviteRepository extends \Doctrine\ORM\EntityRepository
 						$nbhits++;										
 						}
 						
-						/*print_r(array(
+						print_r(array(
         				'sql'        => $qb->getQuery()->getSQL(),
         				'parameters' => $qb->getQuery()->getParameters(),
         				));						
-						*/
+						
 						
 						//Et pour finir on prend les resultats avec tous les criteres en compte
 						$listeRetour=$qb->getQuery()->getArrayResult();
 						
-						//print_r($listeRetour);
+						print_r($listeRetour);
 						
-						return array_slice($listeRetour, $indexDebut, $nbResults);			 
+						if(isset($nbResults) && isset($indexDebut))
+						return array_slice($listeRetour, $indexDebut, $nbResults);
+						
+						return $listeRetour;			 
 						
 			}
 			

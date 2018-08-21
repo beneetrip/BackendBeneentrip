@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use BusinessModelBundle\Entity\Reservation;
+use BusinessModelBundle\Entity\Payment;
 
 class DefaultController extends Controller
 {
@@ -60,7 +62,55 @@ class DefaultController extends Controller
 	    }
 	    //$locale = $this->container->get('request')->getLocale();
 	    //var_dump($url);
-	    return new RedirectResponse($url,302,$arrayParam);
+	    return new RedirectResponse($url);
     }
+    
+    
+      public function finalisePaiementAction(){
+       
+      $elt=$this->get('translator')->trans('Barre.Réservation.Mot');  
+		$response = new Response(json_encode(array('paypalFailure'=>$this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)))));
+       //Comme il est possible qu'on nous retourne apres un transaction d'achat sur paypal, on va donc tester notre transaction si elle a bien eu lieu
+		if(isset($_GET) && count($_GET)>0){		
+		$item_no            = $_GET['item_number'];//Id du produit de reservation
+		$item_transaction   = $_GET['tx']; // Paypal transaction ID
+		$item_price         = $_GET['amt']; // Paypal received amount
+		$item_currency      = $_GET['cc']; // Paypal received currency type
+		$item_transaction_status= $_GET['st']; // Paypal received currency type
+		$id_user 			  = $_GET['cm'];// ID of the customer
+
+		
+		$em = $this->getDoctrine()->getManager();
+		$reservationId=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($item_no));
+		$userId=$em->getRepository('BusinessModelBundle:User')->myFindOne(intval($id_user));
+		//On controle les donnees envoyees par Paypal en cas de transaction ok on met a jour notre reservation en mettant etat paye a true
+		if($reservationId!=null && $item_price>=$reservationId->calculerMontantTotal() && $item_currency=="EUR" && strtoupper($item_transaction_status)=="COMPLETED"){
+		
+		$reservationId->setPaye(true);
+		
+		$payment=new Payment();
+	   $payment->setItemId($item_no);
+	   $payment->setTransactionId($item_transaction);
+	   $payment->setAmount($item_price);
+	   $payment->setCurrencyCode($item_currency);
+	   $payment->setStatus(strtoupper($item_transaction_status));
+	   $payment->setUtilisateur($userId);
+	   
+	   $em->persist($payment);
+		$em->flush();
+		$response = new Response(json_encode(array('paypalSuccess'=>$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt)))));
+		}else
+		$response = new Response(json_encode(array('paypalFailure'=>$this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)))));
+		}
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
+        }
 	
 }

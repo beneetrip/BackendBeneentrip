@@ -133,6 +133,11 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
       
       
       /**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Payment",cascade={"persist", "remove"}, mappedBy="utilisateur")
+        */
+      protected $payments;
+      
+      /**
 		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Langue")
 		 * @Assert\NotNull()
 		 */

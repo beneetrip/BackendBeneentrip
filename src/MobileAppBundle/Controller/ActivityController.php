@@ -50,26 +50,88 @@ class ActivityController extends Controller
 			$debutresultat = $nbrResult * ($page-1);//car le numero de page peut etre negatif
 		
 		
-		if( $request->destination == "")
+		/* if( $request->destination == "")
 			$destination = null;
 		else
 			$destination = $request->destination;
 		
-		if( $request->eclaireur == "")
+		/*if( $request->eclaireur == "")
 			$eclaireur = null;
 		else
 			$eclaireur = $request->eclaireur;
 		
 		//myFindSurActivites($request->destination, $dateDebut, $dateFin, $heureDebut, $heureFin, $categorie, $auteur, $nbResults, $indexDebut)
 		$searchresult = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites($destination, null, null, null, null, null, $eclaireur, $nbrResult, $debutresultat);
-		
+		*/
 
-		
-		//$result['id'] = $request->destination;
+		$searchresult = 
+		array_merge(
+		$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites
+		($request->destination, $request->dateDebut, $request->dateFin, $request->heureDebut, $request->heureFin, $request->categorie, null, null, null)
+		,
+		$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites
+		(null, $request->dateDebut, $request->dateFin, $request->heureDebut, $request->heureFin, $request->categorie, $request->destination, null, null)
+		);//$result['id'] = $request->destination;
 		
 		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
 		
 		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		
+		foreach($searchresult as $elem){
+			
+			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		//$response = new Response(json_encode($searchresult));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;
+    }
+    
+    
+    public function searchresultallAction()
+    {
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$result = array();
+
+		$searchresult = 
+		array_merge(
+		$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites
+		($request->destination, $request->dateDebut, $request->dateFin, $request->heureDebut, $request->heureFin, $request->categorie, null, null, null)
+		,
+		$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites
+		(null, $request->dateDebut, $request->dateFin, $request->heureDebut, $request->heureFin, $request->categorie, $request->destination, null, null)
+		);
 		
 		foreach($searchresult as $elem){
 			
@@ -377,6 +439,7 @@ class ActivityController extends Controller
 		$result['dateclair'] = $activiteId->getDateEnClair();
 		$result['nbVues'] = $activiteId->getNbVues();
 		$result['prix'] = $activiteId->getPrixIndividu();
+		$result['categorie'] = $activiteId->getCategorie()->getNom();
 		$result['nbParticipants'] = $activiteId->getNbParticipants();
 		$result['lieuDestination'] = $activiteId->getLieuDestination(); 
 		
@@ -433,6 +496,91 @@ class ActivityController extends Controller
 		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), $nbrResult, $debutresultat);
 		
 		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response; 
+		
+    }
+    
+    public function newAction()
+    {
+		
+		$result = array();
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), 4, 0);
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescription();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response; 
+		
+    }
+    
+    public function topAction()
+    {
+		
+		$result = array();
+		
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'), 4, 0);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'));
 		
 		foreach($listeActivites as $elem){
 			

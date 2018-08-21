@@ -133,6 +133,11 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
       
       
       /**
+        * @ORM\OneToMany(targetEntity="BusinessModelBundle\Entity\Payment",cascade={"persist", "remove"}, mappedBy="utilisateur")
+        */
+      protected $payments;
+      
+      /**
 		 * @ORM\ManyToMany(targetEntity="BusinessModelBundle\Entity\Langue")
 		 * @Assert\NotNull()
 		 */
@@ -667,5 +672,38 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
     public function getTelephone()
     {
         return $this->telephone;
+    }
+
+    /**
+     * Add payments
+     *
+     * @param \BusinessModelBundle\Entity\Payment $payments
+     * @return User
+     */
+    public function addPayment(\BusinessModelBundle\Entity\Payment $payments)
+    {
+        $this->payments[] = $payments;
+
+        return $this;
+    }
+
+    /**
+     * Remove payments
+     *
+     * @param \BusinessModelBundle\Entity\Payment $payments
+     */
+    public function removePayment(\BusinessModelBundle\Entity\Payment $payments)
+    {
+        $this->payments->removeElement($payments);
+    }
+
+    /**
+     * Get payments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPayments()
+    {
+        return $this->payments;
     }
 }

@@ -34,7 +34,7 @@ class ReservationController extends Controller
 		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idActivite);
 		
 		//On recupere la reservation non payee de l'utilisateur si elle existe deja en BD
-		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNomComplet(),false,null,null);
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),false,null,null);
 		
 		//S'il ya pas de reservation non paye de l'utilisateur
 		if(count($listeRetour)<=0){
@@ -83,10 +83,8 @@ class ReservationController extends Controller
 		
 		//Si la reservation est bonne
 		if($test['resultat']){
-		$reservationId=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne($reservationUser->getId());
-		$reservationId->addActivite($activiteId);
 		$em->flush();
-		$result['id'] = $reservationId->getId();
+		$result['id'] = $reservationUser->getId();
 		$response = new Response(json_encode($result));
 		}
 		
@@ -108,6 +106,15 @@ class ReservationController extends Controller
 		}
 		
 		}
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
     }
     
 		
@@ -126,7 +133,7 @@ class ReservationController extends Controller
 		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idActivite);
 		
 		//On recupere la reservation non payee de l'utilisateur si elle existe deja en BD
-		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNomComplet(),false,null,null);
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),false,null,null);
 		
 		//S'il ya pas de reservation non paye de l'utilisateur
 		if(count($listeRetour)<=0){
@@ -151,14 +158,21 @@ class ReservationController extends Controller
 		
 		//Sinon L'activite est dans la reservation
 		else{
-		$reservationId=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne($reservationUser->getId());
-		$reservationId->removeActivite($activiteId);
+		$reservationUser->removeActivite($activiteId);
 		$em->flush();
-		$result['id'] = $reservationId->getId();
+		$result['id'] = $reservationUser->getId();
 		$response = new Response(json_encode($result));
 		}
 		
 		}
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
     }  
     
     	public function showAction()
@@ -174,7 +188,7 @@ class ReservationController extends Controller
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		
 		//On recupere la reservation non payee de l'utilisateur si elle existe deja en BD
-		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNomComplet(),false,null,null);	
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),false,null,null);	
 		
 		//S'il ya pas de reservation non paye de l'utilisateur
 		if(count($listeRetour)<=0){
@@ -192,15 +206,68 @@ class ReservationController extends Controller
 		foreach( $reservationUser->getActivites() as $elem ){
 		$row['libelle'] = $elem->getLibelle();
 		$row['prix'] =  $elem->getPrixIndividu();
+		$row['image'] =  $elem->getImagePrincipale()->getUrl();
 		$result['activites'][] = $row;
 		}
 		$result['montantTotal'] = $reservationUser->calculerMontantTotal();
 		
 		$response = new Response(json_encode($result));
 		
-		}	
+		}
 		
-    	}  
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		
+    	} 
+    	
+    	public function nombreAction()
+    	{
+    		
+    	$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$idUser=$request->idUser;
+		
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		
+		//On recupere la reservation non payee de l'utilisateur si elle existe deja en BD
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),false,null,null);	
+		
+		//S'il ya pas de reservation non paye de l'utilisateur
+		if(count($listeRetour)<=0){
+			
+		$response = new Response(json_encode(array(
+		'failure'=>'Le panier n\'existe pas'
+		)));	
+		}
+		else 
+		{
+		$reservationUser=$listeRetour[0];
+		
+		$result['nombre'] = $reservationUser->compterActivites();
+		
+		$response = new Response(json_encode($result));
+		
+		}
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		
+    	} 
     
     //Fonction qui permet de controler les resevervations sur les utilisateurs avant insertion ou modification
 		//Elle retourne un tableau contenant le resultat, un boolean; l'activite et l'utilisateur qui a cree le pb: 

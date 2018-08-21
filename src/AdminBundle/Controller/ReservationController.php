@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\Reservation;
+use BusinessModelBundle\Entity\Payment;
 use BusinessModelBundle\Form\Type\ReservationType;
 use BusinessModelBundle\Form\Type\SearchReservationType;
 use BusinessModelBundle\Form\Type\PrintType;
@@ -54,7 +55,7 @@ class ReservationController extends Controller
 	 
 	 public function listeAction()
     {
-    	     
+    	 /*    
 		//Comme il est possible qu'on nous retourne apres un transaction d'achat sur paypal, on va donc tester notre transaction si elle a bien eu lieu
 		if(isset($_GET) && count($_GET)>0){		
 		$item_no            = $_GET['item_number'];//Id du produit de reservation
@@ -62,18 +63,33 @@ class ReservationController extends Controller
 		$item_price         = $_GET['amt']; // Paypal received amount
 		$item_currency      = $_GET['cc']; // Paypal received currency type
 		$item_transaction_status= $_GET['st']; // Paypal received currency type
+		$id_user 			  = $_GET['cm'];// ID of the customer
+
 		
 		$em = $this->getDoctrine()->getManager();
 		$reservationId=$em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($item_no));
+		$userId=$em->getRepository('BusinessModelBundle:User')->myFindOne(intval($id_user));
 		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
 		//On controle les donnees envoyees par Paypal en cas de transaction ok on met a jour notre reservation en mettant etat paye a true
 		if($reservationId!=null && $item_price>=$reservationId->calculerMontantTotal() && $item_currency=="EUR" && strtoupper($item_transaction_status)=="COMPLETED"){
+		
 		$reservationId->setPaye(true);
+		
+		$payment=new Payment();
+	   $payment->setItemId($item_no);
+	   $payment->setTransactionId($item_transaction);
+	   $payment->setAmount($item_price);
+	   $payment->setCurrencyCode($item_currency);
+	   $payment->setStatus(strtoupper($item_transaction_status));
+	   $payment->setUtilisateur($userId);
+	   
+	   $em->persist($payment);
 		$em->flush();
+		
 		$this->get('session')->getFlashBag()->add('paypalSuccess', $this->get('translator')->trans('Réservation.success',array('%elt%' => $elt)));
 		}else
 		$this->get('session')->getFlashBag()->add('paypalFailure', $this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)));
-		}
+		}*/
 		
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		// L'appel de la vue ne change pas
@@ -89,7 +105,7 @@ class ReservationController extends Controller
 		$em->flush();
 		$elt=$this->get('translator')->trans('Barre.Réservation.Mot');
 		$this->get('session')->getFlashBag()->add('info', $this->get('translator')->trans('Action.SupprimerMessage',array('%elt%' => $elt)));
-		$listePages = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindAll();
 		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
     }
     
