@@ -86,6 +86,10 @@ mobile_app_reservation_nombrepage:
     path:     /mobapp/reservation/number
     defaults: { _controller: MobileAppBundle:Reservation:nombre }
 
+mobile_app_reservation_historypage:
+    path:     /mobapp/reservation/activities/history
+    defaults: { _controller: MobileAppBundle:Reservation:activitiesHistory }
+
 mobile_app_creerpayment_paypal_page:
     path:     /mobapp/payment/creer/paypal
     defaults: { _controller: MobileAppBundle:Payment:creerPaiementPaypal }

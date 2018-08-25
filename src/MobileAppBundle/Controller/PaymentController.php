@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\Payment;
-use BusinessModelBundle\Entity\PayPalAPI;
+use BusinessModelBundle\Entity\PaypalAPI;
 
 class PaymentController extends Controller
 {
@@ -62,15 +62,15 @@ class PaymentController extends Controller
 		$rootProject=$tab[$nbelts-4];
 		
 		if($rootProject!="www")
-		$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/end';
+		$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/mobapp/payment/execute/paypal';
 		else
-		$url=$protocol.$hostName.'/web/payment/end';				
+		$url=$protocol.$hostName.'/web/mobapp/payment/execute/paypal';				
 		
 		$url_return=$url;
 		
 		$url_cancel=$url;
 		
-		$paypal = new PayPalAPI($config);
+		$paypal = new PaypalAPI($config);
 		
 		//$osms->setVerifyPeerSSL(false);
 		
@@ -97,7 +97,7 @@ class PaymentController extends Controller
 		  "Reservation voyage touristique",
 		  "1",
 		  "".$amount,
-		  "Reservation_".$idReservation,
+		  "Reservation_".$reservationId->getId(),
 	     "Beneentrip",
 	     "4thFloor",
 	     "unit#34",
@@ -114,9 +114,10 @@ class PaymentController extends Controller
     {
     //On enregistre le payment dans la BD
 	 $payment=new Payment();
-	 $payment->setItemId($reservationId);
+	 $payment->setItemId($reservationId->getId());
 	 $payment->setTransactionId($retour['id']);
 	 $payment->setAmount($amountTotal);
+	 $payment->setStatus(strtoupper("UNCOMPLETED"));
 	 $payment->setCurrencyCode($currencyCode);
 	 $payment->setTransactionToken($paypal->getToken());
 	 $payment->setUtilisateur($userId);
@@ -125,8 +126,9 @@ class PaymentController extends Controller
 	 $em->flush();		
 		
 		
-	 $paypalAnswer['url'] = $retour['transactions'][1]['href'];			
+	 $paypalAnswer['url'] = $retour['links'][1]['href'];			
 	 $response = new Response(json_encode($paypalAnswer));
+	 
     }
     else
     $response = new Response(json_encode(array('failure'=>$retour['error'])));
@@ -171,19 +173,21 @@ class PaymentController extends Controller
 				    'clientSecret' => 'EGoaCn_970xBv9rs9QAPpIHIMzJx7IEwvanKTioxExTzjh33qeoicLo45oGXdAAxHPugcYR28M40W6FL'
 							);
 							
-					$paypal = new PayPalAPI($config);
+					$paypal = new PaypalAPI($config);
 		
 		
 					//on execute le paiement
 					$retour = $paypal->executePayment($payerId,$paymentId,$paymentTransaction->getTransactionToken());
-
-					 if (empty($retour['error']))
+					
+					//$response = new Response(json_encode($retour));
+					
+					  if (empty($retour['error']))
     				 {
     				 
-    				 $status=$retour['payer']['status'];
-					 $state=$retour['state'];	
+    				 //$status=$retour['payer']['status'];
+					 //$state=$retour['state'];	
 					 
-    				 if (strtoupper($status)=="VERIFIED" && strtoupper($state)=="APPROVED"){
+    				 //if (strtoupper($status)=="VERIFIED" && strtoupper($state)=="APPROVED"){
     				 
     				 $paymentTransaction->setTransactionPayer($payerId);
     				 $paymentTransaction->setStatus(strtoupper("COMPLETED"));
@@ -196,14 +200,15 @@ class PaymentController extends Controller
     				 $em->flush();			
     				 
     				 //On peut si on veut ici generer la facture PDF de beneentrip et envoyer renvoyer son url
-    				 $paypalBillPDF['url'] = $paymentTransaction->getInvoice();	
-    				 $response = new Response(json_encode($paypalBillPDF));
+    				 //$paypalBillPDF['url'] = $paymentTransaction->getInvoice();	
+    				 //$response = new Response(json_encode($paypalBillPDF));
+    				 
     				 			
-					 //$response = new Response(json_encode(array('success'=>'Transaction paiement bien finalisée.')));
-					 }
+					 $response = new Response(json_encode(array('success'=>'Transaction paiement bien finalisée.')));
+					 //}
 					 
-					 else					
-    				 $response = new Response(json_encode(array('failure'=>'Finalisation transaction échouée !!!')));					
+					 //else					
+    				 //$response = new Response(json_encode(array('failure'=>'Finalisation transaction échouée !!!')));					
     				 
     				 }
     				 else
@@ -310,7 +315,7 @@ EOF;
 						$html='<div class="fond">';
 		
 						$html=$html.'<h1>'.$this->get('translator')->trans('Facture.mot').' '.strtoupper($userId->getNomComplet()).' N<SUP>o</SUP> '.$nowDate->format('dmYHis').'</h1><br/><br/><br/><br/>'.
-						$html=$html.'<h4>'.$this->get('translator')->trans('Facture.debut').' '.$nowDate.'</h4><br/><br/><br/><br/>'.		
+						$html=$html.'<h4>'.$this->get('translator')->trans('Facture.debut').' '.$nowDate->format('d-m-Y').'</h4><br/><br/><br/><br/>'.		
 						'<table>'.
 						'<thead>'.
 						'<tr>'.

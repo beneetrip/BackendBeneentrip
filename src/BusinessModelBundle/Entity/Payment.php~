@@ -63,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*
 		* @ORM\Column(name="status", type="string", length=255, options={"default":"UNCOMPLETED"})
 		*/
-		private $status;
+		private $status="UNCOMPLETED";
 		
 		
 		/**

@@ -18,7 +18,8 @@
 		<li><a href="{{ path('listeReservations') }}">{{ 'Barre.Réservation.All'|trans }}</a></li>
 		<li><a href="{{ path('ajouterReservation') }}">{{ 'Barre.Réservation.Add'|trans }}</a></li>
 		<li><a href="{{ path('rechercherReservations') }}">{{ 'Barre.Réservation.Search'|trans }}</a></li>
-		<li><a href="{{ path('rechercherReservations') }}">{{ 'Barre.Réservation.Print'|trans }}</a></li>
+		<li><a href="{{ path('imprimerReservations') }}">{{ 'Barre.Réservation.Print'|trans }}</a></li>
+		<li><a href="{{ path('historiqueReservations') }}">{{ 'Barre.Réservation.History'|trans }}</a></li>
 	</ul>
 </li>
 

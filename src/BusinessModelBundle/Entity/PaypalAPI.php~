@@ -2,7 +2,7 @@
 
 namespace BusinessModelBundle\Entity;
 
-class PayPalAPI
+class PaypalAPI
 {
     //For Live paypal
     //const BASE_URL = 'https://api.paypal.com';
@@ -191,7 +191,7 @@ class PayPalAPI
         $paymentID,
         $token
     ) {
-        $url = self::BASE_URL . '/v1/payments/payment/'.$paymentId.'/execute';
+        $url = self::BASE_URL . '/v1/payments/payment/'.$paymentID.'/execute';
 
         $headers = array(
             'Authorization: Bearer ' . $token,
@@ -199,7 +199,7 @@ class PayPalAPI
         );
 
         $args = array(
-    		"payer_id" => $payerId
+    		"payer_id" => $payerID
 							);
 
         return $this->callApi($headers, $args, $url, 'POST', 201, true);

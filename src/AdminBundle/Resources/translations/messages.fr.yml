@@ -26,6 +26,7 @@ Barre.Réservation.All: Toutes les Réservations
 Barre.Réservation.Add: Ajouter une Réservation
 Barre.Réservation.Search: Rechercher une Réservation
 Barre.Réservation.Print: Imprimer Facture
+Barre.Réservation.History: Historique
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: Toutes les Discussions
 Barre.Discussion.Add: Ajouter une Discussion
@@ -57,6 +58,7 @@ Action.ModifierMessage: %elt% modifié(e) avec succès
 Action.Annuler: Annuler les modifications
 Action.Rechercher: Rechercher
 Action.Imprimer: Imprimer
+Action.History: Voir historique
 Action.Ici: Ici
 Action.checkLogin: Vérifier Connexion
 Action.checkRegistration: Vérifier Inscription
@@ -128,6 +130,10 @@ Réservation.quotaErrorMessage: Activité " %activite% " a déjà atteint son qu
 Réservation.reserveErrorMessage: Utilisateur " %utilisateur% " a déjà reservé pour l'activité " %activite% "
 Réservation.success: Paiment %elt% réussi avec succès.
 Réservation.failure: Paiment %elt% échoué !!!
+Réservation.Type: Type
+Réservation.EnCours: En cours
+Réservation.Passees: Passées
+Réservation.Avenir:  A venir
 Discussion.libelleActivite: Libellé Activité
 Discussion.auteur: Auteur
 Discussion.destinataires: Destinataires

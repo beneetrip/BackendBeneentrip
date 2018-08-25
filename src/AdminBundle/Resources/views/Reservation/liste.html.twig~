@@ -28,8 +28,8 @@
 <p>{{ message }}</p>
 </div>
 {% endfor %}
-{% endif %}
-{% endblock %#}
+{% endif %#}
+{% endblock %}
 
 {% block contentTablehead %}
 	<th class="col-xs-1" data-field="id" data-sortable="true">Id</th>

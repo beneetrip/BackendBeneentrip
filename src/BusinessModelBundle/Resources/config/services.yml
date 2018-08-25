@@ -60,3 +60,8 @@ services:
          class: BusinessModelBundle\Form\Type\PrintType
          tags:
             - { name: form.type, alias: businessmodelbundle_print }
+
+     model_history.registration.form.type:
+         class: BusinessModelBundle\Form\Type\HistoryType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_history }

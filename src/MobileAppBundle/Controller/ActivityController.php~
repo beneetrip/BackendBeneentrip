@@ -82,7 +82,7 @@ class ActivityController extends Controller
 			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -138,7 +138,7 @@ class ActivityController extends Controller
 			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -430,7 +430,7 @@ class ActivityController extends Controller
 		
 		$result['id'] = $activiteId->getId();
 		$result['libelle'] = $activiteId->getLibelle();
-		$result['description'] = $activiteId->getDescription();
+		$result['description'] = $activiteId->getDescriptionEnClair();
 		$result['user']['id'] = $activiteId->getAuteur()->getId();
 		$result['user']['username'] = $activiteId->getAuteur()->getUsername();
 		$result['user']['photo'] = $activiteId->getAuteur()->getPhoto();
@@ -439,7 +439,12 @@ class ActivityController extends Controller
 		$result['dateclair'] = $activiteId->getDateEnClair();
 		$result['nbVues'] = $activiteId->getNbVues();
 		$result['prix'] = $activiteId->getPrixIndividu();
+		
+		if($activiteId->getCategorie()!=null)
 		$result['categorie'] = $activiteId->getCategorie()->getNom();
+		else 
+		$result['categorie'] = null;
+		
 		$result['nbParticipants'] = $activiteId->getNbParticipants();
 		$result['lieuDestination'] = $activiteId->getLieuDestination(); 
 		
@@ -501,7 +506,7 @@ class ActivityController extends Controller
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -542,7 +547,7 @@ class ActivityController extends Controller
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -586,7 +591,7 @@ class ActivityController extends Controller
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -637,7 +642,7 @@ class ActivityController extends Controller
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
@@ -688,7 +693,7 @@ class ActivityController extends Controller
 			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
-			$row['description'] = $elem->getDescription();
+			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();

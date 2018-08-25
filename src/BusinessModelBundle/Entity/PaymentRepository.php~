@@ -31,7 +31,7 @@ class PaymentRepository extends \Doctrine\ORM\EntityRepository
 				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
 				$qb = $this->createQueryBuilder('p')
 				->where('p.transactionId = :transactionId')
-				->setParameter('id', $id);
+				->setParameter('transactionId', $transactionId);
 				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
 

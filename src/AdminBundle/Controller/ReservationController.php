@@ -13,6 +13,7 @@ use BusinessModelBundle\Entity\Payment;
 use BusinessModelBundle\Form\Type\ReservationType;
 use BusinessModelBundle\Form\Type\SearchReservationType;
 use BusinessModelBundle\Form\Type\PrintType;
+use BusinessModelBundle\Form\Type\HistoryType;
 use Symfony\Component\Form\FormError;
 //use BusinessModelBundle\Util\tcpdf\TCPDF;
 
@@ -263,6 +264,71 @@ class ReservationController extends Controller
 		
 		return $this->render('AdminBundle:Reservation:print.html.twig',array('form' => $form->createView(),'path' => 'imprimerPDF', 
 		'bouton'=> $this->get('translator')->trans('Action.Imprimer')));
+    }
+    
+     //Fonction speciale permettant des recherches les historiques sur reservations selon des criteres
+    public function historyReservationAction()
+    {
+    	//On construit la liste de choix avec les traduction pour le champ paye?
+    	$listeChoix=array(
+    	'-1'=>$this->get('translator')->trans('Réservation.Passees'),
+    	'0'=>$this->get('translator')->trans('Réservation.EnCours'),
+    	'1'=>$this->get('translator')->trans('Réservation.Avenir')
+    	);
+    	$form = $this->createForm(new HistoryType($listeChoix));
+		return $this->render('AdminBundle:Reservation:history.html.twig',array('form' => $form->createView(),'path' => 'listeHistoriqueReservations', 
+		'bouton'=> $this->get('translator')->trans('Action.History')));
+    }
+    
+    //Fonction speciale permettant d'avoir la liste des historiques sur reservations
+    public function listHistoryReservationAction()
+    {
+    	//On construit la liste de choix avec les traduction pour le champ paye?
+    	$listeChoix=array(
+    	'-1'=>$this->get('translator')->trans('Réservation.Passees'),
+    	'0'=>$this->get('translator')->trans('Réservation.EnCours'),
+    	'1'=>$this->get('translator')->trans('Réservation.Avenir')
+    	);
+
+    	$form = $this->createForm(new HistoryType($listeChoix));
+    	$request = $this->get('request');
+    	$listeReservations=array();
+    	if ($request->getMethod() == 'POST') {
+		// On fait le lien Requête <-> Formulaire
+		// À partir de maintenant, la variable $article contient les valeurs entrées dans le formulaire par le visiteur
+		$form->bind($request);
+		
+		if($form->isValid()) {
+		
+		$registrationArray = $request->get('businessmodelbundle_history');
+		
+		$utilisateurs=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['utilisateurs']))->getNom();
+			
+	
+		$type=$registrationArray['type'];
+		
+		$dateNow=new \Datetime();
+
+		$dateString=$dateNow->format('Y-m-d');
+		
+		$heureString=$dateNow->format('H:i');	
+			
+		if($type=="0")
+    	$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, null, $dateString, null, $heureString);
+		else if($type=="1")
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, $dateString, $dateString, null, null);
+		else
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, $dateString, null, $heureString, null);
+		
+		
+    	//print_r($listeReservations);
+		}  
+		}
+		
+		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
     }
     
     

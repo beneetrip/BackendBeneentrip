@@ -215,6 +215,14 @@ imprimerReservations:
     path:     /admin/imprimerReservations
     defaults: { _controller: AdminBundle:Reservation:printReservation }
 
+historiqueReservations:
+    path:     /admin/historiqueReservations
+    defaults: { _controller: AdminBundle:Reservation:historyReservation }
+
+listeHistoriqueReservations:
+    path:     /admin/listeHistoriqueReservations
+    defaults: { _controller: AdminBundle:Reservation:listHistoryReservation }
+
 imprimerPDF:
     path:     /admin/imprimerPDF
     defaults: { _controller: AdminBundle:Reservation:printPDF }

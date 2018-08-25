@@ -204,12 +204,13 @@ class ReservationController extends Controller
 		$result['activites'] = array();
 		
 		foreach( $reservationUser->getActivites() as $elem ){
+		$row['id'] = $elem->getId();
 		$row['libelle'] = $elem->getLibelle();
 		$row['prix'] =  $elem->getPrixIndividu();
 		$row['image'] =  $elem->getImagePrincipale()->getUrl();
 		$result['activites'][] = $row;
 		}
-		$result['montantTotal'] = $reservationUser->calculerMontantTotal();
+		$result['montantTotal'] = $reservationUser->calculerMontantTotalAvecTaxe();
 		
 		$response = new Response(json_encode($result));
 		
@@ -267,6 +268,73 @@ class ReservationController extends Controller
 
 		return $response;	
 		
+    	}
+    	
+    	public function activitiesHistoryAction()
+    	{
+    	$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$idUser=$request->idUser;
+		
+		$typeHist=$request->type;
+		
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		
+		$dateNow=new \Datetime();
+
+		$dateString=$dateNow->format('Y-m-d');
+		
+		$heureString=$dateNow->format('H:i');
+		
+		$result = array();
+		
+		if($typeHist=="passees")
+    	$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($userId->getNom(), null, $dateString, null, $heureString);
+		else if($typeHist=="encours")
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($userId->getNom(), $dateString, $dateString, null, null);
+		else
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($userId->getNom(), $dateString, null, $heureString, null);
+		
+		foreach($listeReservations as $reservation){
+		foreach($reservation->getActivites() as $activite){
+		$row['id'] = $elem->getId();
+		$row['libelle'] = $elem->getLibelle();
+		$row['description'] = $elem->getDescriptionEnClair();
+		$row['user']['id'] = $elem->getAuteur()->getId();
+		$row['user']['username'] = $elem->getAuteur()->getUsername();
+		$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		$row['dateclair'] = $elem->getDateEnClair();
+		$row['nbVues'] = $elem->getNbVues();
+		$row['prix'] = $elem->getPrixIndividu();
+		$row['nbParticipants'] = $elem->getNbParticipants();
+		$row['lieuDestination'] = $elem->getLieuDestination();
+			
+		$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+		$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+		$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+		$result[] = $row;
+		}		
+		}
+		
+		$response = new Response(json_encode($result));		
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;		
     	} 
     
     //Fonction qui permet de controler les resevervations sur les utilisateurs avant insertion ou modification
