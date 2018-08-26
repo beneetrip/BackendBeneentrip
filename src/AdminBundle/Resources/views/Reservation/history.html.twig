@@ -58,12 +58,20 @@
 					{{ form_widget(form.utilisateurs, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }}
 					</div>
 	</div>
-	
 	<br/>
 	<div class="form-group">
 						{{ form_label(form.type,'Réservation.Type'|trans) }}
 					<div class="controls">
 					 {{ form_widget(form.type, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }} 
+					</div>
+
+					</div>
+	
+	<br/>
+	<div class="form-group">
+						{{ form_label(form.evenement,'Réservation.Evenement'|trans) }}
+					<div class="controls">
+					 {{ form_widget(form.evenement, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }} 
 					</div>
 
 					</div>

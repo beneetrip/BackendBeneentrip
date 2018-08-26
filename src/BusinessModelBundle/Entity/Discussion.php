@@ -25,6 +25,24 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		private $id;
 		
 		
+		
+		/**
+		* @var string $type
+		*
+		* @ORM\Column(name="type", type="string", length=255, options={"default":"Discussion"})
+		* @Assert\Choice({"Discussion", "Report"})
+		*/
+		private $type;
+		
+		
+		/**
+		* @var string $titre
+		*
+		* @ORM\Column(name="titre", type="string", length=255, nullable=true)
+		*/
+		private $titre;
+		
+		
 		/**
 		* @var string $message
 		*
@@ -49,7 +67,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		
 		/**
 		* @ORM\ManyToOne(targetEntity="BusinessModelBundle\Entity\Activite",inversedBy="discussions")
-		* @ORM\JoinColumn(nullable=false)
+		* @ORM\JoinColumn(nullable=true)
 		*/
 		private $activite;
 		
@@ -241,5 +259,51 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     public function getActivite()
     {
         return $this->activite;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Discussion
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     * @return Discussion
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string 
+     */
+    public function getTitre()
+    {
+        return $this->titre;
     }
 }

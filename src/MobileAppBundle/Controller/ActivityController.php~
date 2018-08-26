@@ -431,9 +431,19 @@ class ActivityController extends Controller
 		$result['id'] = $activiteId->getId();
 		$result['libelle'] = $activiteId->getLibelle();
 		$result['description'] = $activiteId->getDescriptionEnClair();
-		$result['user']['id'] = $activiteId->getAuteur()->getId();
-		$result['user']['username'] = $activiteId->getAuteur()->getUsername();
-		$result['user']['photo'] = $activiteId->getAuteur()->getPhoto();
+		
+		$auteur=$activiteId->getAuteur();
+		$result['user']['id'] = $auteur->getId();
+		$result['user']['nomComplet'] = $auteur->getNomComplet();
+		$result['user']['photo'] = $auteur->getUrlPhoto();
+		
+		$result['user']['langues']=array();		
+		foreach($auteur->getLangues() as $elemLang){
+		$rowLang['id'] = $elemLang->getId();
+		$rowLang['nom'] =  $elemLang->getNom();
+		$result['user']['langues'][]=$rowLang;
+		}
+
 		$result['date'] = $activiteId->getDate()->format('d-m-Y');
 		$result['heure'] = $activiteId->getHeure()->format('H:i');
 		$result['dateclair'] = $activiteId->getDateEnClair();
@@ -620,6 +630,8 @@ class ActivityController extends Controller
 		return $response; 
 		
     }
+    	
+    	
 	
 	public function toplistAction($page)
     {

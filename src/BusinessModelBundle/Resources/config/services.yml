@@ -65,3 +65,8 @@ services:
          class: BusinessModelBundle\Form\Type\HistoryType
          tags:
             - { name: form.type, alias: businessmodelbundle_history }
+
+     model_searchDiscussion.registration.form.type:
+         class: BusinessModelBundle\Form\Type\SearchDiscussionType
+         tags:
+            - { name: form.type, alias: businessmodelbundle_searchdiscussion }

@@ -5,6 +5,7 @@ namespace BusinessModelBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 class DiscussionType extends AbstractType
 {
@@ -28,8 +29,14 @@ class DiscussionType extends AbstractType
             ->add('destinataires', 'entity', array(
 				'class' => 'BusinessModelBundle:User',
 				'property' => 'nomComplet',
-				'multiple' => true))
-				        ;
+				'multiple' => true,
+				'required' =>false))
+				->add('type', 'choice', array(
+       'choice_list' => new ChoiceList(
+        array('Discussion', 'Report'),
+        array('Discussion', 'Report'))
+      ))
+      ->add('titre');
     }
     
     /**

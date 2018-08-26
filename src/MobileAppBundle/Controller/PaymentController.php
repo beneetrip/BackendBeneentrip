@@ -22,10 +22,12 @@ class PaymentController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		
 		$idUser=$request->idUser;
+		
+		//$idUser=2;
 	
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		
-		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),false,null,null);
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),'0',null,null);
 		
 		//S'il ya pas de reservation non paye de l'utilisateur
 		if(count($listeRetour)<=0){
@@ -38,6 +40,43 @@ class PaymentController extends Controller
 		else{		
 		
 		$reservationId = $listeRetour[0];
+		
+		
+
+		$amountTotal=$reservationId->calculerMontantTotalAvecTaxe();
+    	$amount=$reservationId->calculerMontantTotal();
+    	$amountTax=$reservationId->calculerMontantTaxe();
+    	$currencyCode="EUR";
+    	
+    	//On teste si la somme totale est nulle car ainsi pas besoin d'aller chez paypal on fait les mise a jour et on renvoit immediatement la reponse
+		if($amountTotal==0.0)
+		{
+			
+		$reservationId->setPaye(true);
+		$em->flush();
+			
+		//On enregistre le payment dans la BD et on met a jour la reservation de l'utilisateur: elle est reglee
+		 $payment=new Payment();
+		 $payment->setItemId($reservationId->getId());
+		 $payment->setAmount($amountTotal);
+		 $payment->setStatus(strtoupper("COMPLETED"));
+		 $payment->setCurrencyCode($currencyCode);
+		 $payment->setUtilisateur($userId);
+		 
+		 $payment->setInvoice($this->creerFacturePDF($this->genererFactureCodeHTML($userId->getId(),$reservationId->getId()),
+    	 $this->genererFactureCodeCSS()));
+		 
+		 $em->persist($payment);
+		 $em->flush();	
+		 //On renvoit la reponse avec success
+		 $response = new Response(json_encode(array('success'=>'Paiement effectué avec succès')));
+		 $response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;	
+		}
+		
 		
 		$config = array(
     'clientId' => 'AXJ9Zy--FPeQfIhxpGK1yF3UwC1zGGCWgh1Q196xDaLZkLEo9Ur4zx4B-xZs1O2NwZgCNcPB3HnEAuHB',
@@ -79,11 +118,6 @@ class PaymentController extends Controller
 		
 		//on cree le paiement Paypal avec les donnees du panier
 		if (empty($retour['error'])) {
-    	
-    	$amountTotal=$reservationId->calculerMontantTotalAvecTaxe();
-    	$amount=$reservationId->calculerMontantTotal();
-    	$amountTax=$reservationId->calculerMontantTaxe();
-    	$currencyCode="EUR";
     	
     	$retour=$paypal->createPayment(
         "".$amountTotal,
@@ -188,6 +222,8 @@ class PaymentController extends Controller
 					 //$state=$retour['state'];	
 					 
     				 //if (strtoupper($status)=="VERIFIED" && strtoupper($state)=="APPROVED"){
+    				 $reservationId->setPaye(true);
+    				 $em->flush();
     				 
     				 $paymentTransaction->setTransactionPayer($payerId);
     				 $paymentTransaction->setStatus(strtoupper("COMPLETED"));
@@ -195,7 +231,6 @@ class PaymentController extends Controller
     				 $this->creerFacturePDF(
     				 $this->genererFactureCodeHTML($paymentTransaction->getUtilisateur()->getId(),$paymentTransaction->getItemId()),
     				 $this->genererFactureCodeCSS()));
-    				 $reservationId->setPaye(true);
     				 
     				 $em->flush();			
     				 
@@ -454,6 +489,7 @@ EOF;
 						 $file=$dir.'/'.$nowDate->format('dmYHis').'.pdf';
 					    $pdf->Output($file, 'F');
 						 
-						 return $file;
+						 //on retourne le chemin relatif
+						 return 'invoices/'.$nowDate->format('d/m/Y/H').'/'.$nowDate->format('dmYHis').'.pdf';
 					}
 }

@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		/**
 		* @var string $transactionId
 		*
-		* @ORM\Column(name="transactionId", type="string", length=255)
+		* @ORM\Column(name="transactionId", type="string", length=255, nullable=true)
 		*/
 		private $transactionId;
 		

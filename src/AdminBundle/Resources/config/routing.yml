@@ -293,6 +293,14 @@ voirActiviteDiscussion:
     requirements:
               id: \d+
 
+rechercherDiscussions:
+    path:     /admin/rechercherDiscussions
+    defaults: { _controller: AdminBundle:Discussion:searchDiscussion }
+
+ListeRechercherDiscussions:
+    path:     /admin/ListeRechercherDiscussions
+    defaults: { _controller: AdminBundle:Discussion:searchListDiscussion }
+
 ajouterLangue:
     path:     /admin/langue/ajouter
     defaults: { _controller: AdminBundle:Langue:ajouter }

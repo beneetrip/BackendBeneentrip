@@ -23,8 +23,60 @@ class DiscussionRepository extends \Doctrine\ORM\EntityRepository
 			$qb = $this->createQueryBuilder('d')
 			->where('d.id = :id')
 			->setParameter('id', $id);
-			return $qb->getQuery()->getResult()[0];
+			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
 
+
+			//Fonction pour les recherches selon les criteres specifiques sur les Discussions
+			public function myFindSurDiscussions($auteur, $activite, $destinataires, $type)
+			{
+
+			$qb = $this->createQueryBuilder('d');
+			$nbhits=0;//Ce compteur est pour le nombre de criteres valides	
+			
+			
+			if(isset($activite) && trim($activite,'')!=""){
+			$qb->join('d.activite', 'a', 'WITH', '(UPPER(a.lieuDestination) LIKE UPPER( :activite ) OR UPPER(a.libelle) LIKE UPPER( :activite ))')
+			->setParameter('activite', '%'.$activite.'%');						
+			$nbhits++;										
+			}
+			
+			if(isset($auteur) && trim($auteur,'')!=""){
+			$qb->join('d.auteur', 'u1', 'WITH', 'UPPER(u1.nom) LIKE UPPER( :auteur ) OR UPPER(u1.prenom) LIKE UPPER( :auteur ) OR UPPER(u1.username) LIKE UPPER( :auteur )')
+			->setParameter('auteur', '%'.$auteur.'%');						
+			$nbhits++;										
+			}
+			
+			if(isset($destinataires) && trim($destinataires,'')!=""){
+			$qb->join('d.destinataires', 'u2', 'WITH', 'UPPER(u2.nom) LIKE UPPER( :destinataires ) OR UPPER(u2.prenom) LIKE UPPER( :destinataires ) OR UPPER(u2.username) LIKE UPPER( :destinataires )')
+			->setParameter('destinataires', '%'.$destinataires.'%');						
+			$nbhits++;										
+			}
+			
+			if(isset($type) && trim($type,'')!=""){
+			if($nbhits>0)	
+			$qb->andWhere('d.type = :type')
+			->setParameter('type', $type);
+			else 
+			$qb->where('d.type = :type')
+			->setParameter('type', $type);
+			$nbhits++;						
+			}
+				
+			
+			print_r(array(
+  			'sql'  => $qb->getQuery()->getSQL(),
+  			'parameters' => $qb->getQuery()->getParameters(),
+  			));				
+		
+			
+			//Et pour finir on prend les resultats avec tous les criteres en compte
+			$listeRetour=$qb->getQuery()->getResult();
+			
+			//print_r($listeRetour);
+			
+			return $listeRetour;
+				
+			}
 
 }

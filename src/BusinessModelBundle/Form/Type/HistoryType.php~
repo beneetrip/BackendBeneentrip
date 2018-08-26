@@ -11,10 +11,12 @@ class HistoryType extends AbstractType
 {
 
 	private $listeChoix;	
+	private $listeChoix2;	
 	
-	public function __construct($listeChoix)
+	public function __construct($listeChoix,$listeChoix2)
 	{
     $this->listeChoix = $listeChoix; 
+    $this->listeChoix2 = $listeChoix2; 
 	}
     /**
      * @param FormBuilderInterface $builder
@@ -33,6 +35,11 @@ class HistoryType extends AbstractType
        'choice_list' => new ChoiceList(
         $this->listeChoix,
         $this->listeChoix)
+      ))
+      ->add('evenement', 'choice', array(
+       'choice_list' => new ChoiceList(
+        $this->listeChoix2,
+        $this->listeChoix2)
       ))
              ;
     }

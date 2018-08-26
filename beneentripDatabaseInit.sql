@@ -81,7 +81,9 @@ INSERT INTO `categorie` (`id`, `nom`, `dateCreation`, `dateModification`) VALUES
 CREATE TABLE `discussion` (
   `id` int(11) NOT NULL,
   `auteur_id` int(11) NOT NULL,
-  `activite_id` int(11) NOT NULL,
+  `activite_id` int(11) DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Discussion',
+  `titre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
   `message` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
   `dateModification` datetime DEFAULT NULL
@@ -464,7 +466,7 @@ CREATE TABLE `reservation_activite` (
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
   `itemId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `transactionId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `transactionId` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `amount` double NOT NULL,
   `currencyCode` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
   `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'UNCOMPLETED',

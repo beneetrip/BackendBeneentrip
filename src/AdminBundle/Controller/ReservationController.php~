@@ -269,13 +269,17 @@ class ReservationController extends Controller
      //Fonction speciale permettant des recherches les historiques sur reservations selon des criteres
     public function historyReservationAction()
     {
-    	//On construit la liste de choix avec les traduction pour le champ paye?
-    	$listeChoix=array(
-    	'-1'=>$this->get('translator')->trans('Réservation.Passees'),
-    	'0'=>$this->get('translator')->trans('Réservation.EnCours'),
-    	'1'=>$this->get('translator')->trans('Réservation.Avenir')
+		
+		$listeChoix=array(
+    	'0'=>"Guide",
+    	'1'=>"Touriste"
     	);
-    	$form = $this->createForm(new HistoryType($listeChoix));
+    	$listeChoix2=array(
+    	'0'=>$this->get('translator')->trans('Réservation.Passees'),
+    	'1'=>$this->get('translator')->trans('Réservation.EnCours'),
+    	'2'=>$this->get('translator')->trans('Réservation.Avenir')
+    	);
+    	$form = $this->createForm(new HistoryType($listeChoix,$listeChoix2));
 		return $this->render('AdminBundle:Reservation:history.html.twig',array('form' => $form->createView(),'path' => 'listeHistoriqueReservations', 
 		'bouton'=> $this->get('translator')->trans('Action.History')));
     }
@@ -283,14 +287,17 @@ class ReservationController extends Controller
     //Fonction speciale permettant d'avoir la liste des historiques sur reservations
     public function listHistoryReservationAction()
     {
-    	//On construit la liste de choix avec les traduction pour le champ paye?
-    	$listeChoix=array(
-    	'-1'=>$this->get('translator')->trans('Réservation.Passees'),
-    	'0'=>$this->get('translator')->trans('Réservation.EnCours'),
-    	'1'=>$this->get('translator')->trans('Réservation.Avenir')
+		$listeChoix=array(
+    	'0'=>"Guide",
+    	'1'=>"Touriste"
+    	);
+    	$listeChoix2=array(
+    	'0'=>$this->get('translator')->trans('Réservation.Passees'),
+    	'1'=>$this->get('translator')->trans('Réservation.EnCours'),
+    	'2'=>$this->get('translator')->trans('Réservation.Avenir')
     	);
 
-    	$form = $this->createForm(new HistoryType($listeChoix));
+    	$form = $this->createForm(new HistoryType($listeChoix,$listeChoix2));
     	$request = $this->get('request');
     	$listeReservations=array();
     	if ($request->getMethod() == 'POST') {
@@ -305,22 +312,42 @@ class ReservationController extends Controller
 		$utilisateurs=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindOne(intval($registrationArray['utilisateurs']))->getNom();
 			
 	
+		$evenement=$registrationArray['evenement'];
+		
 		$type=$registrationArray['type'];
 		
 		$dateNow=new \Datetime();
 
 		$dateString=$dateNow->format('Y-m-d');
 		
-		$heureString=$dateNow->format('H:i');		
+		$heureString=$dateNow->format('H:i');	
+			
+		if($evenement=="0"){
 		if($type=="0")
-    	$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
 		($utilisateurs, null, $dateString, null, $heureString);
-		else if($type=="1")
+		else
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, null, $dateString, null, $heureString);
+		}
+		else if($evenement=="1"){
+		if($type=="0")
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
 		($utilisateurs, $dateString, $dateString, null, null);
 		else
 		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, $dateString, $dateString, null, null);
+		}
+		
+		else{
+		if($type=="0")
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
 		($utilisateurs, $dateString, null, $heureString, null);
+		else
+		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
+		($utilisateurs, $dateString, null, $heureString, null);
+		}
+		
 		
 		
     	//print_r($listeReservations);

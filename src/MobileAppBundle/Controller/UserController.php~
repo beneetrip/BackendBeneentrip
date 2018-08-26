@@ -36,6 +36,7 @@ class UserController extends Controller
 		$email = $request->email;
 		$password = $request->password;
 		
+		
 		//Par defaut le retour est a false car on suppose que l'Utilisateur n'a pas ete trouve
 		$retour=false;
 		
@@ -173,6 +174,8 @@ class UserController extends Controller
 		}
 		else
 		{
+			
+			try{
 			$user = new User();
 			$user->setEmail($request->email);
 			
@@ -229,6 +232,10 @@ class UserController extends Controller
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
+			}catch(\Exception $e)
+			{
+			$response = new Response(json_encode(array('failure'=>'Une erreur s\'est produite, veuillez vérifier vos données')));	
+			}
 		}
 			
 
@@ -512,5 +519,162 @@ class UserController extends Controller
 		return $response;
 		
     }
-	
+    
+    
+    //Fonction d'optimisation des appels du frontend au niveau du home	
+      public function homeAction(){
+      
+      $postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+       
+      $result = array();
+      		  
+		$result['eclaireurs'] = array();
+		$result['destinations'] = array();
+		$result['categories'] = array();
+		$result['tops'] = array();
+		$result['news'] = array();
+		
+		$eclaireurs = $em->getRepository('BusinessModelBundle:User')->findBy(array('typeUtilisateur'=>'Guide'), array('id' => 'DESC'));
+		
+		foreach( $eclaireurs as $elem){
+			
+			$result['eclaireurs'][] = $elem->getUsername();
+		} 
+		
+		$listDestinations=$em->getRepository('BusinessModelBundle:Activite')->myFindListeDestinations();
+		
+		foreach( $listDestinations as $elem){
+			
+			$result['destinations'][] = $elem;
+			
+		}
+		
+		$categories=$em->getRepository('BusinessModelBundle:Categorie')->myFindAll();
+		
+		foreach( $categories as $elem){
+			
+			$result['categories'][] = $elem->getNom();
+			
+		}
+		
+		$idUser=$request->idUser;
+		
+		//Si on envoit 0 comme id alors c'est un visiteur cad un utilisateur non connecte
+		if($idUser==0)
+		$result['nbPanier']=0;
+		else{
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		
+		//On recupere la reservation non payee de l'utilisateur si elle existe deja en BD
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations(null,$userId->getNom(),0,null,null);	
+		
+		//S'il ya pas de reservation non paye de l'utilisateur
+		if(count($listeRetour)<=0){
+		$result['nbPanier']=0;	
+		}
+		else 
+		{
+		$reservationUser=$listeRetour[0];
+		$result['nbPanier'] = $reservationUser->compterActivites();
+		}
+      }
+      
+      $listeActivites = $em->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'), 4, 0);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescriptionEnClair();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
+			$rowImgPrinc['id']=$elem->getImagePrincipale()->getId();
+			$rowImgPrinc['url']=$elem->getImagePrincipale()->getUrl();
+			$row['image'] = $rowImgPrinc;
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$row['images'] = array();
+			
+			foreach( $elem->getImages() as $imgelem ){
+			$rowImg['id'] = $imgelem->getId();
+			$rowImg['url'] =  $imgelem->getUrl();
+			$row['images'][] = $rowImg;
+			}
+			
+			$result['tops'][] = $row;
+		}
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'), 4, 0);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('nbVues' => 'DESC'));
+		
+		foreach($listeActivites as $elem){
+			
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescriptionEnClair();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
+			$rowImgPrinc['id']=$elem->getImagePrincipale()->getId();
+			$rowImgPrinc['url']=$elem->getImagePrincipale()->getUrl();
+			$row['image'] = $rowImgPrinc;
+			
+			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+			$row['images'] = array();
+			
+			foreach( $elem->getImages() as $imgelem ){
+			$rowImg['id'] = $imgelem->getId();
+			$rowImg['url'] =  $imgelem->getUrl();
+			$row['images'][] = $rowImg;
+			}
+			
+			$result['news'][] = $row;
+		}
+		
+		$response = new Response(json_encode($result));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		}
 }

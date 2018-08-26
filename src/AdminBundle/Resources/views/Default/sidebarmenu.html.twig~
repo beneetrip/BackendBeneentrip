@@ -28,6 +28,7 @@
 	<ul class="nav nav-pills nav-stacked">
 		<li><a href="{{ path('listeDiscussions') }}">{{ 'Barre.Discussion.All'|trans }}</a></li>
 		<li><a href="{{ path('ajouterDiscussion') }}">{{ 'Barre.Discussion.Add'|trans }}</a></li>
+		<li><a href="{{ path('rechercherDiscussions') }}">{{ 'Barre.Discussion.Search'|trans }}</a></li>
 	</ul>
 </li>
 

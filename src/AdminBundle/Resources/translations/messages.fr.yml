@@ -30,6 +30,7 @@ Barre.Réservation.History: Historique
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: Toutes les Discussions
 Barre.Discussion.Add: Ajouter une Discussion
+Barre.Discussion.Search: Rechercher une Discussion
 Barre.Langue.Mot: Langue
 Barre.Langue.All: Toutes les Langues
 Barre.Langue.Add: Ajouter une Langue
@@ -131,6 +132,7 @@ Réservation.reserveErrorMessage: Utilisateur " %utilisateur% " a déjà reserv�
 Réservation.success: Paiment %elt% réussi avec succès.
 Réservation.failure: Paiment %elt% échoué !!!
 Réservation.Type: Type
+Réservation.Evenement: Evènement
 Réservation.EnCours: En cours
 Réservation.Passees: Passées
 Réservation.Avenir:  A venir
@@ -138,6 +140,8 @@ Discussion.libelleActivite: Libellé Activité
 Discussion.auteur: Auteur
 Discussion.destinataires: Destinataires
 Discussion.message: Message
+Discussion.type: Type
+Discussion.titre: Titre
 Discussion.form: Formulaire Discussion
 Discussion.activite: Activité
 Facture.mot: FACTURE POUR

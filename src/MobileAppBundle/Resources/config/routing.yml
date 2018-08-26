@@ -70,6 +70,10 @@ mobile_app_user_languespage:
     path:     /mobapp/user/langues
     defaults: { _controller: MobileAppBundle:User:langues }
 
+mobile_app_user_homepage:
+    path:     /mobapp/user/home
+    defaults: { _controller: MobileAppBundle:User:home }
+
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier
     defaults: { _controller: MobileAppBundle:Reservation:editPanier }

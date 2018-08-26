@@ -30,6 +30,7 @@ Barre.Réservation.History: 'Reservation History'
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: 'All Discussions'
 Barre.Discussion.Add: 'New Discussion'
+Barre.Discussion.Search: 'Search Discussion'
 Barre.Langue.Mot: Language
 Barre.Langue.All: 'All Languages'
 Barre.Langue.Add: 'New Language'
@@ -131,6 +132,7 @@ Réservation.reserveErrorMessage: User ' %utilisateur% ' has already reserved fo
 Réservation.success: %elt% payment Successful.
 Réservation.failure: %elt% payment Failed !!!
 Réservation.Type: Type
+Réservation.Evenement: Event
 Réservation.EnCours: Pending
 Réservation.Passees: Past
 Réservation.Avenir:  Coming up
@@ -138,6 +140,8 @@ Discussion.libelleActivite: 'Activity Wording'
 Discussion.auteur: Author
 Discussion.destinataires: Receivers
 Discussion.message: Message
+Discussion.type: Type
+Discussion.titre: Title
 Discussion.form: 'Discussion Form'
 Discussion.activite: Activity
 Facture.mot: BILL FOR
