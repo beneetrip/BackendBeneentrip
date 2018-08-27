@@ -289,41 +289,61 @@ class ReservationController extends Controller
     	
     	public function activitiesHistoryAction()
     	{
-    	$postdata = file_get_contents("php://input");
-		$request = json_decode($postdata);
+    	//$postdata = file_get_contents("php://input");
+		//$request = json_decode($postdata);
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$idUser=$request->idUser;
+		//$idUser=$request->idUser;
 		
-		$typeHist=$request->type;
+		//Valeur de tests manuels
+		$idUser=1;
 		
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		
-		$dateNow=new \Datetime();
-		
-		//on n'oublie pas de bien formatter nos dates pour les requetes	
-		$dateString=$dateNow->format('Y-m-d');
-		
-		$heureString=$dateNow->format('H:i');
 		
 		$result = array();
+		$result['Guide']=array();
+		$result['Touriste']=array();
 		
-		//si type ==-1 ce sont les historiques du passe
-		if($typeHist=="-1")
-    	$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($userId->getNom(), null, $dateString, null, $heureString);
-		//si type ==0 ce sont les historiques en cours
-		else if($typeHist=="0")
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($userId->getNom(), $dateString, $dateString, null, null);
-		//sinon ce sont les historiques a venir
+		//Tableau de nos evenements historiques : 0 pour evenement passe, 1 pour evenement en cours, 2 pour evenement a venir
+		$evts=array('0','1','2');
+		
+		$types=array('0','1');
+		
+		//Si c'est un Guide on lui renvoit deux types d'historiques
+		if(strtoupper($userId->getTypeUtilisateur())=="GUIDE")
+		{
+		
+		foreach($types as $type)
+		{
+		if($type=='0')
+		$nomType="Guide";
 		else
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($userId->getNom(), $dateString, null, $heureString, null);
+		$nomType="Touriste";
 		
-		foreach($listeReservations as $reservation){
-		foreach($reservation->getActivites() as $activite){
+		foreach($evts as $evt)
+		{
+
+		if($evt=='0'){
+		$nomEvt="evtPasses";
+		$nbEvt="nbEvtPasses";
+		}	
+		else if($evt=='1'){
+		$nomEvt="evtEnCours";
+		$nbEvt="nbEvtEnCours";
+		}
+		else{
+		$nomEvt="evtAvenir";
+		$nbEvt="nbEvtAvenir";	
+		}
+		
+		
+		$listeActivites = $em->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations($userId->getNom(), $type,$evt);
+		
+		$result[''.$nomType][''.$nbEvt]= count($listeActivites);
+		$result[''.$nomType][''.$nomEvt]=array();		
+		foreach($listeActivites as $elem){
 		$row['id'] = $elem->getId();
 		$row['libelle'] = $elem->getLibelle();
 		$row['description'] = $elem->getDescriptionEnClair();
@@ -338,13 +358,71 @@ class ReservationController extends Controller
 			
 		$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-		$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+		//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-		$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+		//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
-		$result[] = $row;
-		}		
+		$result[''.$nomType][''.$nomEvt][] = $row;
 		}
+		
+		}
+		
+		}	
+		
+		
+		}
+		
+		
+		//Si c'est un touriste on lui renvoit juste un type d'historique
+		else {
+		
+		
+		foreach($evts as $evt)
+		{
+		if($evt=='0'){
+		$nomEvt="evtPasses";
+		$nbEvt="nbEvtPasses";
+		}	
+		else if($evt=='1'){
+		$nomEvt="evtEnCours";
+		$nbEvt="nbEvtEnCours";
+		}
+		else{
+		$nomEvt="evtAvenir";
+		$nbEvt="nbEvtAvenir";	
+		}
+		
+		$listeActivites = $em->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations($userId->getNom(), '1',$evt);
+		
+		$result['Touriste'][''.$nbEvt]= count($listeActivites);
+		$result['Touriste'][''.$nomEvt]=array();		
+		foreach($listeActivites as $elem){
+		$row['id'] = $elem->getId();
+		$row['libelle'] = $elem->getLibelle();
+		$row['description'] = $elem->getDescriptionEnClair();
+		$row['user']['id'] = $elem->getAuteur()->getId();
+		$row['user']['username'] = $elem->getAuteur()->getUsername();
+		$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		$row['dateclair'] = $elem->getDateEnClair();
+		$row['nbVues'] = $elem->getNbVues();
+		$row['prix'] = $elem->getPrixIndividu();
+		$row['nbParticipants'] = $elem->getNbParticipants();
+		$row['lieuDestination'] = $elem->getLieuDestination();
+			
+		$row['image'] = $elem->getImagePrincipale()->getUrl();
+			
+		//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			
+		//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			
+		$result['Touriste'][''.$nomEvt][] = $row;
+		}
+		
+		}
+		
+		
+		}
+		
 		
 		$response = new Response(json_encode($result));		
 		

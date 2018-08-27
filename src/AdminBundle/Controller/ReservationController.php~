@@ -316,45 +316,17 @@ class ReservationController extends Controller
 		
 		$type=$registrationArray['type'];
 		
-		$dateNow=new \Datetime();
-
-		$dateString=$dateNow->format('Y-m-d');
 		
-		$heureString=$dateNow->format('H:i');	
-			
-		if($evenement=="0"){
-		if($type=="0")
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
-		($utilisateurs, null, $dateString, null, $heureString);
-		else
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($utilisateurs, null, $dateString, null, $heureString);
-		}
-		else if($evenement=="1"){
-		if($type=="0")
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
-		($utilisateurs, $dateString, $dateString, null, null);
-		else
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($utilisateurs, $dateString, $dateString, null, null);
-		}
-		
-		else{
-		if($type=="0")
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueGuideSurReservations
-		($utilisateurs, $dateString, null, $heureString, null);
-		else
-		$listeReservations = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations
-		($utilisateurs, $dateString, null, $heureString, null);
-		}
-		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Reservation')->myFindHistoriqueSurReservations(
+		$utilisateurs,$type, $evenement);
 		
 		
     	//print_r($listeReservations);
 		}  
 		}
 		
-		return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
+		//return $this->render('AdminBundle:Reservation:liste.html.twig',array('listeReservations' => $listeReservations));
+		return $this->render('AdminBundle:Activite:liste.html.twig',array('listeActivites' => $listeActivites));
     }
     
     
@@ -474,8 +446,7 @@ class ReservationController extends Controller
     			}
     			return $somme;	
     	} 
-		
-		
+		 
 		
 		function genererFactureCodeHTML($nomUser, $dateDebut, $dateFin, $paye)
 		{
@@ -699,5 +670,8 @@ EOF;
             //exit;
    }
 }
+
+		
+
 
 }

@@ -143,13 +143,97 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 			
 			}
 			
+			//Notre petite fonction pour verifier que la presence des activites dans les listes cela pour eviter les redondances
+			public function estdansListe($listActivites,$activiteId){
+			
+			foreach($listActivites as $activite){
+			if($activite->getId()==$activiteId->getId())
+			return true;
+			}
+			
+			return false;
+			}
 			
 			//Fonction pour les historiques des activites sur les Reservations Utilisateurs
-			public function myFindHistoriqueSurReservations($utilisateurs, $dateDebut, $dateFin, $heureDebut, $heureFin)
+			//type =0 :Guide; type=1: Touriste
+			//evenement=0: passe; evenement=1: en cours; evenement=2: a venir
+			public function myFindHistoriqueSurReservations($utilisateurs, $type, $evenement)
 			{
 
 			$qb = $this->createQueryBuilder('r');
 			
+			//Si c'est un touriste
+			if($type=='1'){
+			if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
+			$qb->join('r.utilisateurs', 'u', 'WITH', 'UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
+			->setParameter('utilisateurs', '%'.$utilisateurs.'%');						
+			}
+			}
+			//Si c'est un Guide
+			else {
+			if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
+			$qb->join('r.activites', 'a')
+			->join('a.auteur','u','WITH','UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
+			->setParameter('utilisateurs', '%'.$utilisateurs.'%');												
+			}
+			}
+			
+			//On n'oublie pas de prendre les reservations payes car ce sont eux qui sont concernees par les historiques
+			$paye='1';
+			$qb->where('r.paye = :paye')->setParameter('paye', $paye);
+			
+			/*print_r(array(
+  			'sql'  => $qb->getQuery()->getSQL(),
+  			'parameters' => $qb->getQuery()->getParameters(),
+  			));*/				
+		
+			
+			//Et pour finir on prend les resultats avec tous les criteres en compte
+			$listeRetour=$qb->getQuery()->getResult();
+			
+			//print_r($listeRetour);
+				
+				//On va extraire donc manuellement des reservations les activites concernees par l'historique
+				$listeActivites=array();
+			
+				$dateNow=new \Datetime();
+
+				$date=$dateNow->format('Y-m-d');
+				
+				foreach($listeRetour as $reservation){
+    				
+    			foreach($reservation->getActivites() as $activite)	{
+    			$dateActivite= new \DateTime(date_format($activite->getDate(),'Y/m/d'));
+    			$d=new \DateTime($date);
+    			//Si on veut les historiques du passe
+    			if($evenement=='0'){
+				if($dateActivite<$d && !$this->estdansListe($listeActivites,$activite))
+				$listeActivites[]=$activite;
+				}
+				//Si on veut les historiques en cours
+				else if($evenement=='1'){
+				if($dateActivite==$d && !$this->estdansListe($listeActivites,$activite))
+				$listeActivites[]=$activite;
+				}
+		
+				else{
+				if($dateActivite>$d && !$this->estdansListe($listeActivites,$activite))
+				$listeActivites[]=$activite;
+				}
+    			}
+    			
+    			}
+    			
+    			return $listeActivites;	
+				
+			}
+			
+			/*
+			//Fonction pour les historiques des activites sur les Activites des guides Utilisateurs
+			public function myFindHistoriqueReservations($utilisateurs, $dateDebut, $dateFin, $heureDebut, $heureFin)
+			{
+
+			$qb = $this->createQueryBuilder('r');
 			
 			if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
 			$qb->join('r.utilisateurs', 'u', 'WITH', 'UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
@@ -195,101 +279,18 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 			$parameters["dateFin"]=$d->format('Y-m-d');													
 			}
 			
-			
-			
-			if($joindre){
-			$jointure=$qb->join('r.activites', 'a', 'WITH', $req);
-			
-			foreach ($parameters as $key => $value)
-			$jointure->setParameter(''.$key, $value);						
-			
-			}
-
-			
-			/*print_r(array(
-  			'sql'  => $qb->getQuery()->getSQL(),
-  			'parameters' => $qb->getQuery()->getParameters(),
-  			));*/				
-		
-			
-			//Et pour finir on prend les resultats avec tous les criteres en compte
-			$listeRetour=$qb->getQuery()->getResult();
-			
-			//print_r($listeRetour);
-			
-			return $listeRetour;
-				
-			}
-			
-			
-			//Fonction pour les historiques des activites sur les Activites des guides Utilisateurs
-			public function myFindHistoriqueGuideSurReservations($utilisateurs, $dateDebut, $dateFin, $heureDebut, $heureFin)
-			{
-
-			$qb = $this->createQueryBuilder('r');
-			
-			
-			$req="";
-			$joindre=false;
-			$parameters=array();
-			
-			if(isset($dateDebut) && trim($dateDebut,'')!=""){
-			if($req=="")
-			$req.="(a.date >= :dateDebut)";
-			else
-			$req.="AND (a.date >= :dateDebut)";	
-			
-			if(isset($heureDebut) && trim($heureDebut,'')!=""){
-			$req.="OR (a.date = :dateDebut AND a.heure >= :heureDebut)";
-			$parameters["heureDebut"]=$heureDebut;																				
-			}
-			
-			$joindre=true;
-			//On formatte bien notre date pour les requetes			
-			$d=new \DateTime($dateDebut);	
-			$parameters["dateDebut"]=$d->format('Y-m-d');
-			}
-			
-			if(isset($dateFin) && trim($dateFin,'')!=""){
-			
-			if($req=="")
-			$req.="(a.date <= :dateFin)";
-			else
-			$req.="AND (a.date <= :dateFin)";
-			
-			if(isset($heureFin) && trim($heureFin,'')!=""){
-			$req.="OR (a.date = :dateFin AND a.heure <= :heureFin)";
-			$parameters["heureFin"]=$heureFin;																				
-			}
-			
-			$joindre=true;
-			//On formatte bien notre date pour les requetes			
-			$d=new \DateTime($dateFin);	
-			$parameters["dateFin"]=$d->format('Y-m-d');													
-			}
-			
 					
 			if($joindre){
 			$jointure=$qb->join('r.activites', 'a', 'WITH', $req);
-			if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
-			$jointure->join('a.auteur','u','WITH','UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )');
-			$jointure->setParameter('utilisateurs', '%'.$utilisateurs.'%');												
-			}
 			foreach ($parameters as $key => $value)
 			$jointure->setParameter(''.$key, $value);
-			}else {
-			if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
-			$jointure=$qb->join('r.activites', 'a')
-			->join('a.auteur','u','WITH','UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )');
-			$jointure->setParameter('utilisateurs', '%'.$utilisateurs.'%');												
 			}
-			}
-
 			
-			/*print_r(array(
-  			'sql'  => $qb->getQuery()->getSQL(),
-  			'parameters' => $qb->getQuery()->getParameters(),
-  			));*/				
+			//$qb->select('a2')->from('BusinessModelBundle\Entity\Activite','a2');
+			//print_r(array(
+  			//'sql'  => $qb->getQuery()->getSQL(),
+  			//'parameters' => $qb->getQuery()->getParameters(),
+  			//));				
 		
 			
 			//Et pour finir on prend les resultats avec tous les criteres en compte
@@ -299,7 +300,7 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
 			
 			return $listeRetour;
 				
-			}
+			}*/
 			
 			
 
