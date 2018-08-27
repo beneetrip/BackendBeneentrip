@@ -289,15 +289,15 @@ class ReservationController extends Controller
     	
     	public function activitiesHistoryAction()
     	{
-    	//$postdata = file_get_contents("php://input");
-		//$request = json_decode($postdata);
+    	$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		//$idUser=$request->idUser;
+		$idUser=$request->idUser;
 		
 		//Valeur de tests manuels
-		$idUser=1;
+		//$idUser=1;
 		
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		
