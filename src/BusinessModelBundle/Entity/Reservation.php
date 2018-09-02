@@ -297,7 +297,8 @@ use Doctrine\ORM\Mapping as ORM;
     	
     	function calculerMontantTotalAvecTaxe()
     	{	
-    			return ($this->calculerMontantTotal() + $this->calculerMontantTaxe());	
+    			//return ($this->calculerMontantTotal() + $this->calculerMontantTaxe());	
+    			 return ($this->calculerMontantTotal() + $this->calculerMontantTaxeActiviteTotal());	
     	}
     	
     	public function compterActivites()
@@ -308,6 +309,32 @@ use Doctrine\ORM\Mapping as ORM;
     		$count++;	
     		
     		return $count;
+    	}
+    	
+    	
+    	public function calculerMontantTaxeActivite(\BusinessModelBundle\Entity\Activite $activite){
+    	
+    	$dateReserve=$this->getDateCreation();
+    	$dateActivite=new \DateTime(date_format($activite->getDate(),'Y-m-d').' '.date_format($activite->getHeure(),'H:i'));
+    	//Difference in hours
+    	$diff =  floor(($dateActivite->getTimestamp() - $dateReserve->getTimestamp())/3600);
+		
+		if($diff<3)
+		return (floatval("20.00") / 100) * $activite->getPrixIndividu();
+		else if($diff>=3 && $diff <=12)
+		return (floatval("15.00") / 100) * $activite->getPrixIndividu();
+		else 
+	   return (floatval("10.00") / 100) * $activite->getPrixIndividu();
+	   
+    	}
+    	
+    	function calculerMontantTaxeActiviteTotal()
+    	{
+    			$somme=0.0;
+    				
+    			foreach($this->getActivites() as $activite)	
+    			$somme+=$this->calculerMontantTaxeActivite($activite);	
+    			return $somme;	
     	}
     	
     	

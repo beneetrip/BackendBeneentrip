@@ -45,7 +45,8 @@ class PaymentController extends Controller
 
 		$amountTotal=$reservationId->calculerMontantTotalAvecTaxe();
     	$amount=$reservationId->calculerMontantTotal();
-    	$amountTax=$reservationId->calculerMontantTaxe();
+    	//$amountTax=$reservationId->calculerMontantTaxe();
+		$amountTax=$reservationId->calculerMontantTaxeActiviteTotal();
     	$currencyCode="EUR";
     	
     	//On teste si la somme totale est nulle car ainsi pas besoin d'aller chez paypal on fait les mise a jour et on renvoit immediatement la reponse

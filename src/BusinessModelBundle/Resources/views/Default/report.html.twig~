@@ -1,0 +1,12 @@
+<h3>Activity problem report!</h3>
+
+Hello,<br/> 
+
+The user '{{ user }}' reported a problem about the Activity '{{ activity }}' <br/>
+
+You can contact him via : <br/><br/>
+
+<ul>
+<li>Phone number: {{ phone }}</li>
+<li>Email: {{ email }}</li>
+</ul>

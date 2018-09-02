@@ -143,6 +143,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -276,6 +277,27 @@ class ActivityController extends Controller
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
+		
+		//Si on envoit les chaines vides ou nulles on retourne directement l'erreur
+		if(!isset($request->id) || trim($request->id,'')=="" || !isset($request->libelle) || trim($request->libelle,'')=="" || 
+		!isset($request->destination) || trim($request->destination,'')=="" || !isset($request->nbParticipant) || trim($request->nbParticipant,'')=="" ||
+		!isset($request->prix) || trim($request->prix,'')=="" || !isset($request->description) || trim($request->description,'')=="" ||
+		!isset($request->heure) || trim($request->heure,'')=="" || !isset($request->dateAct) || trim($request->dateAct,'')=="" ||
+		!isset($request->photos[0]->id) || trim($request->photos[0]->id,'')=="" || !isset($request->categorie) || trim($request->categorie,'')=="")
+		{
+			
+		$response = new Response(json_encode(array('failure'=>'Données invalides')));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;											
+		}
+		
+		
 		//$id = $request->photos[1]->id;
 		$id = $request->id;
 		$em = $this->getDoctrine()->getManager();
@@ -295,7 +317,7 @@ class ActivityController extends Controller
 			$time = $request->heure;
 			$date = $request->dateAct;
 	
-			$activiteId->setDate(\DateTime::createFromFormat("d-m-Y", $date));
+			$activiteId->setDate(\DateTime::createFromFormat("Y-m-d", $date));
 			$activiteId->setHeure(\DateTime::createFromFormat("H:i",$time));	
 			
 			$categorie=$em->getRepository('BusinessModelBundle:Categorie')->myFindByNom($request->categorie);
@@ -362,7 +384,7 @@ class ActivityController extends Controller
 			$time = $request->heure;
 			$date = $request->dateAct;
 	
-			$activite->setDate(\DateTime::createFromFormat("d-m-Y", $date));
+			$activite->setDate(\DateTime::createFromFormat("Y-m-d", $date));
 			$activite->setHeure(\DateTime::createFromFormat("H:i",$time));
 			
 			$user = $em->getRepository('BusinessModelBundle:User')->myFindOne($request->userid);
@@ -521,6 +543,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -562,6 +585,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -606,6 +630,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -659,6 +684,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -710,6 +736,7 @@ class ActivityController extends Controller
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
 			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
 			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
@@ -765,8 +792,10 @@ class ActivityController extends Controller
 			
 			$nom_image_register = $dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
 			
+			
 			if(!is_dir($dossier_photos))
 			{
+
 				mkdir($dossier_photos, 0777, true); 
 				chmod($dirname. $annee, 0777);
 				chmod($dirname. $annee .'/'. $mois, 0777);
@@ -785,10 +814,11 @@ class ActivityController extends Controller
 			$em->persist($img);
 			$em->flush();
 			
-			$resp['id'] = $img->getId();
-			$resp['url'] = $img->getUrl();
+			//$resp['id'] = $img->getId();
+			//$resp['url'] = $img->getUrl();
 			
-			$response = new Response(json_encode($resp));
+			//$response = new Response(json_encode($resp));
+			$response = new Response(''.$img->getId());
 			
 		}
 		else

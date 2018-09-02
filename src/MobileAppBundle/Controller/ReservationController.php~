@@ -161,13 +161,15 @@ class ReservationController extends Controller
 		$row['id'] = $elem->getId();
 		$row['libelle'] = $elem->getLibelle();
 		$row['prix'] =  $elem->getPrixIndividu();
+		$row['taxe'] = $reservationUser->calculerMontantTaxeActivite($elem);
 		$row['image'] =  $elem->getImagePrincipale()->getUrl();
 		$result['activites'][] = $row;
 		}
 		
 		$result['montantSousTotal'] = $reservationUser->calculerMontantTotal();
 		$result['montantTotal'] = $reservationUser->calculerMontantTotalAvecTaxe();
-		$result['montantTaxe'] = $reservationUser->calculerMontantTaxe();
+		$result['montantTaxe'] = $reservationUser->calculerMontantTaxeActiviteTotal();
+		//$result['montantTaxe'] = $reservationUser->calculerMontantTaxe();
 		
 		$response = new Response(json_encode($result));
 		}
@@ -191,10 +193,10 @@ class ReservationController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$idUser=$request->idUser;
+		//$idUser=$request->idUser;
 		
 		//Valeur de tests manuels
-		//$idUser=2;
+		//$idUser=1;
 		
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		
@@ -218,13 +220,15 @@ class ReservationController extends Controller
 		$row['id'] = $elem->getId();
 		$row['libelle'] = $elem->getLibelle();
 		$row['prix'] =  $elem->getPrixIndividu();
+		$row['taxe'] = $reservationUser->calculerMontantTaxeActivite($elem);
 		$row['image'] =  $elem->getImagePrincipale()->getUrl();
 		$result['activites'][] = $row;
 		}
 		
 		$result['montantSousTotal'] = $reservationUser->calculerMontantTotal();
 		$result['montantTotal'] = $reservationUser->calculerMontantTotalAvecTaxe();
-		$result['montantTaxe'] = $reservationUser->calculerMontantTaxe();
+		$result['montantTaxe'] = $reservationUser->calculerMontantTaxeActiviteTotal();
+		//$result['montantTaxe'] = $reservationUser->calculerMontantTaxe();
 		
 		$response = new Response(json_encode($result));
 		

@@ -46,8 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		/**
 		* @var string $message
 		*
-		* @ORM\Column(name="message", type="text")
-		* @Assert\NotBlank()
+		* @ORM\Column(name="message", type="text", nullable=true)
 		*/
 		private $message;
 		

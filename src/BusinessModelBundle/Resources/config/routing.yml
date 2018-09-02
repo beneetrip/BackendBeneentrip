@@ -23,3 +23,11 @@ business_model_listeDestinations:
 business_model_endPaymentpage:
     path:     /payment/end
     defaults: { _controller: BusinessModelBundle:Default:finalisePaiement }
+
+business_model_reportActivitypage:
+    path:     /report/activity/{user}/{activity}/{phone}/{email}
+    defaults: { _controller: BusinessModelBundle:Default:reportActivite }
+
+business_model_reportpage:
+    path:     /report/{user}/{message}/{phone}/{email}
+    defaults: { _controller: BusinessModelBundle:Default:report }

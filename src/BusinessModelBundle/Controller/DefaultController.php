@@ -68,4 +68,23 @@ class DefaultController extends Controller
 
 		return $response;
         }
+        
+        //Corps de la page des mails de report de problemes sur les activites
+        public function reportActiviteAction($user,$activity,$phone,$email)
+    {
+        return $this->render('BusinessModelBundle:Default:reportActivite.html.twig', array('user' => $user,'activity' => $activity,
+        'phone' => $phone,'email' => $email));
+		
+		
+    }
+
+
+  	//Corps de la page des mails de report de problemes sur les activites
+        public function reportAction($user,$message,$phone,$email)
+    {
+        return $this->render('BusinessModelBundle:Default:report.html.twig', array('user' => $user,'message' => $message,
+        'phone' => $phone,'email' => $email));
+		
+		
+    }
 }

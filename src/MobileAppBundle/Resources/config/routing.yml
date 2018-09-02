@@ -74,6 +74,14 @@ mobile_app_user_homepage:
     path:     /mobapp/user/home
     defaults: { _controller: MobileAppBundle:User:home }
 
+mobile_app_user_reportActivitypage:
+    path:     /mobapp/user/report/activity
+    defaults: { _controller: MobileAppBundle:User:reportSurActivite }
+
+mobile_app_user_reportpage:
+    path:     /mobapp/user/report
+    defaults: { _controller: MobileAppBundle:User:report }
+
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier
     defaults: { _controller: MobileAppBundle:Reservation:editPanier }

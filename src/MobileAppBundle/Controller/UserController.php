@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\User;
+use BusinessModelBundle\Entity\Discussion;
 use BusinessModelBundle\Form\Type\UserType;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -36,6 +37,20 @@ class UserController extends Controller
 		$email = $request->email;
 		$password = $request->password;
 		
+		//Si on envoit les chaines vides ou nulles on retourne directement l'erreur
+		if(!isset($email) || trim($email,'')=="" || !isset($password) || trim($password,'')=="")
+		{
+			
+		$response = new Response(json_encode(array('failure'=>'Données invalides')));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;											
+		}
 		
 		//Par defaut le retour est a false car on suppose que l'Utilisateur n'a pas ete trouve
 		$retour=false;
@@ -151,6 +166,25 @@ class UserController extends Controller
 		$request = json_decode($postdata);
 		
 		
+		//Si on envoit les chaines vides ou nulles on retourne directement l'erreur
+		if(!isset($request->email) || trim($request->email,'')=="" || !isset($request->username) || trim($request->username,'')=="" || 
+		!isset($request->lastname) || trim($request->lastname,'')=="" || !isset($request->firstname) || trim($request->firstname,'')=="" ||
+		!isset($request->kind) || trim($request->kind,'')=="" || !isset($request->birthday) || trim($request->birthday,'')=="" ||
+		!isset($request->type) || trim($request->type,'')=="" || !isset($request->phone) || trim($request->phone,'')=="")
+		{
+			
+		$response = new Response(json_encode(array('failure'=>'Données invalides')));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;											
+		}
+		
+		
 		$email = $request->email;
 		$username = $request->username;
 		
@@ -259,6 +293,23 @@ class UserController extends Controller
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
+		//Si on envoit les chaines vides ou nulles on retourne directement l'erreur
+		if(!isset($request->email) || trim($request->email,'')=="" || !isset($request->username) || trim($request->username,'')=="" || 
+		!isset($request->lastname) || trim($request->lastname,'')=="" || !isset($request->firstname) || trim($request->firstname,'')=="" ||
+		!isset($request->kind) || trim($request->kind,'')=="" || !isset($request->birthday) || trim($request->birthday,'')=="" ||
+		!isset($request->type) || trim($request->type,'')=="" || !isset($request->phone) || trim($request->phone,'')=="")
+		{
+			
+		$response = new Response(json_encode(array('failure'=>'Données invalides')));
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;											
+		}
 		
 		$id = $request->id;
 		$email = $request->email;
@@ -676,5 +727,174 @@ class UserController extends Controller
 		//$response->headers->set('Content-Type', 'application/json');
 
 		return $response;	
+		}
+		
+		
+		
+		//Fonction permettant de reporter un pb sur une activite
+		public function reportSurActiviteAction(){
+		
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$idUser=$request->idUser;
+		$idActivite=$request->idActivite;
+		
+		//Valeurs de tests manuels
+		//$idUser=2;
+		//$idActivite=2;
+	
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idActivite);
+		/*
+		$message = \Swift_Message::newInstance()
+        ->setSubject('BeneenTrip Activity Report Problem '.$idUser.''.$idActivite)
+        ->setFrom('beneentrip@gmail.com')
+        ->setTo('micdejc@gmail.com')
+        ->setBody(
+            $this->renderView(
+                'BusinessModelBundle:Default:report.html.twig',
+                array('user' => $userId->getNomComplet(),'activity' => $activiteId->getLibelle(),
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail()))
+			            );
+			    $result=$this->get('mailer')->send($message);
+				 */
+				 $discussion=new Discussion();
+				 $discussion->setType("Report");
+				 $discussion->setAuteur($userId);
+				 $discussion->setActivite($activiteId);
+				 
+				 $em->persist($discussion);
+				 $em->flush();
+				 
+				 $retour= $this->envoyerMail(
+				 "beneentrip@gmail.com",
+				 'BeneenTrip Activity Report Problem '.$idUser.''.$idActivite,
+				 $this->renderView(
+                'BusinessModelBundle:Default:reportActivite.html.twig',
+                array('user' => $userId->getNomComplet(),'activity' => $activiteId->getLibelle(),
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail())
+				 )
+				 );
+				 if(!$retour)
+				 $response = new Response(json_encode(array('failure'=>'Échec d\'envoi, le mail n\'est pas parti !!!')));
+				 else
+				 $response = new Response(json_encode(array('success'=>'Mail envoyé avec succès')));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;		      
+		      
+		}
+		
+		//Fonction permettant de reporter un pb de l'utilisateur
+		public function reportAction(){
+		
+		//$postdata = file_get_contents("php://input");
+		//$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$idUser=$request->idUser;
+		$title=$request->title;
+		$message=$request->message;
+		
+		//Valeurs de tests manuels
+		//$idUser=1;
+		//$title="Renseignement";
+		//$message="Pourquoi les prix des reservations des activites varient avec le temps comme cela ???";
+	
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		/*
+		$message = \Swift_Message::newInstance()
+        ->setSubject('BeneenTrip Activity Report Problem '.$idUser.''.$idActivite)
+        ->setFrom('beneentrip@gmail.com')
+        ->setTo('micdejc@gmail.com')
+        ->setBody(
+            $this->renderView(
+                'BusinessModelBundle:Default:report.html.twig',
+                array('user' => $userId->getNomComplet(),'activity' => $activiteId->getLibelle(),
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail()))
+			            );
+			    $result=$this->get('mailer')->send($message);
+				 */
+				 $discussion=new Discussion();
+				 $discussion->setType("Report");
+				 $discussion->setAuteur($userId);
+				 $discussion->setTitre($title);
+				 $discussion->setMessage($message);
+				 
+				 $em->persist($discussion);
+				 $em->flush();
+				 
+				  $retour= $this->envoyerMail(
+				 "beneentrip@gmail.com",
+				 "BeneenTrip Report Problem: ".$title,
+				 $this->renderView(
+                'BusinessModelBundle:Default:report.html.twig',
+                array('user' => $userId->getNomComplet(),'message' => $message,
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail())
+				 )
+				 );
+				 if(!$retour)
+				 $response = new Response(json_encode(array('failure'=>'Échec d\'envoi, le mail n\'est pas parti !!!')));
+				 else
+				 $response = new Response(json_encode(array('success'=>'Mail envoyé avec succès')));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;		      
+		      
+		}
+		
+		function envoyerMail($emailParam,$sujetParam,$messageParam)
+		{
+			
+			require_once(__DIR__."/../../../src/AdminBundle/Resources/public/PHPMailer-master/src/PHPMailer.php");
+			require_once(__DIR__."/../../../src/AdminBundle/Resources/public/PHPMailer-master/src/SMTP.php");
+			require_once(__DIR__."/../../../src/AdminBundle/Resources/public/PHPMailer-master/src/Exception.php");
+			
+			try{ 
+			    $mail = new \PHPMailer\PHPMailer\PHPMailer();
+			    $mail->IsSMTP(); // enable SMTP
+			
+			    //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+			    $mail->SMTPAuth = true; // authentication enabled
+			    $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
+			    $mail->Host = "smtp.gmail.com";//smtp gmail pour yahoo c'est : smtp.mail.yahoo.com
+			    $mail->Port = 465; // or 587
+			    $mail->IsHTML(true);
+			    $mail->Username = "beneentrip";
+			    $mail->Password = "beneentrip20182019";
+			    $mail->SetFrom("beneentrip@gmail.com");
+			    $mail->FromName = "BeneenTrip";
+			    $mail->Subject =$sujetParam;
+			    $mail->Body = $messageParam;
+			    $mail->AddAddress("".$emailParam."");
+			    
+				 //$mail->addAttachment(getCheminDonnees().getFichier($_SESSION['fichier']), "".$Mot['Attach'].""); // Optional name
+			    $mail->CharSet = 'UTF-8';//On definit le mail en encodage utf-8 ayant encode au format encode en utf8mb4
+			     
+			     if(!$mail->Send()) {
+			return false;
+			     } else {
+			return true;
+			     }
+			     }catch (Exception $e) {
+			return false;
+			//return $e->getMessage();
+			}
 		}
 }
