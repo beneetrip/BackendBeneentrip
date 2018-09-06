@@ -31,3 +31,7 @@ business_model_reportActivitypage:
 business_model_reportpage:
     path:     /report/{user}/{message}/{phone}/{email}
     defaults: { _controller: BusinessModelBundle:Default:report }
+
+business_model_resetpage:
+    path:     /reset/{password}
+    defaults: { _controller: BusinessModelBundle:Default:reset }

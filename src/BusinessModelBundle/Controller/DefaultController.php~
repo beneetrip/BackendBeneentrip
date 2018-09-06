@@ -70,11 +70,28 @@ class DefaultController extends Controller
         }
         
         //Corps de la page des mails de report de problemes sur les activites
-        public function reportAction($user,$activity,$phone,$email)
+        public function reportActiviteAction($user,$activity,$phone,$email)
     {
-        return $this->render('BusinessModelBundle:Default:report.html.twig', array('user' => $user,'activity' => $activity,
-        'activity' => $activity,'activity' => $activity));
+        return $this->render('BusinessModelBundle:Default:reportActivite.html.twig', array('user' => $user,'activity' => $activity,
+        'phone' => $phone,'email' => $email));
 		
+		
+    }
+
+
+  	//Corps de la page des mails de report de problemes sur les activites
+        public function reportAction($user,$message,$phone,$email)
+    {
+        return $this->render('BusinessModelBundle:Default:report.html.twig', array('user' => $user,'message' => $message,
+        'phone' => $phone,'email' => $email));
+		
+		
+    }
+    
+    //Corps de la page des mails de reinitialisation des mots de passes
+        public function resetAction($password)
+    {
+        return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password));
 		
     }
 }

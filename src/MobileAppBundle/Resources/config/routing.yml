@@ -82,6 +82,10 @@ mobile_app_user_reportpage:
     path:     /mobapp/user/report
     defaults: { _controller: MobileAppBundle:User:report }
 
+mobile_app_user_resetpage:
+    path:     /mobapp/user/reset
+    defaults: { _controller: MobileAppBundle:User:resetPassword }
+
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier
     defaults: { _controller: MobileAppBundle:Reservation:editPanier }

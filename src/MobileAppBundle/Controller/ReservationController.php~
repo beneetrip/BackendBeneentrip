@@ -193,7 +193,7 @@ class ReservationController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		//$idUser=$request->idUser;
+		$idUser=$request->idUser;
 		
 		//Valeur de tests manuels
 		//$idUser=1;

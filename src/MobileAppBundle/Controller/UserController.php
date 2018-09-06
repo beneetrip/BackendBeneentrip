@@ -586,7 +586,7 @@ class UserController extends Controller
 		$result['destinations'] = array();
 		$result['categories'] = array();
 		$result['tops'] = array();
-		$result['news'] = array();
+		$result['news'] = array();	
 		
 		$eclaireurs = $em->getRepository('BusinessModelBundle:User')->findBy(array('typeUtilisateur'=>'Guide'), array('id' => 'DESC'));
 		
@@ -660,9 +660,9 @@ class UserController extends Controller
 			$rowImgPrinc['url']=$elem->getImagePrincipale()->getUrl();
 			$row['image'] = $rowImgPrinc;
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$row['images'] = array();
 			
@@ -702,9 +702,9 @@ class UserController extends Controller
 			$rowImgPrinc['url']=$elem->getImagePrincipale()->getUrl();
 			$row['image'] = $rowImgPrinc;
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$row['images'] = array();
 			
@@ -716,6 +716,7 @@ class UserController extends Controller
 			
 			$result['news'][] = $row;
 		}
+		
 		
 		$response = new Response(json_encode($result));
 		
@@ -778,6 +779,7 @@ class UserController extends Controller
 			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail())
 				 )
 				 );
+				 
 				 if(!$retour)
 				 $response = new Response(json_encode(array('failure'=>'Échec d\'envoi, le mail n\'est pas parti !!!')));
 				 else
@@ -797,8 +799,8 @@ class UserController extends Controller
 		//Fonction permettant de reporter un pb de l'utilisateur
 		public function reportAction(){
 		
-		//$postdata = file_get_contents("php://input");
-		//$request = json_decode($postdata);
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
 		
 		$em = $this->getDoctrine()->getManager();
 		
@@ -857,6 +859,101 @@ class UserController extends Controller
 
 		return $response;		      
 		      
+		}
+		
+		
+		//Fonction permettant de renitialiser le mot de passe d'un utilisateur
+		public function resetPasswordAction()
+		{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$email=$request->email;
+		
+		
+		//Valeurs de tests manuels
+		//$email='micdejc@gmail.com';
+		
+		
+		//On verifie si cet email est correspond a un utilisateur dans notre systeme
+		$userByEmail = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($email);
+		
+		//Si ce n'est pas un utilisateur du systeme on envoit une erreur
+		if($userByEmail==null)
+		{
+	   $response = new Response(json_encode(array('failure'=>'Email utilisateur invalide !!!')));
+      
+      $response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		}
+		
+		/*$caracteres = array(2, 'y', 9, 'a', 9, 'j', 5, 'i', 7, 'd', 3, 'b', 2, 's', 6, 'm', 8, 'h', 1, 'e', 9, 't', 2, 'r', 4, 'z',
+							6, 'f', 4, 'p', 7, 'n', 1, 's', 'q', 3, 'd', 2, 'v', 0, 'd', 0, 's', 6, 'i', 7, 'm', 9, 'q', 4, 't', 3,
+							'q', 2, 'd', 'o', 9, 'd', 'g', 9, 5, 'i', 7, 'v', 3, 2, 6, 's', 8, 1, 'z', 9, 2, 4, 'e', 6, 4, 7, 1, 'v');
+        
+		$caracteres_aleatoires = array_rand($caracteres, 10); //Généartion d'un code aléatoire pour le mot de passe
+		$password = '';
+		 
+			foreach($caracteres_aleatoires as $i)
+			{
+				$password .= $caracteres[$i];
+			}*/
+		
+		$password=$this->genererCodeAleatoire(10);	
+			
+		$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+      $userByEmail->setSalt($salt);
+   
+		$encoder = $this->container->get('security.encoder_factory')->getEncoder($userByEmail);
+		$encoded = $encoder->encodePassword($password, $userByEmail->getSalt());
+		$userByEmail->setPassword($encoded);
+		$userByEmail->eraseCredentials();
+		
+		$em->flush();
+		
+		 $retour= $this->envoyerMail(
+				 $email,
+				 "BeneenTrip Password Reset",
+				 $this->renderView(
+                'BusinessModelBundle:Default:reset.html.twig',
+                array('password' => $password)
+				 )
+				 );
+				 if(!$retour)
+				 $response = new Response(json_encode(array('failure'=>'Échec d\'envoi, le mail n\'est pas parti !!!')));
+				 else
+				 $response = new Response(json_encode(array('success'=>'Initialisation mot de passe effectuée avec succès')));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		}
+		
+		//Fonction permettant de generer une mot de passe aleatoire en fonction de la longueur voulue
+		function genererCodeAleatoire($longeur) {
+		$characts = 'abcdefghijklmnopqrstuvwxyz';
+		$characts .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$characts .= '1234567890';
+		$code_aleatoire = '';
+		
+		for($i=0;$i < $longeur;$i++)
+		{
+		$code_aleatoire .= $characts[ rand() % strlen($characts) ];
+		}
+		return $code_aleatoire; 	
 		}
 		
 		function envoyerMail($emailParam,$sujetParam,$messageParam)

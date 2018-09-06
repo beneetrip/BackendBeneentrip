@@ -223,9 +223,20 @@ class ReservationRepository extends \Doctrine\ORM\EntityRepository
     			}
     			
     			}
+    			usort($listeActivites, array($this, "comparerActivite"));
     			
     			return $listeActivites;	
 				
+			}
+			
+			 
+			public function comparerActivite($activiteA, $activiteB) {
+			
+			$dateActiviteA=new \DateTime(date_format($activiteA->getDate(),'Y-m-d').' '.date_format($activiteA->getHeure(),'H:i'));
+			$dateActiviteB=new \DateTime(date_format($activiteB->getDate(),'Y-m-d').' '.date_format($activiteB->getHeure(),'H:i'));
+				 
+			return ($dateActiviteA <= $dateActiviteB) ? 1 : 0;
+			
 			}
 			
 			/*

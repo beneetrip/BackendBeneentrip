@@ -283,7 +283,8 @@ class ActivityController extends Controller
 		!isset($request->destination) || trim($request->destination,'')=="" || !isset($request->nbParticipant) || trim($request->nbParticipant,'')=="" ||
 		!isset($request->prix) || trim($request->prix,'')=="" || !isset($request->description) || trim($request->description,'')=="" ||
 		!isset($request->heure) || trim($request->heure,'')=="" || !isset($request->dateAct) || trim($request->dateAct,'')=="" ||
-		!isset($request->photos[0]->id) || trim($request->photos[0]->id,'')=="" || !isset($request->categorie) || trim($request->categorie,'')=="")
+		!isset($request->photos[0]->id) || trim($request->photos[0]->id,'')=="" || !isset($request->categorie) || trim($request->categorie,'')=="" 
+		|| !isset($request->langue) || trim($request->langue,'')=="")
 		{
 			
 		$response = new Response(json_encode(array('failure'=>'Données invalides')));
@@ -313,6 +314,7 @@ class ActivityController extends Controller
 			$activiteId->setNbParticipants($request->nbParticipant);
 			$activiteId->setPrixIndividu($request->prix);
 			$activiteId->setDescription($request->description);
+			$activiteId->setLangueParlee($request->langue);
 			
 			$time = $request->heure;
 			$date = $request->dateAct;
@@ -380,6 +382,7 @@ class ActivityController extends Controller
 			$activite->setNbParticipants($request->nbParticipant);
 			$activite->setPrixIndividu($request->prix);
 			$activite->setDescription($request->description);
+			$activite->setLangueParlee($request->langue);
 			
 			$time = $request->heure;
 			$date = $request->dateAct;
@@ -426,10 +429,11 @@ class ActivityController extends Controller
 			
 		}
 		
-		$result['id'] = $activite->getId();
+		//$result['id'] = $activite->getId();
+		//$response = new Response(json_encode($result));
+		$response = new Response(json_encode(array('success'=>'L\'activite a ete bien creee')));
 		
-		$response = new Response(json_encode($result));
-		
+		$response->headers->set('Content-Type', 'application/json');  
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');

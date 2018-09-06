@@ -87,4 +87,11 @@ class DefaultController extends Controller
 		
 		
     }
+    
+    //Corps de la page des mails de reinitialisation des mots de passes
+        public function resetAction($password)
+    {
+        return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password));
+		
+    }
 }
