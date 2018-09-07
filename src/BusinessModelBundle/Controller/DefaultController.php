@@ -75,7 +75,6 @@ class DefaultController extends Controller
         return $this->render('BusinessModelBundle:Default:reportActivite.html.twig', array('user' => $user,'activity' => $activity,
         'phone' => $phone,'email' => $email));
 		
-		
     }
 
 
@@ -85,7 +84,6 @@ class DefaultController extends Controller
         return $this->render('BusinessModelBundle:Default:report.html.twig', array('user' => $user,'message' => $message,
         'phone' => $phone,'email' => $email));
 		
-		
     }
     
     //Corps de la page des mails de reinitialisation des mots de passes
@@ -93,5 +91,5 @@ class DefaultController extends Controller
     {
         return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password));
 		
-    }
+    } 
 }

@@ -356,6 +356,7 @@ $( document ).ready( function() {
 {# Voici le script en question pour formatter les champs de mot de passe #}
 <script type="text/javascript">
 $(document).ready(function() {
+$('.datepicker').datepicker();
 var $container = $('div#passe');
 for (var i = 0; i < $container.find(':input').length; i++){
 $($container.find(':input')[i]).attr('class','form-control');

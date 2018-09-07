@@ -75,7 +75,6 @@ class DefaultController extends Controller
         return $this->render('BusinessModelBundle:Default:reportActivite.html.twig', array('user' => $user,'activity' => $activity,
         'phone' => $phone,'email' => $email));
 		
-		
     }
 
 
@@ -93,5 +92,5 @@ class DefaultController extends Controller
     {
         return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password));
 		
-    }
+    } 
 }
