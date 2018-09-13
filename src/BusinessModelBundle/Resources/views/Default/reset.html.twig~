@@ -1,7 +1,7 @@
 <div style="text-align: left;color: #000;font-family: roboto,arial,sans-serif;font-size: 15px; font-weight: bold;border-bottom: 4px solid #FAFAFA;">
 <table>
 <tr>
-<td><img src="{{ logo }}" alt="" style="height: 50px;border-radius: 50%;width: 50px;"/></td>
+<td><img src="{{ asset('bundles/admin/img/logoBeneenTrip.png') }}" alt="" style="height: 50px;border-radius: 50%;width: 50px;"/></td>
 <td style="padding-top: 10%;"><h3>Password Reset!</h3></td>
 </tr>
 </table>

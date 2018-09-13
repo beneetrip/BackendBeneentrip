@@ -59,7 +59,20 @@
     <link rel="shortcut icon" href="{{ asset('bundles/admin/img/favicon.ico') }}">
 	
 	{% block style %} {% endblock %}
-	
+	<!-- <script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//localhost/piwik/piwik/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script> -->
+
 </head>
 
 <body >
@@ -171,7 +184,7 @@
 					</li>
 					{% block page %}
 					<li>
-						<a href="#">{{ 'Utilisateur.Tableau_bord'|trans }}</a>
+						<a href="#">{{ 'Utilisateur.Tableau_Bord'|trans }}</a>
 					</li>
 					{% endblock %}
 				</ul>
@@ -356,6 +369,7 @@ $( document ).ready( function() {
 {# Voici le script en question pour formatter les champs de mot de passe #}
 <script type="text/javascript">
 $(document).ready(function() {
+$('.datepicker').datepicker();
 var $container = $('div#passe');
 for (var i = 0; i < $container.find(':input').length; i++){
 $($container.find(':input')[i]).attr('class','form-control');

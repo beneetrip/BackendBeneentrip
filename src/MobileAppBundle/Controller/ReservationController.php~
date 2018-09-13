@@ -298,7 +298,7 @@ class ReservationController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$idUser=$request->idUser;
+		//$idUser=$request->idUser;
 		
 		//Valeur de tests manuels
 		//$idUser=1;
@@ -365,6 +365,16 @@ class ReservationController extends Controller
 		//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
 		//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+		
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations($elem->getLibelle(),$userId->getNom(),'1',null,null);	
+		if(count($listeRetour)>0){
+		$reservationUser=$listeRetour[0];
+		$taxe=$reservationUser->calculerMontantTaxeActivite($elem);
+		$row['taxe'] = $taxe;
+		$row['montant'] = ($taxe + $elem->getPrixIndividu());
+		}
+		$row['monnaie'] = "EUR";
+		$row['quantite'] = 1;
 			
 		$result[''.$nomType][''.$nomEvt][] = $row;
 		}
@@ -418,6 +428,16 @@ class ReservationController extends Controller
 		//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
 		//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+		
+		$listeRetour=$em->getRepository('BusinessModelBundle:Reservation')->myFindSurReservations($elem->getLibelle(),$userId->getNom(),'1',null,null);	
+		if(count($listeRetour)>0){
+		$reservationUser=$listeRetour[0];
+		$taxe=$reservationUser->calculerMontantTaxeActivite($elem);
+		$row['taxe'] = $taxe;
+		$row['montant'] = ($taxe + $elem->getPrixIndividu());
+		}
+		$row['monnaie'] = "EUR";
+		$row['quantite'] = 1;
 			
 		$result['Touriste'][''.$nomEvt][] = $row;
 		}

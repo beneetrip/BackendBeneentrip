@@ -73,7 +73,7 @@ class DefaultController extends Controller
         public function reportActiviteAction($user,$activity,$phone,$email)
     {
         return $this->render('BusinessModelBundle:Default:reportActivite.html.twig', array('user' => $user,'activity' => $activity,
-        'phone' => $phone,'email' => $email));
+        'phone' => $phone,'email' => $email, 'logo' => $this->pathLogo()));
 		
     }
 
@@ -82,14 +82,40 @@ class DefaultController extends Controller
         public function reportAction($user,$message,$phone,$email)
     {
         return $this->render('BusinessModelBundle:Default:report.html.twig', array('user' => $user,'message' => $message,
-        'phone' => $phone,'email' => $email));
+        'phone' => $phone,'email' => $email, 'logo' => $this->pathLogo()));
 		
     }
     
     //Corps de la page des mails de reinitialisation des mots de passes
         public function resetAction($password)
     {
-        return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password));
+        return $this->render('BusinessModelBundle:Default:reset.html.twig', array('password' => $password, 'logo' => $this->pathLogo()));
 		
     } 
+    
+    public function pathLogo(){
+    //On construit les urls de retour
+		
+		// output: BackendBeneentrip/web/app_dev.php/....
+		$currentPath = $_SERVER['PHP_SELF'];
+
+		// output: localhost
+		$hostName = $_SERVER['HTTP_HOST'];
+
+		// output: http://
+		$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+		
+		$tab = explode("/",__DIR__);
+						
+		$nbelts=count($tab);
+			
+		$rootProject=$tab[$nbelts-4];
+		
+		if($rootProject!="www")
+		$logo=$protocol.$hostName.'/'.$rootProject.'/web/bundles/admin/img/logoBeneenTrip.png';
+		else
+		$logo=$protocol.$hostName.'/web/bundles/admin/img/logoBeneenTrip.png';	
+		
+		return $logo;
+    }
 }

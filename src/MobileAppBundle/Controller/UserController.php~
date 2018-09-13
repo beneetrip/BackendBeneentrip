@@ -82,6 +82,7 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
+			$userfind['photo'] = $user->getPhoto();
 			//traitement des langues
 			$languesUser = array();
 
@@ -263,6 +264,7 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
+			$userfind['photo'] = $user->getPhoto();
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
@@ -369,6 +371,7 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
+					$userfind['photo'] = $user->getPhoto();
 					$userfind['languages'] = $languesUser;
 					
 					$response = new Response(json_encode($userfind));
@@ -425,6 +428,7 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
+					$userfind['photo'] = $user->getPhoto();
 					$userfind['languages'] = $languesUser;
 					
 					$response = new Response(json_encode($userfind));
@@ -483,6 +487,7 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
+					$userfind['photo'] = $user->getPhoto();
 					$userfind['languages'] = $languesUser;
 					
 					
@@ -555,6 +560,7 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
+			$userfind['photo'] = $user->getPhoto();
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
@@ -776,7 +782,7 @@ class UserController extends Controller
 				 $this->renderView(
                 'BusinessModelBundle:Default:reportActivite.html.twig',
                 array('user' => $userId->getNomComplet(),'activity' => $activiteId->getLibelle(),
-			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail())
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail(), 'logo' => $this->pathLogo())
 				 )
 				 );
 				 
@@ -842,7 +848,7 @@ class UserController extends Controller
 				 $this->renderView(
                 'BusinessModelBundle:Default:report.html.twig',
                 array('user' => $userId->getNomComplet(),'message' => $message,
-			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail())
+			        'phone' => $userId->getTelephone(),'email' => $userId->getEmail(), 'logo' => $this->pathLogo())
 				 )
 				 );
 				 if(!$retour)
@@ -924,7 +930,7 @@ class UserController extends Controller
 				 "BeneenTrip Password Reset",
 				 $this->renderView(
                 'BusinessModelBundle:Default:reset.html.twig',
-                array('password' => $password)
+                array('password' => $password, 'logo' => $this->pathLogo())
 				 )
 				 );
 				 if(!$retour)
@@ -994,4 +1000,31 @@ class UserController extends Controller
 			//return $e->getMessage();
 			}
 		}
+		
+		
+		public function pathLogo(){
+    //On construit les urls de retour
+		
+		// output: BackendBeneentrip/web/app_dev.php/....
+		$currentPath = $_SERVER['PHP_SELF'];
+
+		// output: localhost
+		$hostName = $_SERVER['HTTP_HOST'];
+
+		// output: http://
+		$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+		
+		$tab = explode("/",__DIR__);
+						
+		$nbelts=count($tab);
+			
+		$rootProject=$tab[$nbelts-4];
+		
+		if($rootProject!="www")
+		$logo=$protocol.$hostName.'/'.$rootProject.'/web/bundles/admin/img/logoBeneenTrip.png';
+		else
+		$logo=$protocol.$hostName.'/web/bundles/admin/img/logoBeneenTrip.png';	
+		
+		return $logo;
+    }
 }

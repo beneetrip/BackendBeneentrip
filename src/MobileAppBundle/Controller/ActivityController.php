@@ -151,9 +151,9 @@ class ActivityController extends Controller
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
