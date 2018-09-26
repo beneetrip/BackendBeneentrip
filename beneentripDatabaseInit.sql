@@ -433,17 +433,18 @@ CREATE TABLE `utilisateurs` (
   `dateModification` datetime DEFAULT NULL,
   `prenom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `dateNaissance` date NOT NULL,
-  `telephone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
+  `telephone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `avatar_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `genre`, `nom`, `photo`, `typeutilisateur`, `privilege`, `urlPhoto`, `dateCreation`, `dateModification`, `prenom`, `dateNaissance`, `telephone`) VALUES
-(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$REvaLEbGgFehBA2P3fIBy.rD/SWw1KQhnSGJyJwBOneM.tya.2enW', '2018-08-07 11:27:29', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', '1.jpg', 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-08-07 11:27:29', '', '1992-01-05', ''),
-(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22', '', '1986-01-01', ''),
-(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$ZZ4RLSLDCpFOIiSUK10hAujkcbyA9pVqNC6RRK6jp8d58D.CstXeu', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-23 20:50:00', '', '1988-01-01', '');
+INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `genre`, `nom`, `photo`, `typeutilisateur`, `privilege`, `urlPhoto`, `dateCreation`, `dateModification`, `prenom`, `dateNaissance`, `telephone`, `avatar_id`) VALUES
+(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$REvaLEbGgFehBA2P3fIBy.rD/SWw1KQhnSGJyJwBOneM.tya.2enW', '2018-08-07 11:27:29', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-08-07 11:27:29', '', '1992-01-05', '', NULL),
+(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22', '', '1986-01-01', '', NULL),
+(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$ZZ4RLSLDCpFOIiSUK10hAujkcbyA9pVqNC6RRK6jp8d58D.CstXeu', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-23 20:50:00', '', '1988-01-01', '', NULL);
 
 
 -- --------------------------------------------------------
@@ -562,6 +563,7 @@ ALTER TABLE `utilisateurs`
   ADD UNIQUE KEY `UNIQ_497B315E92FC23A8` (`username_canonical`),
   ADD UNIQUE KEY `UNIQ_497B315EA0D96FBF` (`email_canonical`),
   ADD UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`);
+  ADD UNIQUE KEY `UNIQ_497B315E86383B10` (`avatar_id`);
 
 
 --
@@ -690,6 +692,13 @@ ALTER TABLE `reservation_activite`
 --
 ALTER TABLE `payment`
   ADD CONSTRAINT `FK_6D28840DFB88E14F` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id`);
+
+
+--
+-- Constraints for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  ADD CONSTRAINT `FK_497B315E86383B10` FOREIGN KEY (`avatar_id`) REFERENCES `image` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

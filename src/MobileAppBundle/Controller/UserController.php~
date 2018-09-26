@@ -82,7 +82,8 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
-			$userfind['photo'] = $user->getPhoto();
+			//$userfind['photo'] = $user->getPhoto();
+			$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 			//traitement des langues
 			$languesUser = array();
 
@@ -171,7 +172,8 @@ class UserController extends Controller
 		if(!isset($request->email) || trim($request->email,'')=="" || !isset($request->username) || trim($request->username,'')=="" || 
 		!isset($request->lastname) || trim($request->lastname,'')=="" || !isset($request->firstname) || trim($request->firstname,'')=="" ||
 		!isset($request->kind) || trim($request->kind,'')=="" || !isset($request->birthday) || trim($request->birthday,'')=="" ||
-		!isset($request->type) || trim($request->type,'')=="" || !isset($request->phone) || trim($request->phone,'')=="")
+		!isset($request->type) || trim($request->type,'')=="" || !isset($request->phone) || trim($request->phone,'')=="" || 
+		!isset($request->password) || trim($request->password,'')=="")
 		{
 			
 		$response = new Response(json_encode(array('failure'=>'Données invalides')));
@@ -251,6 +253,20 @@ class UserController extends Controller
 			}	
 			}
 			
+			//traitement de l'avatar
+			if($request->avatars !=null && count($request->avatars)>0){
+			if($request->avatars[0]->id != 0)
+			{
+				$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+				
+				if($imageId != null)
+				{
+					$user->setAvatar($imageId);
+				} 
+			}
+		   }
+			
+			
 			$em->persist($user);
 			$em->flush();
 		
@@ -264,7 +280,8 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
-			$userfind['photo'] = $user->getPhoto();
+			//$userfind['photo'] = $user->getPhoto();
+			$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
@@ -358,6 +375,39 @@ class UserController extends Controller
 					}	
 					}
 					
+					//traitement de l'avatar
+					if($request->avatars !=null && count($request->avatars)>0){
+					if($request->avatars[0]->id != 0)
+					{
+						
+						$holdAvatar = $user->getAvatar();
+						$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+						
+						if($imageId != null)
+						{
+							$user->setAvatar($imageId);
+							$em->remove($holdAvatar);
+						} 
+					}
+				   }
+				   
+				//traitement du password
+				
+				//Si le password est non vide lors de la modification alors on va le changer sinon il restera le meme
+				if(isset($request->password) && trim($request->password,'')!=""){
+				//encodage mot de passe
+        
+            $salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+            $user->setSalt($salt);
+      
+				$plainPassword = $request->password;
+				$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+				$encoded = $encoder->encodePassword($plainPassword, $user->getSalt());
+				$user->setPassword($encoded);
+				$user->eraseCredentials();
+				
+				}   
+				   
 					
 					$em->flush();
 					
@@ -371,7 +421,8 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
-					$userfind['photo'] = $user->getPhoto();
+					//$userfind['photo'] = $user->getPhoto();
+					$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 					$userfind['languages'] = $languesUser;
 					
 					$response = new Response(json_encode($userfind));
@@ -415,6 +466,39 @@ class UserController extends Controller
 					}	
 					}
 					
+					//traitement de l'avatar
+					if($request->avatars !=null && count($request->avatars)>0){
+					if($request->avatars[0]->id != 0)
+					{
+						
+						$holdAvatar = $user->getAvatar();
+						$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+						
+						if($imageId != null)
+						{
+							$user->setAvatar($imageId);
+							$em->remove($holdAvatar);
+						} 
+					}
+				   }
+				   
+				   //traitement du password
+				
+					//Si le password est non vide lors de la modification alors on va le changer sinon il restera le meme
+					if(isset($request->password) && trim($request->password,'')!=""){
+					//encodage mot de passe
+	        
+	            $salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+	            $user->setSalt($salt);
+	      
+					$plainPassword = $request->password;
+					$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+					$encoded = $encoder->encodePassword($plainPassword, $user->getSalt());
+					$user->setPassword($encoded);
+					$user->eraseCredentials();
+					
+					}
+					
 					$em->flush();
 					
 					
@@ -428,7 +512,8 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
-					$userfind['photo'] = $user->getPhoto();
+					//$userfind['photo'] = $user->getPhoto();
+					$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 					$userfind['languages'] = $languesUser;
 					
 					$response = new Response(json_encode($userfind));
@@ -475,6 +560,39 @@ class UserController extends Controller
 					}	
 					}
 					
+					//traitement de l'avatar
+					if($request->avatars !=null && count($request->avatars)>0){
+					if($request->avatars[0]->id != 0)
+					{
+						
+						$holdAvatar = $user->getAvatar();
+						$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+						
+						if($imageId != null)
+						{
+							$user->setAvatar($imageId);
+							$em->remove($holdAvatar);
+						} 
+					}
+				   }
+				   
+				   //traitement du password
+				
+					//Si le password est non vide lors de la modification alors on va le changer sinon il restera le meme
+					if(isset($request->password) && trim($request->password,'')!=""){
+					//encodage mot de passe
+	        
+	            $salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+	            $user->setSalt($salt);
+	      
+					$plainPassword = $request->password;
+					$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+					$encoded = $encoder->encodePassword($plainPassword, $user->getSalt());
+					$user->setPassword($encoded);
+					$user->eraseCredentials();
+					
+					}
+					
 					$em->flush();
 					
 					$userfind['id'] = $user->getId();
@@ -487,7 +605,8 @@ class UserController extends Controller
 					$userfind['kind'] = $user->getGenre();
 					$userfind['phone'] = $user->getTelephone();
 					$userfind['type'] = $user->getTypeUtilisateur();
-					$userfind['photo'] = $user->getPhoto();
+					//$userfind['photo'] = $user->getPhoto();
+					$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 					$userfind['languages'] = $languesUser;
 					
 					
@@ -547,6 +666,39 @@ class UserController extends Controller
 			}	
 			}
 			
+			//traitement de l'avatar
+			if($request->avatars !=null && count($request->avatars)>0){
+			if($request->avatars[0]->id != 0)
+			{
+				
+				$holdAvatar = $user->getAvatar();
+				$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+				
+				if($imageId != null)
+				{
+					$user->setAvatar($imageId);
+					$em->remove($holdAvatar);
+				} 
+			}
+		   }
+		   
+		   //traitement du password
+				
+			//Si le password est non vide lors de la modification alors on va le changer sinon il restera le meme
+			if(isset($request->password) && trim($request->password,'')!=""){
+			//encodage mot de passe
+     
+         $salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+         $user->setSalt($salt);
+   
+			$plainPassword = $request->password;
+			$encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
+			$encoded = $encoder->encodePassword($plainPassword, $user->getSalt());
+			$user->setPassword($encoded);
+			$user->eraseCredentials();
+			
+			}
+			
 			
 			$em->flush();
 			
@@ -560,7 +712,8 @@ class UserController extends Controller
 			$userfind['kind'] = $user->getGenre();
 			$userfind['phone'] = $user->getTelephone();
 			$userfind['type'] = $user->getTypeUtilisateur();
-			$userfind['photo'] = $user->getPhoto();
+			//$userfind['photo'] = $user->getPhoto();
+			$userfind['photo'] = ($user->getAvatar() != null) ? $user->getAvatar()->getUrl() : null;
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
@@ -650,7 +803,8 @@ class UserController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
@@ -692,7 +846,8 @@ class UserController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
@@ -1002,6 +1157,61 @@ class UserController extends Controller
 		}
 		
 		
+	  public function myActivitiesAction($idUser)
+    {
+		
+
+		
+		//$postdata = file_get_contents("php://input");
+		//$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		//$idUser=$request->idUser;
+		
+		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+
+		$result = array();
+		
+		
+		$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindSurActivites
+		(null, null, null, null, null, null, $userId->getNom(), null, null);
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array('auteur'=>$iduser), array('id' => 'DESC'), $nbrResult, $debutresultat);
+		
+		//$listeActivites = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->findBy(array(), array('id' => 'DESC'));
+		//print_r($listeActivites);
+		foreach($listeActivites as $elem){
+			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
+			$row['id'] = $elem->getId();
+			$row['libelle'] = $elem->getLibelle();
+			$row['description'] = $elem->getDescriptionEnClair();
+			$row['user']['id'] = $elem->getAuteur()->getId();
+			$row['user']['username'] = $elem->getAuteur()->getUsername();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
+			$row['dateclair'] = $elem->getDateEnClair();
+			$row['heure'] = $elem->getHeure();
+			$row['nbVues'] = $elem->getNbVues();
+			$row['prix'] = $elem->getPrixIndividu();
+			$row['nbParticipants'] = $elem->getNbParticipants();
+			$row['lieuDestination'] = $elem->getLieuDestination();
+			
+			$row['image'] = $elem->getImagePrincipale()->getUrl();
+		
+			$result[] = $row;
+			
+		}
+		
+		$response = new Response(json_encode($result));
+
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		
+		return $response;
+    }
+		
+		
 		public function pathLogo(){
     //On construit les urls de retour
 		
@@ -1027,4 +1237,87 @@ class UserController extends Controller
 		
 		return $logo;
     }
+    
+    
+    
+    public function uploadAvatarAction()
+    {
+		
+		//Directory where uploaded images are saved
+		 $dirname = "upload_images/users/";
+		
+		
+		 // If uploading file
+		if($_FILES) {
+			
+		   //print_r($_FILES);
+		   //mkdir ($dirname, 0777, true);
+		   $caracteres = array(2, 'y', 9, 'a', 9, 'j', 5, 'i', 7, 'd', 3, 'b', 2, 's', 6, 'm', 8, 'h', 1, 'e', 9, 't', 2, 'r', 4, 'z',
+							6, 'f', 4, 'p', 7, 'n', 1, 's', 'q', 3, 'd', 2, 'v', 0, 'd', 0, 's', 6, 'i', 7, 'm', 9, 'q', 4, 't', 3,
+							'q', 2, 'd', 'o', 9, 'd', 'g', 9, 5, 'i', 7, 'v', 3, 2, 6, 's', 8, 1, 'z', 9, 2, 4, 'e', 6, 4, 7, 1, 'v');
+        
+			$caracteres_aleatoires = array_rand($caracteres, 10); //Généartion d'un code aléatoire pour le nom des photos
+			$code = '';
+		 
+			foreach($caracteres_aleatoires as $i)
+			{
+				$code .= $caracteres[$i];
+			}
+			
+			$new_image_name = $code.".jpg";
+			 
+			$annee = date('Y');
+			$mois = date('m');
+			$jour = date('d');
+			$heure = date('H');
+			$minute = date('i');
+			
+			$dossier_photos = $dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute;
+			
+			$nom_image_register = $dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute .'/'. $new_image_name;
+			
+			
+			if(!is_dir($dossier_photos))
+			{
+
+				mkdir($dossier_photos, 0777, true); 
+				chmod($dirname. $annee, 0777);
+				chmod($dirname. $annee .'/'. $mois, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure, 0777);
+				chmod($dirname. $annee .'/'. $mois .'/'. $jour .'/'. $heure .'/'. $minute, 0777);
+			}
+			
+			move_uploaded_file($_FILES["photo"]["tmp_name"], $dossier_photos."/".$new_image_name);
+		   
+			$img = new Image();
+			$img->setUrl($dossier_photos."/".$new_image_name);
+			$img->setAlt($code);
+			$img->setNom($code);
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($img);
+			$em->flush();
+			
+			//$resp['id'] = $img->getId();
+			//$resp['url'] = $img->getUrl();
+			
+			//$response = new Response(json_encode($resp));
+			$response = new Response(''.$img->getId());
+			
+		}
+		else
+		{
+			$response = new Response($dossier_photos."/".$nom_image_register);
+		}
+		
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		return $response; 
+		
+    }
+    
+    
+    
 }

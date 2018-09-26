@@ -103,6 +103,13 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
    */
     protected $urlPhoto;
     
+    
+	  /**
+		 * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Image", cascade={"persist", "remove"})
+		 * @ORM\JoinColumn(nullable=true)
+		 */
+		private $avatar;  
+
 	  
 	  /**
 		* @var datetime $dateCreation
@@ -705,5 +712,28 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param \BusinessModelBundle\Entity\Image $avatar
+     * @return User
+     */
+    public function setAvatar(\BusinessModelBundle\Entity\Image $avatar = null)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return \BusinessModelBundle\Entity\Image 
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 }

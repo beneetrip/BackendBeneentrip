@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use BusinessModelBundle\Entity\Image;
 use BusinessModelBundle\Entity\Activite;
+use BusinessModelBundle\Entity\Discussion;
 
 class ActivityController extends Controller
 {
@@ -85,7 +86,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['nbVues'] = $elem->getNbVues();
 			$row['prix'] = $elem->getPrixIndividu();
@@ -136,12 +138,14 @@ class ActivityController extends Controller
 		foreach($searchresult as $elem){
 			
 			$elem = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Activite')->myFindOne($elem['id']);
+			
 			$row['id'] = $elem->getId();
 			$row['libelle'] = $elem->getLibelle();
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -461,7 +465,8 @@ class ActivityController extends Controller
 		$auteur=$activiteId->getAuteur();
 		$result['user']['id'] = $auteur->getId();
 		$result['user']['nomComplet'] = $auteur->getNomComplet();
-		$result['user']['photo'] = $auteur->getUrlPhoto();
+		//$result['user']['photo'] = $auteur->getUrlPhoto();
+		$result['user']['photo'] = ($auteur->getAvatar() != null) ? $auteur->getAvatar()->getUrl() : null;
 		
 		$result['user']['langues']=array();		
 		foreach($auteur->getLangues() as $elemLang){
@@ -506,10 +511,24 @@ class ActivityController extends Controller
 			$result['images'][] = $row;
 		}
 		
+		//on ajoute les commentaires sur l'Activite
+		$listeCommentaires = $em->getRepository('BusinessModelBundle:Discussion')->myFindSurDiscussions(null, $activiteId->getLibelle(), null,'Discussion');
+		
+		foreach( $listeCommentaires as $elem ){
+			$rowCom['id'] = $elem->getId();
+			$rowCom['auteur'] =  $elem->getAuteur()->getNomComplet();
+			$rowCom['message'] =  $elem->getMessage();
+			$formatter = new \IntlDateFormatter('fr_FR',\IntlDateFormatter::FULL,\IntlDateFormatter::NONE,'Europe/Paris',\IntlDateFormatter::GREGORIAN );
+	      $rowCom['date']= $formatter->format($elem->getDateCreation()).' '.$elem->getDateCreation()->format('H:i');
+			$result['commentaires'][] = $rowCom;
+		}
+		
+		
 		$response = new Response(json_encode($result));
 		
 		$em->flush();
 		
+		$response->headers->set('Content-Type', 'application/json');  
 		//header('Access-Control-Allow-Origin: *'); //allow everybody  
 		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
 		$response->headers->set('Access-Control-Allow-Origin', '*');
@@ -545,7 +564,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -587,7 +607,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -632,7 +653,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -686,7 +708,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -738,7 +761,8 @@ class ActivityController extends Controller
 			$row['description'] = $elem->getDescriptionEnClair();
 			$row['user']['id'] = $elem->getAuteur()->getId();
 			$row['user']['username'] = $elem->getAuteur()->getUsername();
-			$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+			$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 			$row['dateclair'] = $elem->getDateEnClair();
 			$row['heure'] = $elem->getHeure();
 			$row['nbVues'] = $elem->getNbVues();
@@ -837,5 +861,52 @@ class ActivityController extends Controller
 		return $response; 
 		
     }
+    
+    
+    	public function commentaireAction()
+    	{
+    	
+    	$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$idUser=$request->idUser;
+    	$idActivite=$request->idActivite;
+    	$commentaire=$request->commentaire;
+    	
+    	//Valeurs manuelles
+    	//$idUser=1;
+    	//$idActivite=1;
+    	//$commentaire="mon commentaire";
+    	
+    	$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
+		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($idActivite);
+    	
+    	 $discussion=new Discussion();
+		 $discussion->setType("Discussion");
+		 $discussion->setAuteur($userId);
+		 $discussion->setActivite($activiteId);
+		 $discussion->setMessage($commentaire);
+		 
+		 $em->persist($discussion);
+		 $em->flush();
+		 
+		 $result['id'] = $discussion->getId();
+		 $result['message'] = $discussion->getMessage();
+		 
+		 
+		 $response = new Response(json_encode($result));
+		 
+		 $response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
+    	
+    	}
 	
 }

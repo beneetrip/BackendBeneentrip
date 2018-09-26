@@ -23,7 +23,7 @@ class PaymentController extends Controller
 		
 		$idUser=$request->idUser;
 		
-		//$idUser=2;
+		//$idUser=1;
 	
 		$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
 		

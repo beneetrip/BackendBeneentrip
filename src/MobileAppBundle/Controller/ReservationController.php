@@ -298,7 +298,7 @@ class ReservationController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		//$idUser=$request->idUser;
+		$idUser=$request->idUser;
 		
 		//Valeur de tests manuels
 		//$idUser=1;
@@ -353,7 +353,8 @@ class ReservationController extends Controller
 		$row['description'] = $elem->getDescriptionEnClair();
 		$row['user']['id'] = $elem->getAuteur()->getId();
 		$row['user']['username'] = $elem->getAuteur()->getUsername();
-		$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 		$row['dateclair'] = $elem->getDateEnClair();
 		$row['nbVues'] = $elem->getNbVues();
 		$row['prix'] = $elem->getPrixIndividu();
@@ -416,7 +417,8 @@ class ReservationController extends Controller
 		$row['description'] = $elem->getDescriptionEnClair();
 		$row['user']['id'] = $elem->getAuteur()->getId();
 		$row['user']['username'] = $elem->getAuteur()->getUsername();
-		$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		//$row['user']['photo'] = $elem->getAuteur()->getPhoto();
+		$row['user']['photo'] = ($elem->getAuteur()->getAvatar() != null) ? $elem->getAuteur()->getAvatar()->getUrl() : null;
 		$row['dateclair'] = $elem->getDateEnClair();
 		$row['nbVues'] = $elem->getNbVues();
 		$row['prix'] = $elem->getPrixIndividu();

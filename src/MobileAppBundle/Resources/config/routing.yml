@@ -54,6 +54,10 @@ mobile_app_activity_uploadpage:
     path:     /mobapp/activity/image/upload
     defaults: { _controller: MobileAppBundle:Activity:upload }
 
+mobile_app_activity_commentpage:
+    path:     /mobapp/activity/commentaire
+    defaults: { _controller: MobileAppBundle:Activity:commentaire }
+
 mobile_app_user_loginpage:
     path:     /mobapp/user/login
     defaults: { _controller: MobileAppBundle:User:login }
@@ -85,6 +89,14 @@ mobile_app_user_reportpage:
 mobile_app_user_resetpage:
     path:     /mobapp/user/reset
     defaults: { _controller: MobileAppBundle:User:resetPassword }
+
+mobile_app_user_activitiespage:
+    path:     /mobapp/user/{idUser}/myactivities
+    defaults: { _controller: MobileAppBundle:User:myActivities }
+
+mobile_app_user_uploadpage:
+    path:     /mobapp/user/avatar/upload
+    defaults: { _controller: MobileAppBundle:User:uploadAvatar }
 
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier
