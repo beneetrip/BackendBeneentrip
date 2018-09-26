@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\User;
 use BusinessModelBundle\Entity\Discussion;
+use BusinessModelBundle\Entity\Image;
 use BusinessModelBundle\Form\Type\UserType;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -36,6 +37,9 @@ class UserController extends Controller
 		
 		$email = $request->email;
 		$password = $request->password;
+		
+		//$email = "guide@yahoo.fr";
+		//$password = "guide";
 		
 		//Si on envoit les chaines vides ou nulles on retourne directement l'erreur
 		if(!isset($email) || trim($email,'')=="" || !isset($password) || trim($password,'')=="")
@@ -386,6 +390,7 @@ class UserController extends Controller
 						if($imageId != null)
 						{
 							$user->setAvatar($imageId);
+							if($holdAvatar!=null)
 							$em->remove($holdAvatar);
 						} 
 					}
@@ -477,6 +482,7 @@ class UserController extends Controller
 						if($imageId != null)
 						{
 							$user->setAvatar($imageId);
+							if($holdAvatar!=null)
 							$em->remove($holdAvatar);
 						} 
 					}
@@ -571,6 +577,7 @@ class UserController extends Controller
 						if($imageId != null)
 						{
 							$user->setAvatar($imageId);
+							if($holdAvatar!=null)
 							$em->remove($holdAvatar);
 						} 
 					}
@@ -677,6 +684,7 @@ class UserController extends Controller
 				if($imageId != null)
 				{
 					$user->setAvatar($imageId);
+					if($holdAvatar!=null)
 					$em->remove($holdAvatar);
 				} 
 			}
