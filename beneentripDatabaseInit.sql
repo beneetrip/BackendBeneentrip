@@ -83,7 +83,7 @@ CREATE TABLE `discussion` (
   `auteur_id` int(11) NOT NULL,
   `activite_id` int(11) DEFAULT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Discussion',
-  `titre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `titre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `message` longtext COLLATE utf8_unicode_ci NOT NULL,
   `dateCreation` datetime NOT NULL,
   `dateModification` datetime DEFAULT NULL
@@ -562,7 +562,7 @@ ALTER TABLE `utilisateurs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UNIQ_497B315E92FC23A8` (`username_canonical`),
   ADD UNIQUE KEY `UNIQ_497B315EA0D96FBF` (`email_canonical`),
-  ADD UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`);
+  ADD UNIQUE KEY `UNIQ_497B315EC05FB297` (`confirmation_token`),
   ADD UNIQUE KEY `UNIQ_497B315E86383B10` (`avatar_id`);
 
 
