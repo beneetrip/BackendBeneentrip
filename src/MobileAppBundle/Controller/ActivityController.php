@@ -513,7 +513,7 @@ class ActivityController extends Controller
 		
 		//on ajoute les commentaires sur l'Activite
 		$listeCommentaires = $em->getRepository('BusinessModelBundle:Discussion')->myFindSurDiscussions(null, $activiteId->getLibelle(), null,'Discussion');
-		
+		$result['commentaires']=array();		
 		foreach( $listeCommentaires as $elem ){
 			$rowCom['id'] = $elem->getId();
 			$rowCom['auteur'] =  $elem->getAuteur()->getNomComplet();
