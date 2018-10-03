@@ -2,6 +2,10 @@ mobile_app_activity_editpage:
     path:     /mobapp/activity/edit
     defaults: { _controller: MobileAppBundle:Activity:edit }
 
+mobile_app_activity_modifierpage:
+    path:     /mobapp/activity/modifier
+    defaults: { _controller: MobileAppBundle:Activity:modifier }
+
 mobile_app_activity_searchpage:
     path:     /mobapp/activity/search
     defaults: { _controller: MobileAppBundle:Activity:search }
@@ -90,6 +94,14 @@ mobile_app_user_resetpage:
     path:     /mobapp/user/reset
     defaults: { _controller: MobileAppBundle:User:resetPassword }
 
+mobile_app_user_testCodepage:
+    path:     /mobapp/user/code
+    defaults: { _controller: MobileAppBundle:User:testCode }
+
+mobile_app_user_changePasswordpage:
+    path:     /mobapp/user/password
+    defaults: { _controller: MobileAppBundle:User:changePassword }
+
 mobile_app_user_activitiespage:
     path:     /mobapp/user/{idUser}/myactivities
     defaults: { _controller: MobileAppBundle:User:myActivities }
@@ -97,6 +109,10 @@ mobile_app_user_activitiespage:
 mobile_app_user_uploadpage:
     path:     /mobapp/user/avatar/upload
     defaults: { _controller: MobileAppBundle:User:uploadAvatar }
+
+mobile_app_user_changeAvatarpage:
+    path:     /mobapp/user/avatar/change
+    defaults: { _controller: MobileAppBundle:User:changeAvatar }
 
 mobile_app_reservation_editpage:
     path:     /mobapp/reservation/editPanier

@@ -164,6 +164,60 @@ class UserController extends Controller
 	
 	
 	
+	public function changeAvatarAction()
+   {
+    $postdata = file_get_contents("php://input");
+	 $request = json_decode($postdata);	
+	 
+	 $em = $this->getDoctrine()->getManager();
+	 
+	 $id = $request->id;
+	 
+	 $userBD = $em->getRepository('BusinessModelBundle:User')->myFindOne($id);
+	 
+	 //traitement de l'avatar au cas ou on transmet une image avatar on change la photo sinon on sait qu'il faut supprimer l'avatar
+					if($request->avatars !=null && count($request->avatars)>0){
+					if($request->avatars[0]->id != 0)
+					{
+						
+						$holdAvatar = $user->getAvatar();
+						$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->avatars[0]->id);
+						
+						if($imageId != null)
+						{
+							$userBD->setAvatar($imageId);
+							if($holdAvatar!=null)
+							$em->remove($holdAvatar);
+						} 
+					}
+				   }
+	//L'utilisateur supprime certainement son avatar sur l'appli			   
+				   else 
+				   {
+				   $holdAvatar = $user->getAvatar();
+				   $userBD->setAvatar(null);
+					if($holdAvatar!=null)
+					$em->remove($holdAvatar);
+				   }
+		   
+	  $em->flush();	   
+	 
+	  $response = new Response(json_encode(array('success'=>'Avatar modifié avec succès')));
+	 
+	 $response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response;
+   }
+	
+	
+	
+	
+	
 	public function registerAction()
     {
 		
@@ -378,7 +432,7 @@ class UserController extends Controller
 					$user->addLangue($langueObj);
 					}	
 					}
-					
+					/*
 					//traitement de l'avatar
 					if($request->avatars !=null && count($request->avatars)>0){
 					if($request->avatars[0]->id != 0)
@@ -394,7 +448,7 @@ class UserController extends Controller
 							$em->remove($holdAvatar);
 						} 
 					}
-				   }
+				   }*/
 				   
 				//traitement du password
 				
@@ -471,6 +525,7 @@ class UserController extends Controller
 					}	
 					}
 					
+					/*
 					//traitement de l'avatar
 					if($request->avatars !=null && count($request->avatars)>0){
 					if($request->avatars[0]->id != 0)
@@ -486,7 +541,7 @@ class UserController extends Controller
 							$em->remove($holdAvatar);
 						} 
 					}
-				   }
+				   }*/
 				   
 				   //traitement du password
 				
@@ -566,6 +621,7 @@ class UserController extends Controller
 					}	
 					}
 					
+					/*
 					//traitement de l'avatar
 					if($request->avatars !=null && count($request->avatars)>0){
 					if($request->avatars[0]->id != 0)
@@ -581,7 +637,7 @@ class UserController extends Controller
 							$em->remove($holdAvatar);
 						} 
 					}
-				   }
+				   }*/
 				   
 				   //traitement du password
 				
@@ -673,6 +729,7 @@ class UserController extends Controller
 			}	
 			}
 			
+			/*
 			//traitement de l'avatar
 			if($request->avatars !=null && count($request->avatars)>0){
 			if($request->avatars[0]->id != 0)
@@ -688,7 +745,7 @@ class UserController extends Controller
 					$em->remove($holdAvatar);
 				} 
 			}
-		   }
+		   }*/
 		   
 		   //traitement du password
 				
@@ -1076,21 +1133,25 @@ class UserController extends Controller
 				$password .= $caracteres[$i];
 			}*/
 		
-		$password=$this->genererCodeAleatoire(10);	
+		$password=$this->genererCodeAleatoire(6);	
 			
-		$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+		/*$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
       $userByEmail->setSalt($salt);
    
 		$encoder = $this->container->get('security.encoder_factory')->getEncoder($userByEmail);
 		$encoded = $encoder->encodePassword($password, $userByEmail->getSalt());
 		$userByEmail->setPassword($encoded);
-		$userByEmail->eraseCredentials();
+		$userByEmail->eraseCredentials();*/
+		
+		
+		$userByEmail->setCodePassword($password);
+		
 		
 		$em->flush();
 		
 		 $retour= $this->envoyerMail(
 				 $email,
-				 "BeneenTrip Password Reset",
+				 "BeneenTrip Password Code",
 				 $this->renderView(
                 'BusinessModelBundle:Default:reset.html.twig',
                 array('password' => $password, 'logo' => $this->pathLogo())
@@ -1099,7 +1160,7 @@ class UserController extends Controller
 				 if(!$retour)
 				 $response = new Response(json_encode(array('failure'=>'Échec d\'envoi, le mail n\'est pas parti !!!')));
 				 else
-				 $response = new Response(json_encode(array('success'=>'Initialisation mot de passe effectuée avec succès')));
+				 $response = new Response(json_encode(array('success'=>'Initialisation Code de mot de passe effectuée avec succès')));
 		
 		$response->headers->set('Content-Type', 'application/json');  
 		
@@ -1110,6 +1171,98 @@ class UserController extends Controller
 
 		return $response;	
 		}
+		
+		
+		//Fonction permettant de tester le code de l'utilisateur
+		public function testCodeAction(){
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$email=$request->email;
+		
+		$code=$request->code;
+		
+		//On verifie si on a un utilisateur correspondant dans notre systeme
+		$userCode = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmailCodePassword($email,$code);
+		
+		if($userCode==null)
+	   $response = new Response(json_encode(array('failure'=>'Code utilisateur invalide !!!')));
+		else 
+		$response = new Response(json_encode(array('success'=>'Code utilisateur valide')));
+		
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		}
+		
+		
+		//Fonction permettant de changer le mot de passe de l'utilisateur
+		public function changePasswordAction(){
+			
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$email=$request->email;
+		
+		$password=$request->password;
+		
+		
+		//Valeurs de tests manuels
+		//$email='micdejc@gmail.com';
+		//$password='merci';
+		
+		
+		//On verifie si cet email est correspond a un utilisateur dans notre systeme
+		$userByEmail = $this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:User')->myFindEmail($email);
+		
+		//Si ce n'est pas un utilisateur du systeme on envoit une erreur
+		if($userByEmail==null)
+		{
+	   $response = new Response(json_encode(array('failure'=>'Email utilisateur invalide !!!')));
+      
+      $response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+		}
+		
+		$salt = rtrim(str_replace('+', '.', base64_encode(random_bytes(32))), '=');
+      $userByEmail->setSalt($salt);
+   
+		$encoder = $this->container->get('security.encoder_factory')->getEncoder($userByEmail);
+		$encoded = $encoder->encodePassword($password, $userByEmail->getSalt());
+		$userByEmail->setPassword($encoded);
+		$userByEmail->eraseCredentials();
+		
+		$em->flush();
+		
+		$response = new Response(json_encode(array('success'=>'Modification de mot de passe effectuée avec succès')));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+
+		return $response;	
+			
+		}
+		
 		
 		//Fonction permettant de generer une mot de passe aleatoire en fonction de la longueur voulue
 		function genererCodeAleatoire($longeur) {

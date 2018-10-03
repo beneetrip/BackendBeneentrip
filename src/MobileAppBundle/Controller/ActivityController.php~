@@ -276,6 +276,94 @@ class ActivityController extends Controller
 		return $response;
     }
 	
+	public function modifierAction(){
+		//$file = 'data.txt';
+		// Écrit dans notre fichier pour garder les donnees
+		//file_put_contents($file, $id."....".$request->libelle."....".$request->destination);
+		
+		//$fp=fopen('data.txt', 'w');
+		//fwrite($fp,print_r($_GET, TRUE));
+		//fclose($fp);
+		
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);		
+		
+		$id = $request->id;
+		$em = $this->getDoctrine()->getManager();
+		
+		$activiteId = $em->getRepository('BusinessModelBundle:Activite')->myFindOne($id);
+			$activiteId->setLibelle($request->libelle);
+			$activiteId->setLieuDestination($request->destination);
+			$activiteId->setNbParticipants($request->nbParticipant);
+			$activiteId->setPrixIndividu($request->prix);
+			$activiteId->setDescription($request->description);
+			$activiteId->setLangueParlee($request->langue);
+			
+			$time = $request->heure;
+			$date = $request->dateAct;
+	
+			$activiteId->setDate(\DateTime::createFromFormat("Y-m-d", $date));
+			$activiteId->setHeure(\DateTime::createFromFormat("H:i",$time));	
+			
+			$categorie=$em->getRepository('BusinessModelBundle:Categorie')->myFindByNom($request->categorie);
+			$activiteId->setCategorie($categorie);
+			
+			//image principale
+			if(($request->photos[0]->id != 0) and ($request->photos[0]->id != $activiteId->getImagePrincipale()->getId()))
+			{
+				$holdimagePrincipale = $activiteId->getImagePrincipale();
+				$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($request->photos[0]->id);
+				
+				if($imageId != null)
+				{
+					$activiteId->setImagePrincipale($imageId);
+					$em->remove($holdimagePrincipale);
+				} 
+			}
+			
+			$updateImage[] = $request->photos[1]->id;
+			$updateImage[] = $request->photos[2]->id;
+			
+			$holdImage = array();
+			//on retire les images supprimés
+			foreach( $activiteId->getImages() as $imgelem){
+			
+				if(!(in_array($imgelem->getId(), $updateImage))){
+					$activiteId->removeImage($imgelem);
+					$em->remove($imgelem);
+				}
+				else
+				{
+					$holdImage[] = $imgelem->getId();
+				}
+			
+			}
+			
+			//on ajoute les nouvelles
+			foreach( $updateImage as $imgelem){
+			
+				if(!(in_array($imgelem, $holdImage)) and $imgelem != 0){
+				
+					$imageId = $em->getRepository('BusinessModelBundle:Image')->myFindOne($imgelem);
+					$activiteId->addImage($imageId);
+					$imageId->setActivite($activiteId);
+				}
+				
+			} 
+			
+			$em->flush();
+			
+				$response = new Response(json_encode(array('success'=>'L\'activite a ete bien modifie')));
+		
+		$response->headers->set('Content-Type', 'application/json');  
+		//header('Access-Control-Allow-Origin: *'); //allow everybody  
+		// pour eviter l'erreur ajax : Blocage d’une requête multiorigines (Cross-Origin Request) : la politique « Same Origin » ne permet pas de consulter la ressource distante située Raison : l’en-tête CORS « Access-Control-Allow-Origin » est manquant.
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		//$response->headers->set('Content-Type', 'application/json');
+		
+		return $response; 
+	}
+	
 	public function editAction()
     {
 		$postdata = file_get_contents("php://input");
@@ -308,6 +396,14 @@ class ActivityController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		
 		$activite = null;
+		
+		//$file = 'data.txt';
+		// Écrit dans notre fichier pour garder les donnees
+		//file_put_contents($file, $id."....".$request->libelle."....".$request->destination);
+		
+		$fp=fopen('data.txt', 'w');
+		fwrite($fp,$id."....".$request->libelle."....".$request->destination);
+		fclose($fp);
 		
 		if ($id != 0)
 		{

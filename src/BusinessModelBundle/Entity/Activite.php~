@@ -139,6 +139,22 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*/
 		private $auteur;
 		
+		
+		/**
+    	* @var string $devise
+    	*
+    	* @ORM\Column(name="devise", type="string", length=255, options={"default":"EUR"})
+    	*/
+      protected $devise;
+      
+      /**
+		* @var integer $duree
+		*
+		* @ORM\Column(name="duree", type="integer", nullable=true)
+      * @Assert\GreaterThan(0)
+		*/
+		private $duree;
+		
 		/**
 		 * @ORM\PrePersist()
 		 */

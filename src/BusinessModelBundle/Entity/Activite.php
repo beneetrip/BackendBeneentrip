@@ -139,6 +139,22 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		*/
 		private $auteur;
 		
+		
+		/**
+    	* @var string $devise
+    	*
+    	* @ORM\Column(name="devise", type="string", length=255, options={"default":"EUR"})
+    	*/
+      protected $devise;
+      
+      /**
+		* @var integer $duree
+		*
+		* @ORM\Column(name="duree", type="integer", nullable=true)
+      * @Assert\GreaterThan(0)
+		*/
+		private $duree;
+		
 		/**
 		 * @ORM\PrePersist()
 		 */
@@ -562,5 +578,51 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     public function getLangueParlee()
     {
         return $this->langueParlee;
+    }
+
+    /**
+     * Set devise
+     *
+     * @param string $devise
+     * @return Activite
+     */
+    public function setDevise($devise)
+    {
+        $this->devise = $devise;
+
+        return $this;
+    }
+
+    /**
+     * Get devise
+     *
+     * @return string 
+     */
+    public function getDevise()
+    {
+        return $this->devise;
+    }
+
+    /**
+     * Set duree
+     *
+     * @param integer $duree
+     * @return Activite
+     */
+    public function setDuree($duree)
+    {
+        $this->duree = $duree;
+
+        return $this;
+    }
+
+    /**
+     * Get duree
+     *
+     * @return integer 
+     */
+    public function getDuree()
+    {
+        return $this->duree;
     }
 }
