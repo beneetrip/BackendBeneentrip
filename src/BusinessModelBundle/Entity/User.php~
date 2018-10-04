@@ -164,15 +164,7 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
     
       protected $tempPhoto;
       
-    
-    	/**
-    	* @var string $codePassword
-    	*
-    	* @ORM\Column(name="codePassword", type="string", length=255, nullable=true)
-    	*/
-      protected $codePassword;
       
-
 		/**
     	* @var string $monnaie
     	*
@@ -753,25 +745,25 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
     }
 
     /**
-     * Set codePassword
+     * Set monnaie
      *
-     * @param string $codePassword
+     * @param string $monnaie
      * @return User
      */
-    public function setCodePassword($codePassword)
+    public function setMonnaie($monnaie)
     {
-        $this->codePassword = $codePassword;
+        $this->monnaie = $monnaie;
 
         return $this;
     }
 
     /**
-     * Get codePassword
+     * Get monnaie
      *
      * @return string 
      */
-    public function getCodePassword()
+    public function getMonnaie()
     {
-        return $this->codePassword;
+        return $this->monnaie;
     }
 }

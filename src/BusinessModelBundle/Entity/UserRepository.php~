@@ -57,16 +57,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			->setParameter('username', $username);
 			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 			}
-			
-			public function myFindEmailCodePassword($email,$codePwd)
-			{
-			// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
-			$qb = $this->createQueryBuilder('u')
-			->where('u.email = :email AND u.codePassword = :codePwd')
-			->setParameter('email', $email)
-			->setParameter('codePwd', $codePwd);
-			return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
-			}
 
 
 }

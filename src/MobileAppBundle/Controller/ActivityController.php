@@ -93,6 +93,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -152,6 +154,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -583,7 +587,9 @@ class ActivityController extends Controller
 		$result['categorie'] = null;
 		
 		$result['nbParticipants'] = $activiteId->getNbParticipants();
-		$result['lieuDestination'] = $activiteId->getLieuDestination(); 
+		$result['lieuDestination'] = $activiteId->getLieuDestination();
+		$result['devise'] = $activiteId->getDevise();
+		$result['duree'] = $activiteId->getDuree(); 
 		
 		if( $activiteId->getImagePrincipale()!= null )
 		{
@@ -668,6 +674,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -711,6 +719,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -757,6 +767,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -812,6 +824,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -865,6 +879,8 @@ class ActivityController extends Controller
 			$row['prix'] = $elem->getPrixIndividu();
 			$row['nbParticipants'] = $elem->getNbParticipants();
 			$row['lieuDestination'] = $elem->getLieuDestination();
+			$row['devise'] = $elem->getDevise();
+			$row['duree'] = $elem->getDuree();
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 		

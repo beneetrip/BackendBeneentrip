@@ -94,10 +94,6 @@ mobile_app_user_resetpage:
     path:     /mobapp/user/reset
     defaults: { _controller: MobileAppBundle:User:resetPassword }
 
-mobile_app_user_testCodepage:
-    path:     /mobapp/user/code
-    defaults: { _controller: MobileAppBundle:User:testCode }
-
 mobile_app_user_changePasswordpage:
     path:     /mobapp/user/password
     defaults: { _controller: MobileAppBundle:User:changePassword }

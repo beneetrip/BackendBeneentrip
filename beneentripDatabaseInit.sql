@@ -437,7 +437,6 @@ CREATE TABLE `utilisateurs` (
   `dateNaissance` date NOT NULL,
   `telephone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar_id` int(11) DEFAULT NULL,
-  `codePassword` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `monnaie` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EUR'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -446,9 +445,9 @@ CREATE TABLE `utilisateurs` (
 --
 
 INSERT INTO `utilisateurs` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `genre`, `nom`, `photo`, `typeutilisateur`, `privilege`, `urlPhoto`, `dateCreation`, `dateModification`, `prenom`, `dateNaissance`, `telephone`, `avatar_id`) VALUES
-(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$REvaLEbGgFehBA2P3fIBy.rD/SWw1KQhnSGJyJwBOneM.tya.2enW', '2018-08-07 11:27:29', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-08-07 11:27:29', '', '1992-01-05', '', NULL, NULL, 'EUR'),
-(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22', '', '1986-01-01', '', NULL, NULL, 'EUR'),
-(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$ZZ4RLSLDCpFOIiSUK10hAujkcbyA9pVqNC6RRK6jp8d58D.CstXeu', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-23 20:50:00', '', '1988-01-01', '', NULL, NULL, 'EUR');
+(1, 'micdejc', 'micdejc', 'midcejc@gmail.com', 'midcejc@gmail.com', 1, NULL, '$2y$13$REvaLEbGgFehBA2P3fIBy.rD/SWw1KQhnSGJyJwBOneM.tya.2enW', '2018-08-07 11:27:29', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'michael yamsi', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-14 15:39:37', '2018-08-07 11:27:29', '', '1992-01-05', NULL, NULL, 'EUR'),
+(2, 'nsanith', 'nsanith', 'nsanith@gmail.com', 'nsanith@gmail.com', 1, NULL, '$2y$13$tx9WlnPkfk0CXpGWk1tHFuQz7LmBeUmPJLrnViWGkGR/8kXdeeDBK', '2018-06-17 14:40:33', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'nsani thierry', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:30:21', '2018-06-22 13:31:22', '', '1986-01-01', NULL, NULL, 'EUR'),
+(3, 'paullecodeur', 'paullecodeur', 'paulericyemdji@gmail.com', 'paulericyemdji@gmail.com', 1, NULL, '$2y$13$ZZ4RLSLDCpFOIiSUK10hAujkcbyA9pVqNC6RRK6jp8d58D.CstXeu', '2018-06-18 04:54:39', NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 'Homme', 'paul eric', NULL, 'Guide', 'ROLE_ADMIN', NULL, '2018-06-15 15:32:13', '2018-06-23 20:50:00', '', '1988-01-01', NULL, NULL, 'EUR');
 
 
 -- --------------------------------------------------------
