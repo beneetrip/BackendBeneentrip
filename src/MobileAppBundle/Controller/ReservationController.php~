@@ -360,6 +360,8 @@ class ReservationController extends Controller
 		$row['prix'] = $elem->getPrixIndividu();
 		$row['nbParticipants'] = $elem->getNbParticipants();
 		$row['lieuDestination'] = $elem->getLieuDestination();
+		$row['devise'] = $elem->getDevise();
+		$row['duree'] = $elem->getDuree();
 			
 		$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -424,6 +426,8 @@ class ReservationController extends Controller
 		$row['prix'] = $elem->getPrixIndividu();
 		$row['nbParticipants'] = $elem->getNbParticipants();
 		$row['lieuDestination'] = $elem->getLieuDestination();
+		$row['devise'] = $elem->getDevise();
+		$row['duree'] = $elem->getDuree();
 			
 		$row['image'] = $elem->getImagePrincipale()->getUrl();
 			

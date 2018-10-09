@@ -58,14 +58,14 @@ class PaymentController extends Controller
 			
 		//On enregistre le payment dans la BD et on met a jour la reservation de l'utilisateur: elle est reglee
 		 $payment=new Payment();
-		 $payment->setItemId($reservationId->getId());
+	    $payment->setReservation($reservationId);
 		 $payment->setAmount($amountTotal);
 		 $payment->setStatus(strtoupper("COMPLETED"));
 		 $payment->setCurrencyCode($currencyCode);
 		 $payment->setUtilisateur($userId);
 		 
-		 $payment->setInvoice($this->creerFacturePDF($this->genererFactureCodeHTML($userId->getId(),$reservationId->getId()),
-    	 $this->genererFactureCodeCSS()));
+		 //$payment->setInvoice($this->creerFacturePDF($this->genererFactureCodeHTML($userId->getId(),$reservationId->getId()),
+    	 //$this->genererFactureCodeCSS()));
 		 
 		 $em->persist($payment);
 		 $em->flush();	
@@ -149,7 +149,7 @@ class PaymentController extends Controller
     {
     //On enregistre le payment dans la BD
 	 $payment=new Payment();
-	 $payment->setItemId($reservationId->getId());
+	 $payment->setReservation($reservationId);
 	 $payment->setTransactionId($retour['id']);
 	 $payment->setAmount($amountTotal);
 	 $payment->setStatus(strtoupper("UNCOMPLETED"));
@@ -201,7 +201,7 @@ class PaymentController extends Controller
 					$em = $this->getDoctrine()->getManager();
 					
 					$paymentTransaction = $em->getRepository('BusinessModelBundle:Payment')->myFindByTransactionId($paymentId);
-					$reservationId = $em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($paymentTransaction->getItemId()));
+					$reservationId = $em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($paymentTransaction->getReservation()->getId()));
 					
 					$config = array(
 				    'clientId' => 'AXJ9Zy--FPeQfIhxpGK1yF3UwC1zGGCWgh1Q196xDaLZkLEo9Ur4zx4B-xZs1O2NwZgCNcPB3HnEAuHB',
@@ -228,10 +228,10 @@ class PaymentController extends Controller
     				 
     				 $paymentTransaction->setTransactionPayer($payerId);
     				 $paymentTransaction->setStatus(strtoupper("COMPLETED"));
-    				 $paymentTransaction->setInvoice(
-    				 $this->creerFacturePDF(
-    				 $this->genererFactureCodeHTML($paymentTransaction->getUtilisateur()->getId(),$paymentTransaction->getItemId()),
-    				 $this->genererFactureCodeCSS()));
+    				 //$paymentTransaction->setInvoice(
+    				 //$this->creerFacturePDF(
+    				 //$this->genererFactureCodeHTML($paymentTransaction->getUtilisateur()->getId(),$paymentTransaction->getReservation()->getId()),
+    				 //$this->genererFactureCodeCSS()));
     				 
     				 $em->flush();			
     				 
@@ -272,225 +272,4 @@ class PaymentController extends Controller
 				}
 				
 				
-				static function genererFactureCodeCSS()
-				{		
-
-				$css=<<<EOF
-							<style>
-							
-							table
-							{
-							width: 100%;
-							font-size: 14px;
-							font-family: times news roman;
-							}
-							
-							table tr th
-							{
-							background-color: white;
-							font-weight: bold;
-							text-align: center;
-							height: 50px;
-							font-size: 18px;
-							border: 1px solid black;
-							}
-							
-							td{
-							border: 1px solid black;
-							text-align: center;
-							}
-							
-							tr.totalRow{
-							background-color:white;
-							font-weight: bold;
-							text-align: center;
-							height: 50px;
-							font-size: 20px;
-							}
-							
-							tr.sousTotalRow{
-							background-color:white;
-							font-weight: bold;
-							text-align: center;
-							height: 50px;
-							font-size: 15px;
-							font-style: italic;
-							}
-							
-							tr.taxeRow{
-							background-color:white;
-							font-weight: bold;
-							text-align: center;
-							height: 50px;
-							font-size: 15px;
-							font-style: italic;
-							}
-							
-							.fond{
-							background-color: #fff;
-							}
-							h1, h4{
-							text-align: center;
-							}
-							</style>
-EOF;
-				
-							return $css;
-						}
-						
-						
-						function genererFactureCodeHTML($idUser, $idReservation)
-						{
-							
-						$em=$this->getDoctrine()->getManager();
-						$userId = $em->getRepository('BusinessModelBundle:User')->myFindOne($idUser);
-						$reservationId = $em->getRepository('BusinessModelBundle:Reservation')->myFindOne($idReservation);
-						
-						$nowDate=new \DateTime();
-						
-						$html='<div class="fond">';
-		
-						$html=$html.'<h1>'.$this->get('translator')->trans('Facture.mot').' '.strtoupper($userId->getNomComplet()).' N<SUP>o</SUP> '.$nowDate->format('dmYHis').'</h1><br/><br/><br/><br/>'.
-						$html=$html.'<h4>'.$this->get('translator')->trans('Facture.debut').' '.$nowDate->format('d-m-Y').'</h4><br/><br/><br/><br/>'.		
-						'<table>'.
-						'<thead>'.
-						'<tr>'.
-						'<th>'.$this->get('translator')->trans('Barre.Activité.Mot').'</th>'.
-						'<th>'.$this->get('translator')->trans('Activité.lieuDestination').'</th>'.
-						'<th>'.$this->get('translator')->trans('Activité.date').'</th>'.
-						'<th>'.$this->get('translator')->trans('Activité.heure').'</th>'.
-						'<th>'.$this->get('translator')->trans('Activité.prixIndividu').'</th>'.
-						'<th>'.$this->get('translator')->trans('Réservation.paye').'</th>'.
-						'</tr>'.
-						'</thead>';
-						
-						
-						foreach($reservationId->getActivites() as $activite)	{	
-						$html=$html.'<tr>';
-						$html=$html. '<td>';
-						$html=$html. $activite->getLibelle();
-						$html=$html. '</td>'.
-						'<td>';
-						$html=$html. $activite->getLieuDestination();
-						$html=$html. '</td>'.
-						'<td>';
-						$html=$html. $activite->getDateEnClair();
-						$html=$html. '</td>'.
-						'<td>';
-						$html=$html. date_format($activite->getHeure(),'H:i');
-						$html=$html. '</td>'.
-						'<td>';
-						$html=$html. $activite->getPrixIndividu();
-						$html=$html. '</td>'.
-						'<td>';
-						$html=$html. (($reservationId->getPaye()) ? $this->get('translator')->trans('Réservation.Ok') : $this->get('translator')->trans('Réservation.nonOk'));
-						$html=$html. '</td>'.
-						'</tr>';
-						}
-						
-						$html=$html. '<tr class="sousTotalRow">'.
-						'<td colspan="4">';
-						$html=$html.' '.$this->get('translator')->trans('Facture.sousTotal').' : '.
-						'</td>'.
-						'<td colspan="2">'.$reservationId->calculerMontantTotal().
-						'</td>'.
-						'</tr>';
-						$html=$html. '<tr class="taxeRow">'.
-						'<td colspan="4">';
-						$html=$html.' '.$this->get('translator')->trans('Facture.taxe').' : '.
-						'</td>'.
-						'<td colspan="2">'.$reservationId->calculerMontantTaxe().
-						'</td>'.
-						'</tr>';
-						$html=$html. '<tr class="totalRow">'.
-						'<td colspan="4">';
-						$html=$html.' '.$this->get('translator')->trans('Facture.total').' : '.
-						'</td>'.
-						'<td colspan="2">'.$reservationId->calculerMontantTotalAvecTaxe().
-						'</td>'.
-						'</tr>';
-						$html=$html. '</table>'.
-						"</div>";
-						
-						//return htmlspecialchars($html);//cette fonction nous htmlne le brut HTML en remplacant certains caracteres en code HTML: & devient &amp;
-						return $html;	
-						}	
-						
-						//fonction permettant de creer la facture PDF a partir des templates HTML et CSS
-						function creerFacturePDF($html,$css){
-						    
-						 require_once(__DIR__.'/../../../src/AdminBundle/Resources/public/tcpdf/tcpdf.php');
-					 	 
-					 	 $lang='en';
-					    
-					    // create new PDF document
-					    $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-					 
-					    // set document information
-					    $pdf->SetCreator(PDF_CREATOR);
-					    $pdf->SetAuthor('BeneenTrip');
-					    $pdf->SetTitle('BeneenTrip');
-					    $pdf->SetSubject('BeneenTrip');
-					    //$pdf->SetKeywords('TCPDF, PDF, tab, appphp, print');
-					 
-					    // set default header data
-					   $logo='../../../../../../AdminBundle/Resources/public/img/logoBeneenTrip.png';
-					   $logowidth=15;
-					   $title="BeneenTrip";
-					   //On recupere la date en cours
-					   $nowDate=new \DateTime();
-					   $string="Date : ".$nowDate->format('d/m/Y H:i:s');
-					   //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-						$pdf->SetHeaderData($logo, $logowidth,$title, $string);
-					    // set header and footer fonts
-					    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-					    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-					 
-					    // set default monospaced font
-					    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-					 
-					    //set margins
-					    //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-					    $pdf->SetMargins(10, PDF_MARGIN_TOP, 10);
-					    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-					    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-					 
-					    //set auto page breaks
-					    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-					 
-					    //set image scale factor
-					    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-					 
-					    //set some language-dependent strings
-					    $pdf->setLanguageArray($lang);
-					 
-					    // set font
-					    $pdf->SetFont('helvetica', '', 10);
-					 
-					    // add a page
-					    $pdf->AddPage();
-					
-						//$codefinal=htmlspecialchars($css.''.$html);
-					    
-					    $pdf->writeHTML($css.''.$html, true, false, true, false, '');
-					    
-					    // reset pointer to the last page
-					    $pdf->lastPage();
-					    
-					     ob_end_clean(); //add this line here to avoid TCPDF ERROR: Some data has already been output, can't send PDF file
-					    
-					    //Close, output PDF document
-					    //$pdf->Output('monDocPrint.pdf', 'I');
-					    //Close, save PDF document on disk
-					    $nowDate=new \DateTime();	
-					    $dir=__DIR__.'/../../../web/invoices/'.$nowDate->format('d/m/Y/H');
-					    if (!file_exists($dir)) {
-					    mkdir($dir, 0777, true);
-							}
-						 $file=$dir.'/'.$nowDate->format('dmYHis').'.pdf';
-					    $pdf->Output($file, 'F');
-						 
-						 //on retourne le chemin relatif
-						 return 'invoices/'.$nowDate->format('d/m/Y/H').'/'.$nowDate->format('dmYHis').'.pdf';
-					}
 }

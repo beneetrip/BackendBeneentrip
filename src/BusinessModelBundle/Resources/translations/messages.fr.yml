@@ -26,9 +26,11 @@ Barre.Réservation.All: Toutes les Réservations
 Barre.Réservation.Add: Ajouter une Réservation
 Barre.Réservation.Search: Rechercher une Réservation
 Barre.Réservation.Print: Imprimer Facture
+Barre.Réservation.History: Historique
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: Toutes les Discussions
 Barre.Discussion.Add: Ajouter une Discussion
+Barre.Discussion.Search: Rechercher une Discussion
 Barre.Langue.Mot: Langue
 Barre.Langue.All: Toutes les Langues
 Barre.Langue.Add: Ajouter une Langue
@@ -57,6 +59,7 @@ Action.ModifierMessage: %elt% modifié(e) avec succès
 Action.Annuler: Annuler les modifications
 Action.Rechercher: Rechercher
 Action.Imprimer: Imprimer
+Action.History: Voir historique
 Action.Ici: Ici
 Action.checkLogin: Vérifier Connexion
 Action.checkRegistration: Vérifier Inscription
@@ -128,10 +131,17 @@ Réservation.quotaErrorMessage: Activité " %activite% " a déjà atteint son qu
 Réservation.reserveErrorMessage: Utilisateur " %utilisateur% " a déjà reservé pour l'activité " %activite% "
 Réservation.success: Paiment %elt% réussi avec succès.
 Réservation.failure: Paiment %elt% échoué !!!
+Réservation.Type: Type
+Réservation.Evenement: Evènement
+Réservation.EnCours: En cours
+Réservation.Passees: Passées
+Réservation.Avenir:  A venir
 Discussion.libelleActivite: Libellé Activité
 Discussion.auteur: Auteur
 Discussion.destinataires: Destinataires
 Discussion.message: Message
+Discussion.type: Type
+Discussion.titre: Titre
 Discussion.form: Formulaire Discussion
 Discussion.activite: Activité
 Facture.mot: FACTURE POUR
@@ -140,3 +150,5 @@ Facture.fin: Au
 Facture.total: MONTANT TOTAL
 Facture.sousTotal: MONTANT SOUS TOTAL
 Facture.taxe: MONTANT TAXE
+SentMail.success: Tous les mails ont été envoyés avec succès.
+SentMail.failure: Certains envois de mails ont échoué !!!

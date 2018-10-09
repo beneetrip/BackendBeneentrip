@@ -150,3 +150,5 @@ Facture.fin: Au
 Facture.total: MONTANT TOTAL
 Facture.sousTotal: MONTANT SOUS TOTAL
 Facture.taxe: MONTANT TAXE
+SentMail.success: Tous les mails ont été envoyés avec succès.
+SentMail.failure: Certains envois de mails ont échoué !!!

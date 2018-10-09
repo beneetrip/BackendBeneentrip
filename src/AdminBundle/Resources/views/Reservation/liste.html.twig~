@@ -99,6 +99,16 @@
 
 					</li>
 							{% endif %}
+							
+					{% if reservation.paye== false %} 
+					 <li class="divider"></li>
+					<li>
+						<a class="delete-content" href="{{ path('paiementStripeReservation',{'id': reservation.id}) }}" >
+						<center> {{reservation.getImageBoutonPaiementStripe}} </center>
+						</a>
+
+					</li>
+							{% endif %}		
                 </ul>
             </div>
 			

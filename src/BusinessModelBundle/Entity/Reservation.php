@@ -221,11 +221,6 @@ use Doctrine\ORM\Mapping as ORM;
     
     public function getBoutonPaiementPayPal(){
 			
-			$paypal_url='https://www.sandbox.paypal.com/cgi-bin/webscr'; // Test Paypal API URL
-			//$paypal_url='https://www.paypal.com/cgi-bin/webscr'; // Pro Paypal API URL
-			$paypal_id='beneentrip@gmail.com'; // Business email ID
-			
-			
 			// output: BackendBeneentrip/web/app_dev.php/....
 			$currentPath = $_SERVER['PHP_SELF'];
 
@@ -251,16 +246,31 @@ use Doctrine\ORM\Mapping as ORM;
 			else
 			$url=$protocol.$hostName.'/web/payment/end';
 			
-			//$url=$protocol.$hostName.$currentPath;		
+			//$url=$protocol.$hostName.$currentPath;
+			
+			$amount=$this->calculerMontantTotal();
+			$currencyCode='EUR';
+			
+			if($amount > 0.0){
+			$paypal_url='https://www.sandbox.paypal.com/cgi-bin/webscr'; // Test Paypal API URL
+			//$paypal_url='https://www.paypal.com/cgi-bin/webscr'; // Pro Paypal API URL
+			}else{
+			if($rootProject!="www")
+			$paypal_url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/validate';
+			else
+			$paypal_url=$protocol.$hostName.'/web/payment/validate';
+			}
+		
+			$paypal_id='beneentrip@gmail.com'; // Business email ID		
 			
 			echo '<form action="'.$paypal_url.'" method="post" name="frmPayPal1">
 			 <input type="hidden" name="business" value="'.$paypal_id.'">
 			  <input type="hidden" name="cmd" value="_xclick"> 
-			 <input type="hidden" name="item_name" value="reservation_numero'.$this->getId().'">
+			 <input type="hidden" name="item_name" value="Reservation_'.$this->getId().'">
 			 <input type="hidden" name="item_number" value="'.$this->getId().'">
 			 <input type="hidden" name="amount" value="'.$this->calculerMontantTotal().'">
 			 <input type="hidden" name="tax_rate" value="'.self::TAX_RATE.'">
-			 <input type="hidden" name="currency_code" value="EUR">
+			 <input type="hidden" name="currency_code" value="'.$currencyCode.'">
 			 <input type="hidden" name="custom" value="'.$this->getUtilisateurs()[0]->getId().'">
 			 <input type="hidden" name="cancel_return" value="'.$url.'">
 			 <input type="hidden" name="return" value="'.$url.'">
@@ -268,6 +278,94 @@ use Doctrine\ORM\Mapping as ORM;
 			  alt="PayPal - The safer, easier way to pay online!">
 			 </form>';  
     }
+    
+    public function getImageBoutonPaiementStripe(){
+    // output: BackendBeneentrip/web/app_dev.php/....
+			$currentPath = $_SERVER['PHP_SELF'];
+
+			// output: localhost
+			$hostName = $_SERVER['HTTP_HOST'];
+
+			// output: http://
+			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+			
+			$tab = explode("/",__DIR__);
+						
+			$nbelts=count($tab);
+			
+			$rootProject=$tab[$nbelts-4];
+			
+			if($rootProject!="www")
+			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/BuyStripe.png';
+			else
+			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/BuyStripe.png';
+			
+			echo '<input type="image" src="'.$imgbouton.'" border="0" name="submit" 
+			  alt="Stripe - The best way to accept payments online!">'; 
+    }
+    
+    public function getBoutonPaiementStripe(){
+   
+    // output: BackendBeneentrip/web/app_dev.php/....
+			$currentPath = $_SERVER['PHP_SELF'];
+
+			// output: localhost
+			$hostName = $_SERVER['HTTP_HOST'];
+
+			// output: http://
+			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+			
+			$tab = explode("/",__DIR__);
+						
+			$nbelts=count($tab);
+			
+			$rootProject=$tab[$nbelts-4];
+			
+			if($rootProject!="www")
+			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/stripe.png';
+			else
+			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/stripe.png';
+			
+			
+			
+			//$url=$protocol.$hostName.$currentPath;		
+		    $stripe_pkey='pk_test_JCG2KQDPdH54s7eJtwNjcQZm';
+		    $amount=$this->calculerMontantTotal() * 100;
+		    $currencyCode='EUR';
+    		 
+    		if($amount > 0.0){
+			if($rootProject!="www")
+			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/end/stripe';
+			else
+			$url=$protocol.$hostName.'/web/payment/end/stripe';
+			}else{
+			if($rootProject!="www")
+			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/validate';
+			else
+			$url=$protocol.$hostName.'/web/payment/validate';
+			}
+    		 
+    		 
+    echo '<form action="'.$url.'" method="POST">
+			 <input type="hidden" name="amount" value="'.$amount.'">
+			  <input type="hidden" name="item_number" value="'.$this->getId().'">
+			  <input type="hidden" name="currency_code" value="'.$currencyCode.'">
+			    <input type="hidden" name="custom" value="'.$this->getUtilisateurs()[0]->getId().'">
+			
+			
+			  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+			    data-key="'.$stripe_pkey.'"
+			    data-amount="'.$amount.'"
+			    data-name="Stripe"
+			    data-description="Beneen Trip charge : Reservation_'.$this->getId().'"
+			    data-image="'.$imgbouton.'"
+			    data-locale="auto"
+			    data-currency="'.$currencyCode.'">
+			  </script>
+			</form>';
+    
+    }
+    
     
     function calculerMontantTotal()
     	{
@@ -328,6 +426,28 @@ use Doctrine\ORM\Mapping as ORM;
 	   
     	}
     	
+    	public function calculerTauxTaxeActivite(\BusinessModelBundle\Entity\Activite $activite){
+    	
+    	$dateReserve=$this->getDateCreation();
+    	$dateActivite=new \DateTime(date_format($activite->getDate(),'Y-m-d').' '.date_format($activite->getHeure(),'H:i'));
+    	//Difference in hours
+    	$diff =  floor(($dateActivite->getTimestamp() - $dateReserve->getTimestamp())/3600);
+		
+		if($diff<3)
+		return "20.00";
+		else if($diff>=3 && $diff <=12)
+		return "15.00";
+		else 
+	   return "10.00";
+	   
+    	}
+    	
+    	function calculerMontantTotalActiviteAvecTaxe(\BusinessModelBundle\Entity\Activite $activite)
+    	{	
+    			//return ($this->calculerMontantTotal() + $this->calculerMontantTaxe());	
+    			 return ($activite->getPrixIndividu() + $this->calculerMontantTaxeActivite($activite));	
+    	}
+    	
     	function calculerMontantTaxeActiviteTotal()
     	{
     			$somme=0.0;
@@ -337,5 +457,55 @@ use Doctrine\ORM\Mapping as ORM;
     			return $somme;	
     	}
     	
+    	//Fonction permettant d'extraire la liste des activites cree par l'utilisateurs precis dans la reservation
+		function getListActivitesUtilisateur(\BusinessModelBundle\Entity\User $utilisateur){
+		
+		$listeActivites=array();
+		
+		foreach($this->getActivites() as $activite)	{
+		if($activite->getAuteur()->getId()==$utilisateur->getId())
+		$listeActivites[]=$activite;	
+		}
+			
+		return $listeActivites;	 
+		}
+		
+		//Fonction permettant la somme de la liste des activites cree par l'utilisateurs precis dans la reservation
+		function getSommeActivitesUtilisateur(\BusinessModelBundle\Entity\User $utilisateur){
+		
+		$somme=0.0;
+		
+		foreach($this->getActivites() as $activite)	{
+		if($activite->getAuteur()->getId()==$utilisateur->getId())
+		$somme+=floatval($activite->getPrixIndividu());	
+		}
+			
+		return $somme;	 
+		}
+		
+		//Fonction permettant d'extraire la liste des utilisateurs sans redondances ayant cree des activites dans la reservation
+		function getListUtilisateurAuteurs(){
+		
+		$listeUsers=array();
+		
+		foreach($this->getActivites() as $activite)	{
+		if(!$this->estdansListe($listeUsers,$activite->getAuteur()))
+		$listeUsers[]=$activite->getAuteur();	
+		}
+			
+		return $listeUsers;	 
+		}
+		
+		//Notre petite fonction pour verifier que la presence des utilisateurs dans les listes cela pour eviter les redondances
+		function estdansListe($listeUsers,$userId){
+			
+			foreach($listeUsers as $user){
+			if($user->getId()==$userId->getId())
+			return true;
+			}
+			
+			return false;
+			}
+ 	
     	
 }

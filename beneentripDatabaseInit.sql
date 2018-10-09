@@ -42,7 +42,7 @@ CREATE TABLE `activite` (
   `dateModification` datetime DEFAULT NULL,
   `nbVues` int(11) NOT NULL DEFAULT '0',
   `langueParlee` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `devise` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EUR',
+  `devise` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'EUR',
   `duree` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -437,7 +437,7 @@ CREATE TABLE `utilisateurs` (
   `dateNaissance` date NOT NULL,
   `telephone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar_id` int(11) DEFAULT NULL,
-  `monnaie` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'EUR'
+  `monnaie` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'EUR'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -469,7 +469,6 @@ CREATE TABLE `reservation_activite` (
 
 CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
-  `itemId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `transactionId` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `amount` double NOT NULL,
   `currencyCode` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
@@ -479,7 +478,9 @@ CREATE TABLE `payment` (
   `dateModification` datetime DEFAULT NULL,
   `utilisateur_id` int(11) NOT NULL,
   `invoice` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `transactionPayer` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `transactionPayer` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reservation_id` int(11) NOT NULL,
+  `ref` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -582,6 +583,7 @@ ALTER TABLE `reservation_activite`
 --
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_6D28840DB83297E7` (`reservation_id`),
   ADD KEY `IDX_6D28840DFB88E14F` (`utilisateur_id`);
 
 --
@@ -694,6 +696,7 @@ ALTER TABLE `reservation_activite`
 -- Constraints for table `payment`
 --
 ALTER TABLE `payment`
+  ADD CONSTRAINT `FK_6D28840DB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`),
   ADD CONSTRAINT `FK_6D28840DFB88E14F` FOREIGN KEY (`utilisateur_id`) REFERENCES `utilisateurs` (`id`);
 
 

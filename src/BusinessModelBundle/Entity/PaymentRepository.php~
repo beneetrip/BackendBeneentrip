@@ -34,5 +34,86 @@ class PaymentRepository extends \Doctrine\ORM\EntityRepository
 				->setParameter('transactionId', $transactionId);
 				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
 				}
+				
+				public function myFindByReservationId($idReservation)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('p');
+				$qb->join('p.reservation','r','WITH','r.id = :idReservation')
+				->setParameter('idReservation', $idReservation);
+				return ($qb->getQuery()->getResult()==null)? null : $qb->getQuery()->getResult()[0];
+				}
+				
+				//Fonction pour rechercher les payments concernes par un Utilisateur
+			   //type =0 :Guide; type=1: Touriste
+				public function myFindPayments($utilisateurs, $type, $dateDebut, $dateFin)
+				{
+				// On passe par le QueryBuilder vide de l'EntityManager pour l'exemple
+				$qb = $this->createQueryBuilder('p');
+				$nbhits=0;//Ce compteur est pour le nombre de criteres valides	
+				
+				//Si c'est un touriste
+				if($type=='1'){
+				if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
+				$qb->join('p.utilisateur', 'u', 'WITH', 'UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
+				->setParameter('utilisateurs', '%'.$utilisateurs.'%');	
+				$nbhits++;															
+				}
+				}
+				//Si c'est un Guide
+				else {
+				if(isset($utilisateurs) && trim($utilisateurs,'')!=""){
+				$qb->join('p.reservation', 'r')->join('r.activites', 'a')
+				->join('a.auteur','u','WITH','UPPER(u.nom) LIKE UPPER( :utilisateurs ) OR UPPER(u.prenom) LIKE UPPER( :utilisateurs ) OR UPPER(u.username) LIKE UPPER( :utilisateurs )')
+				->setParameter('utilisateurs', '%'.$utilisateurs.'%');
+				$nbhits++;																						
+				}
+				}
+				
+				if(isset($dateDebut) && trim($dateDebut,'')!=""){
+			
+			//On formatte bien notre date pour les requetes			
+			$date1=new \DateTime($dateDebut);
+		   $dateDebut=$date1->format('Y-m-d');	
+		   
+			if($nbhits>0)	
+			$qb->andWhere('r.dateCreation >= :dateDebut')
+			->setParameter('dateDebut', $dateDebut);
+			else 
+			$qb->where('r.dateCreation >= :dateDebut')
+			->setParameter('dateDebut', $dateDebut);
+			$nbhits++;						
+			}	
+			
+			if(isset($dateFin) && trim($dateFin,'')!=""){
+				
+
+			//On formatte bien notre date pour les requetes			
+			$date2=new \DateTime($dateFin);
+		   $dateFin=$date2->format('Y-m-d');				
+				
+			if($nbhits>0)	
+			$qb->andWhere('r.dateCreation <= :dateFin')
+			->setParameter('dateFin', $dateFin);
+			else 
+			$qb->where('r.dateCreation <= :dateFin')
+			->setParameter('dateFin', $dateFin);
+			$nbhits++;						
+			}
+				
+				/*print_r(array(
+	  			'sql'  => $qb->getQuery()->getSQL(),
+	  			'parameters' => $qb->getQuery()->getParameters(),
+	  			));*/	
+				
+				$listeRetour=$qb->getQuery()->getResult();
+				
+				//print_r($listeRetour);
+				
+			   return $listeRetour;
+				
+				}
+				
+				
 
 }

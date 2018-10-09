@@ -31,7 +31,7 @@ class PrintType extends AbstractType
 				'multiple' => false))
 				->add('dateDebut', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
             ->add('dateFin', 'datetime', array('widget' =>'single_text','format' =>'MM/dd/yyyy','required' =>false))
-				->add('paye', 'choice', array(
+				->add('type', 'choice', array(
        'choice_list' => new ChoiceList(
         $this->listeChoix,
         $this->listeChoix)

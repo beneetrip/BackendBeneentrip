@@ -143,7 +143,7 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		/**
     	* @var string $devise
     	*
-    	* @ORM\Column(name="devise", type="string", length=255, options={"default":"EUR"})
+    	* @ORM\Column(name="devise", type="string", length=255, options={"default":"EUR"}, nullable=true)
     	*/
       protected $devise;
       

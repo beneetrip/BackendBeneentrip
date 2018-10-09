@@ -25,12 +25,14 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		private $id;
 		
 		
+		
 		/**
-		* @var string $itemId
+		* @var string $ref
 		*
-		* @ORM\Column(name="itemId", type="string", length=255)
+		* @ORM\Column(name="ref", type="string", length=255, nullable=true)
 		*/
-		private $itemId;
+		private $ref;
+		
 		
 		
 		/**
@@ -95,12 +97,22 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		 */
 		private $utilisateur;
 		
+		
+		/**
+		 * @ORM\OneToOne(targetEntity="BusinessModelBundle\Entity\Reservation", cascade={"persist", "remove"})
+		 * @ORM\JoinColumn(nullable=false)
+		 */
+		private $reservation;
+		
+		
 		/**
 		 * @ORM\PrePersist()
 		 */
 		public function createDate()
 		{
-		$this->setDateCreation(new \Datetime());
+		$nowDate=new \DateTime();
+		$this->setDateCreation($nowDate);
+	   $this->setRef(''.$nowDate->format('dmYHis'));	
 		}
 		
 		
@@ -109,7 +121,9 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
 		 */
 		public function updateDate()
 		{
-		$this->setDateModification(new \Datetime());
+		$nowDate=new \DateTime();	
+		$this->setDateModification($nowDate);
+	   $this->setRef(''.$nowDate->format('dmYHis'));	
 		}
 		
 
@@ -121,29 +135,6 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set itemId
-     *
-     * @param string $itemId
-     * @return Payment
-     */
-    public function setItemId($itemId)
-    {
-        $this->itemId = $itemId;
-
-        return $this;
-    }
-
-    /**
-     * Get itemId
-     *
-     * @return string 
-     */
-    public function getItemId()
-    {
-        return $this->itemId;
     }
 
     /**
@@ -374,5 +365,51 @@ use Symfony\Component\Validator\Constraints as Assert;//for validation groups vo
     public function getTransactionPayer()
     {
         return $this->transactionPayer;
+    }
+
+    /**
+     * Set reservation
+     *
+     * @param \BusinessModelBundle\Entity\Reservation $reservation
+     * @return Payment
+     */
+    public function setReservation(\BusinessModelBundle\Entity\Reservation $reservation)
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Get reservation
+     *
+     * @return \BusinessModelBundle\Entity\Reservation 
+     */
+    public function getReservation()
+    {
+        return $this->reservation;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return Payment
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
     }
 }

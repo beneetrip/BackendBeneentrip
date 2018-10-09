@@ -58,7 +58,7 @@ class PaymentController extends Controller
 			
 		//On enregistre le payment dans la BD et on met a jour la reservation de l'utilisateur: elle est reglee
 		 $payment=new Payment();
-		 $payment->setItemId($reservationId->getId());
+	    $payment->setReservation($reservationId);
 		 $payment->setAmount($amountTotal);
 		 $payment->setStatus(strtoupper("COMPLETED"));
 		 $payment->setCurrencyCode($currencyCode);
@@ -149,7 +149,7 @@ class PaymentController extends Controller
     {
     //On enregistre le payment dans la BD
 	 $payment=new Payment();
-	 $payment->setItemId($reservationId->getId());
+	 $payment->setReservation($reservationId);
 	 $payment->setTransactionId($retour['id']);
 	 $payment->setAmount($amountTotal);
 	 $payment->setStatus(strtoupper("UNCOMPLETED"));
@@ -201,7 +201,7 @@ class PaymentController extends Controller
 					$em = $this->getDoctrine()->getManager();
 					
 					$paymentTransaction = $em->getRepository('BusinessModelBundle:Payment')->myFindByTransactionId($paymentId);
-					$reservationId = $em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($paymentTransaction->getItemId()));
+					$reservationId = $em->getRepository('BusinessModelBundle:Reservation')->myFindOne(intval($paymentTransaction->getReservation()->getId()));
 					
 					$config = array(
 				    'clientId' => 'AXJ9Zy--FPeQfIhxpGK1yF3UwC1zGGCWgh1Q196xDaLZkLEo9Ur4zx4B-xZs1O2NwZgCNcPB3HnEAuHB',
@@ -230,7 +230,7 @@ class PaymentController extends Controller
     				 $paymentTransaction->setStatus(strtoupper("COMPLETED"));
     				 $paymentTransaction->setInvoice(
     				 $this->creerFacturePDF(
-    				 $this->genererFactureCodeHTML($paymentTransaction->getUtilisateur()->getId(),$paymentTransaction->getItemId()),
+    				 $this->genererFactureCodeHTML($paymentTransaction->getUtilisateur()->getId(),$paymentTransaction->getReservation()->getId()),
     				 $this->genererFactureCodeCSS()));
     				 
     				 $em->flush();			

@@ -197,6 +197,12 @@ modifierReservation:
     requirements:
               id: \d+
 
+paiementStripeReservation:
+    path:     /admin/reservation/paiement/stripe/{id}
+    defaults: { _controller: AdminBundle:Reservation:paiementStripe }
+    requirements:
+              id: \d+
+
 voirActiviteReservation:
     path:     /admin/reservation/activites/{id}
     defaults: { _controller: AdminBundle:Reservation:voirActivite }

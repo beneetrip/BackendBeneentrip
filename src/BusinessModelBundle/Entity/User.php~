@@ -168,7 +168,7 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
 		/**
     	* @var string $monnaie
     	*
-    	* @ORM\Column(name="monnaie", type="string", length=255, options={"default":"EUR"})
+    	* @ORM\Column(name="monnaie", type="string", length=255, options={"default":"EUR"}, nullable=true)
     	*/
       protected $monnaie;
       

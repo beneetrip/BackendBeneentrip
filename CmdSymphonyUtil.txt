@@ -1,0 +1,25 @@
+COMMANDES UTILES POUR SYMPHONY (LINUX)
+
+
+Un fois positionne dans la racine du projet Symphony voici la liste des commandes utiles:
+
+php app/console doctrine:generate:entities BusinessModelBundle:User : cette commande permet de generer les getters et setters de l'Entities User
+
+php app/console doctrine:schema:update --force: cette commande permet de mettre a jour dans la BD la table lie a l'entite User
+
+
+php app/console cache:clear --env=dev: permet de nettoyer le cache en mode developpement
+
+php app/console cache:clear --env=prod: permet de nettoyer le cache en mode production
+
+php app/console cache:clear: permet de nettoyer le cache en mode developpement et production a la fois
+
+php app/console translation:update --dump-messages --force en AdminBundle: Generer le fichier catalogue de traduction des pages du Bundle AdminBundle en langue Anglaise mot cle en, visible dans le dossier 'translations' du Bundle (Ce code parcours toutes les pages du bundle pour extraire tous les mots a traduire grace au mot cle trans)
+
+git add --all : ajouter tous les fichiers modifie au Github local du projet
+git commit -m "Blabla": definir le message identifiant le commit cad le changement effectue sur le projet
+git push: mettre a jour le projet Github en ligne
+
+sudo /etc/init.d/apache2 stop: arreter le serveur apache2
+sudo /etc/init.d/apache2 start: demarrer le serveur apache2
+sudo /etc/init.d/apache2 restart: redemarrer le serveur apache2

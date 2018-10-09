@@ -71,9 +71,9 @@
 					</div>
 	<br/>
 	<div class="form-group">
-						{{ form_label(form.paye,'Réservation.paye'|trans) }}
+						{{ form_label(form.type,'Réservation.Type'|trans) }}
 					<div class="controls">
-					 {{ form_widget(form.paye, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }} 
+					 {{ form_widget(form.type, { 'attr': {'data-rel': 'chosen', 'class': 'form-control'} }) }} 
 					</div>
 
 					</div>

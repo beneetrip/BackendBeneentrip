@@ -150,3 +150,5 @@ Facture.fin: To
 Facture.total: TOTAL AMOUNT
 Facture.sousTotal: SUB TOTAL AMOUNT
 Facture.taxe: TAX AMOUNT
+SentMail.success: All mails have been sent Successful.
+SentMail.failure: Some mailings have failed !!!

@@ -24,6 +24,14 @@ business_model_endPaymentpage:
     path:     /payment/end
     defaults: { _controller: BusinessModelBundle:Default:finalisePaiement }
 
+business_model_endPaymentStripepage:
+    path:     /payment/end/stripe
+    defaults: { _controller: BusinessModelBundle:Default:finalisePaiementStripe }
+
+business_model_validatePaymentpage:
+    path:     /payment/validate
+    defaults: { _controller: BusinessModelBundle:Default:validerPaiement }
+
 business_model_reportActivitypage:
     path:     /report/activity/{user}/{activity}/{phone}/{email}
     defaults: { _controller: BusinessModelBundle:Default:reportActivite }
@@ -33,5 +41,13 @@ business_model_reportpage:
     defaults: { _controller: BusinessModelBundle:Default:report }
 
 business_model_resetpage:
-    path:     /reset/{password}
+    path:     /reset/{user}/{password}
     defaults: { _controller: BusinessModelBundle:Default:reset }
+
+business_model_invoicepage:
+    path:     /invoice/{user}
+    defaults: { _controller: BusinessModelBundle:Default:invoice }
+
+business_model_statementpage:
+    path:     /statement/{guide}/{tourist}/{phone}/{email}
+    defaults: { _controller: BusinessModelBundle:Default:statement }

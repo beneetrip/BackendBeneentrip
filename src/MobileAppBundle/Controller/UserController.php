@@ -271,7 +271,7 @@ class UserController extends Controller
 		else
 		{
 			
-			try{
+			//try{
 			$user = new User();
 			$user->setEmail($request->email);
 			
@@ -344,10 +344,10 @@ class UserController extends Controller
 			$userfind['languages'] = $languesUser;
 			
 			$response = new Response(json_encode($userfind));
-			}catch(\Exception $e)
-			{
-			$response = new Response(json_encode(array('failure'=>'Une erreur s\'est produite, veuillez vérifier vos données')));	
-			}
+			//}catch(\Exception $e)
+			//{
+			//$response = new Response(json_encode(array('failure'=>'Une erreur s\'est produite, veuillez vérifier vos données')));	
+			//}
 		}
 			
 
@@ -1160,7 +1160,7 @@ class UserController extends Controller
 				 "BeneenTrip Password Reset",
 				 $this->renderView(
                 'BusinessModelBundle:Default:reset.html.twig',
-                array('password' => $password, 'logo' => $this->pathLogo())
+                array('user' => $userByEmail->getNomComplet(), 'password' => $password, 'logo' => $this->pathLogo())
 				 )
 				 );
 				 if(!$retour)
@@ -1273,7 +1273,7 @@ class UserController extends Controller
 			    $mail->Username = "beneentrip";
 			    $mail->Password = "beneentrip20182019";
 			    $mail->SetFrom("beneentrip@gmail.com");
-			    $mail->FromName = "BeneenTrip";
+			    $mail->FromName = "Beneen Trip";
 			    $mail->Subject =$sujetParam;
 			    $mail->Body = $messageParam;
 			    $mail->AddAddress("".$emailParam."");

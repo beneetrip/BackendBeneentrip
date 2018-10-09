@@ -26,9 +26,11 @@ Barre.Réservation.All: 'All Reservations'
 Barre.Réservation.Add: 'New Reservation'
 Barre.Réservation.Search: 'Search Reservation'
 Barre.Réservation.Print: 'Invoice Print'
+Barre.Réservation.History: 'Reservation History'
 Barre.Discussion.Mot: Discussion
 Barre.Discussion.All: 'All Discussions'
 Barre.Discussion.Add: 'New Discussion'
+Barre.Discussion.Search: 'Search Discussion'
 Barre.Langue.Mot: Language
 Barre.Langue.All: 'All Languages'
 Barre.Langue.Add: 'New Language'
@@ -57,6 +59,7 @@ Action.ModifierMessage: '%elt% updated successfully'
 Action.Annuler: Reset
 Action.Rechercher: Search
 Action.Imprimer: Print
+Action.History: Show history
 Action.Ici: Here
 Action.checkLogin: 'Check User'
 Action.checkRegistration: 'Check Registration'
@@ -128,10 +131,17 @@ Réservation.quotaErrorMessage: Activity ' %activite% ' has already reached its 
 Réservation.reserveErrorMessage: User ' %utilisateur% ' has already reserved for activity ' %activite% '
 Réservation.success: %elt% payment Successful.
 Réservation.failure: %elt% payment Failed !!!
+Réservation.Type: Type
+Réservation.Evenement: Event
+Réservation.EnCours: Pending
+Réservation.Passees: Past
+Réservation.Avenir:  Coming up
 Discussion.libelleActivite: 'Activity Wording'
 Discussion.auteur: Author
 Discussion.destinataires: Receivers
 Discussion.message: Message
+Discussion.type: Type
+Discussion.titre: Title
 Discussion.form: 'Discussion Form'
 Discussion.activite: Activity
 Facture.mot: BILL FOR
@@ -140,3 +150,5 @@ Facture.fin: To
 Facture.total: TOTAL AMOUNT
 Facture.sousTotal: SUB TOTAL AMOUNT
 Facture.taxe: TAX AMOUNT
+SentMail.success: All mails have been sent Successful.
+SentMail.failure: Some mailings have failed !!!
