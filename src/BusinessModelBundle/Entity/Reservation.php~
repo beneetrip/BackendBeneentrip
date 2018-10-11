@@ -2,7 +2,7 @@
 
 namespace BusinessModelBundle\Entity;
 
-
+use BusinessModelBundle\Entity\MonMailer;
 use Doctrine\ORM\Mapping as ORM;
 
 		/**
@@ -221,32 +221,10 @@ use Doctrine\ORM\Mapping as ORM;
     
     public function getBoutonPaiementPayPal(){
 			
-			// output: BackendBeneentrip/web/app_dev.php/....
-			$currentPath = $_SERVER['PHP_SELF'];
-
-			// output: localhost
-			$hostName = $_SERVER['HTTP_HOST'];
-
-			// output: http://
-			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
 			
-			$tab = explode("/",__DIR__);
-						
-			$nbelts=count($tab);
+			$baseURL= MonMailer::baseURL(true);
 			
-			$rootProject=$tab[$nbelts-4];
-			
-			if($rootProject!="www")
-			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/BuyNow.png';
-			else
-			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/BuyNow.png';
-			
-			if($rootProject!="www")
-			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/end';
-			else
-			$url=$protocol.$hostName.'/web/payment/end';
-			
-			//$url=$protocol.$hostName.$currentPath;
+			$url=$baseURL.'payment/end';
 			
 			$amount=$this->calculerMontantTotal();
 			$currencyCode='EUR';
@@ -255,13 +233,24 @@ use Doctrine\ORM\Mapping as ORM;
 			$paypal_url='https://www.sandbox.paypal.com/cgi-bin/webscr'; // Test Paypal API URL
 			//$paypal_url='https://www.paypal.com/cgi-bin/webscr'; // Pro Paypal API URL
 			}else{
-			if($rootProject!="www")
-			$paypal_url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/validate';
-			else
-			$paypal_url=$protocol.$hostName.'/web/payment/validate';
+			$paypal_url=$baseURL.'payment/validate';
 			}
 		
 			$paypal_id='beneentrip@gmail.com'; // Business email ID		
+			
+			
+			//on recupere le dernier element de l'URL de base pour voir si cela fini par app_dev.php
+			$tab = explode("/",$baseURL);
+			//On retire deux foix car les urls de retour finissent par /	
+	      $fin= array_pop($tab);
+	      $fin= array_pop($tab);  
+	      
+	      //Si on n'est pas en local ou mode dev
+	      if($fin!="app_dev.php")
+			$imgbouton=$baseURL.'bundles/admin/img/BuyNow.png';
+			else 
+			$imgbouton=implode("/",$tab).'/bundles/admin/img/BuyNow.png';
+			
 			
 			echo '<form action="'.$paypal_url.'" method="post" name="frmPayPal1">
 			 <input type="hidden" name="business" value="'.$paypal_id.'">
@@ -279,72 +268,43 @@ use Doctrine\ORM\Mapping as ORM;
 			 </form>';  
     }
     
+
+
     public function getImageBoutonPaiementStripe(){
-    // output: BackendBeneentrip/web/app_dev.php/....
-			$currentPath = $_SERVER['PHP_SELF'];
-
-			// output: localhost
-			$hostName = $_SERVER['HTTP_HOST'];
-
-			// output: http://
-			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
-			
-			$tab = explode("/",__DIR__);
-						
-			$nbelts=count($tab);
-			
-			$rootProject=$tab[$nbelts-4];
-			
-			if($rootProject!="www")
-			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/BuyStripe.png';
-			else
-			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/BuyStripe.png';
+    
+			$imgbouton=MonMailer::baseURL(false).'bundles/admin/img/BuyStripe.png';
 			
 			echo '<input type="image" src="'.$imgbouton.'" border="0" name="submit" 
 			  alt="Stripe - The best way to accept payments online!">'; 
     }
     
+    
     public function getBoutonPaiementStripe(){
    
-    // output: BackendBeneentrip/web/app_dev.php/....
-			$currentPath = $_SERVER['PHP_SELF'];
-
-			// output: localhost
-			$hostName = $_SERVER['HTTP_HOST'];
-
-			// output: http://
-			$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+  			$baseURL= MonMailer::baseURL(true);
+  			
 			
-			$tab = explode("/",__DIR__);
-						
-			$nbelts=count($tab);
-			
-			$rootProject=$tab[$nbelts-4];
-			
-			if($rootProject!="www")
-			$imgbouton=$protocol.$hostName."/".$rootProject.'/web/bundles/admin/img/stripe.png';
-			else
-			$imgbouton=$protocol.$hostName.'/web/bundles/admin/img/stripe.png';
-			
-			
-			
-			//$url=$protocol.$hostName.$currentPath;		
 		    $stripe_pkey='pk_test_JCG2KQDPdH54s7eJtwNjcQZm';
 		    $amount=$this->calculerMontantTotal() * 100;
 		    $currencyCode='EUR';
     		 
-    		if($amount > 0.0){
-			if($rootProject!="www")
-			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/end/stripe';
+    		if($amount > 0.0)
+			$url=$baseURL.'payment/end/stripe';
 			else
-			$url=$protocol.$hostName.'/web/payment/end/stripe';
-			}else{
-			if($rootProject!="www")
-			$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/payment/validate';
-			else
-			$url=$protocol.$hostName.'/web/payment/validate';
-			}
-    		 
+			$url=$baseURL.'payment/validate';
+			
+    	   //on recupere le dernier element de l'URL de base pour voir si cela fini par app_dev.php
+			$tab = explode("/",$baseURL);
+			//On retire deux foix car les urls de retour finissent par /	
+	      $fin= array_pop($tab);
+	      $fin= array_pop($tab);  
+	      
+	      //Si on n'est pas en local ou mode dev
+	      if($fin!="app_dev.php")
+			$imgbouton=$baseURL.'bundles/admin/img/stripe.png';
+			else 
+			$imgbouton=implode("/",$tab).'/bundles/admin/img/stripe.png';
+			
     		 
     echo '<form action="'.$url.'" method="POST">
 			 <input type="hidden" name="amount" value="'.$amount.'">

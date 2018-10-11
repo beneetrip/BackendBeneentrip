@@ -220,10 +220,6 @@ class ReservationController extends Controller
 		
 		//Si on a selectionne l'option de valeur 0 du select alors c'est un guide sinon c'est un touriste
 		$type=$registrationArray['type'];
-		
-
-		$pdfInvoice=new PDFInvoice();
-		
 
 		$payments=$this->getDoctrine()->getManager()->getRepository('BusinessModelBundle:Payment')->myFindPayments($user->getNom(), $type, $dateDebut, $dateFin);
 		
@@ -232,11 +228,11 @@ class ReservationController extends Controller
 		if($type=='1'){
 		$payment=$payments[(count($payments)-1)];
 		//echo $pdfInvoice->genererInvoiceCodeHTML($user,$payment);
-	   $file=__DIR__.'/../../../web/'.$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererInvoiceCodeHTML($user,$payment),PDFInvoice::genererCodeCSS(), true);
+	   $file=__DIR__.'/../../../web/'.PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererInvoiceCodeHTML($user,$payment),PDFInvoice::genererCodeCSS(), true);
 		}
 		//C'est un guide
 		else{
-		$file=__DIR__.'/../../../web/'.$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererStatementCodeHTML($user,$payments),PDFInvoice::genererCodeCSS(), false);
+		$file=__DIR__.'/../../../web/'.PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererStatementCodeHTML($user,$payments),PDFInvoice::genererCodeCSS(), false);
 		}
 		
 		//On afficher le telechargement automatique du fichier PDF creee 

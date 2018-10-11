@@ -63,7 +63,7 @@ EOF;
 						
 			
 			//On prend juste un paiement car la facture du paiement doit avoir une reference donc difficile de prendre plusieurs paiement			
-			function genererInvoiceCodeHTML(\BusinessModelBundle\Entity\User $user, \BusinessModelBundle\Entity\Payment $payment)
+			static function genererInvoiceCodeHTML(\BusinessModelBundle\Entity\User $user, \BusinessModelBundle\Entity\Payment $payment)
 			
 			{
 				
@@ -181,7 +181,7 @@ EOF;
 			}	
 						
 		   //On prend ici plusieurs paiements et dans le cas ou on veut generer les factures etats pour un seul paiement former un array avec un seul paiement et le passer comme parametre			
-			function genererStatementCodeHTML(\BusinessModelBundle\Entity\User $user, $listPayments)
+			static function genererStatementCodeHTML(\BusinessModelBundle\Entity\User $user, $listPayments)
 			{	
 			
 			
@@ -253,7 +253,7 @@ EOF;
 			foreach($listActivites as $activite)	{
 			$html.='
 			<tr id="LigneCorps">
-				<td>'.$payment->getDateCreation()->format('d/m/Y').'</td>
+				<td>'.date_format($activite->getDate(),'d/m/Y').'</td>
 				<td>'.$payment->getRef().'</td>
 				<td>'.$activite->getLibelle().'</td>
 				<td>0 EUR</td>
@@ -319,7 +319,7 @@ EOF;
 						
 			//fonction permettant de creer le PDF a partir des templates HTML et CSS
 			//typeInvoice true: Invoice, false: Statement
-			function genererPDFWithTCPDF($codeHTML,$codeCSS,$typeInvoice)
+			static function genererPDFWithTCPDF($codeHTML,$codeCSS,$typeInvoice)
 			{
 						    
 						 require_once(__DIR__.'/../../../src/AdminBundle/Resources/public/tcpdf/tcpdf.php');

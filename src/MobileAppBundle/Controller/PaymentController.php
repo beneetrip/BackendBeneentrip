@@ -10,6 +10,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use BusinessModelBundle\Entity\Payment;
 use BusinessModelBundle\Entity\PaypalAPI;
+use BusinessModelBundle\Entity\StripeAPI;
+use BusinessModelBundle\Entity\MonMailer;
+use BusinessModelBundle\Entity\PDFInvoice;
+
+
 
 class PaymentController extends Controller
 {
@@ -64,13 +69,21 @@ class PaymentController extends Controller
 		 $payment->setCurrencyCode($currencyCode);
 		 $payment->setUtilisateur($userId);
 		 
-		 //$payment->setInvoice($this->creerFacturePDF($this->genererFactureCodeHTML($userId->getId(),$reservationId->getId()),
-    	 //$this->genererFactureCodeCSS()));
-		 
 		 $em->persist($payment);
 		 $em->flush();	
+		 
+		 
+		 $result=array();
+		 $result['success']='Paiement effectué avec succès';
+		 
+		 
+		 //On appelle le service de la gestions de mails avec le payment
+		 $result['Mails']= $this->gererMails($payment);
+		 
 		 //On renvoit la reponse avec success
-		 $response = new Response(json_encode(array('success'=>'Paiement effectué avec succès')));
+		$response = new Response(json_encode($result));
+		 
+		 
 		 $response->headers->set('Access-Control-Allow-Origin', '*');
 		
 		$response->headers->set('Content-Type', 'application/json');
@@ -86,25 +99,9 @@ class PaymentController extends Controller
 		
 		//On construit les urls de retour
 		
-		// output: BackendBeneentrip/web/app_dev.php/....
-		$currentPath = $_SERVER['PHP_SELF'];
-
-		// output: localhost
-		$hostName = $_SERVER['HTTP_HOST'];
-
-		// output: http://
-		$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+		$baseURL= MonMailer::baseURL(true);
 		
-		$tab = explode("/",__DIR__);
-						
-		$nbelts=count($tab);
-			
-		$rootProject=$tab[$nbelts-4];
-		
-		if($rootProject!="www")
-		$url=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/mobapp/payment/execute/paypal';
-		else
-		$url=$protocol.$hostName.'/web/mobapp/payment/execute/paypal';				
+		$url=$baseURL.'mobapp/payment/execute/paypal';				
 		
 		$url_return=$url;
 		
@@ -241,6 +238,17 @@ class PaymentController extends Controller
     				 
     				 			
 					 $response = new Response(json_encode(array('success'=>'Transaction paiement bien finalisée.')));
+					 
+					  $result=array();
+						 $result['success']='Transaction paiement bien finalisée.';
+						 
+						 
+						 //On appelle le service de la gestions de mails avec le payment
+						 $result['Mails']= $this->gererMails($paymentTransaction);
+						 
+						 //On renvoit la reponse avec success
+						$response = new Response(json_encode($result));
+					 
 					 //}
 					 
 					 //else					
@@ -252,11 +260,11 @@ class PaymentController extends Controller
 					
 					}	
     				else 
-    				$response = new Response(json_encode(array('failure'=>'Transaction échouée !!!')));					
+    				$response = new Response(json_encode(array('failure'=>'Transaction annulée !!!')));					
 
 				}
 				else 
-    			$response = new Response(json_encode(array('failure'=>'Transaction échouée !!!')));
+    			$response = new Response(json_encode(array('failure'=>'Transaction annulée !!!')));
 				
 				
 				
@@ -270,6 +278,99 @@ class PaymentController extends Controller
 				
 				return $response;	
 				}
+				
+				
+				
+				
+		 //Pour la gestion des mails le payment seul suffit car il contient toutes les infos
+		 //Cette methode doit etre la meme chose que la methode du meme nom dans le Controleur par defaut de BusinessModelBundle
+		 //Soit faut fusionner alors tous les paiements et ses procedures dans un seul controleur
+       public function gererMails(\BusinessModelBundle\Entity\Payment $payment)
+       {
+       
+       $em = $this->getDoctrine()->getManager();
+       
+      
+		 
+		 $pathInvoice=PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererInvoiceCodeHTML($payment->getUtilisateur(),$payment),PDFInvoice::genererCodeCSS(), true);
+		 
+		 $payment->setInvoice($pathInvoice);
+		 $em->flush();
+		 
+       
+       $result=array();
+       $erreurs=0;
+		 
+
+		 
+		 $invoice= $payment->getInvoice();
+		 //On doit arreter tous les exceptions et ne pas les laisser nous empecher de terminer l'envoi des mails
+		  
+		  //On commence par la facture du Touriste...
+		  try{
+		      $retour= MonMailer::envoyerMail(
+				 $payment->getUtilisateur()->getEmail(),
+				 "Beneen Trip Invoice",
+				 $this->renderView(
+                'BusinessModelBundle:Default:invoice.html.twig',
+                array('user' => $payment->getUtilisateur()->getNomComplet(), 
+                		 'logo' => MonMailer::pathLogo())
+				 ),
+				$invoice
+				 );
+				 
+				 if(!$retour)
+             $erreurs++;
+           }catch(\Exception $e){$erreurs++;}
+           
+            
+				//Ensuite on gere les factures des etats des Guides
+				$listeGuides= $payment->getReservation()->getListUtilisateurAuteurs();
+				
+				
+		      //On construit notre liste de payments pour les statements des guides		
+				$payments=array();	
+				$payments[]=$payment;
+				
+				foreach($listeGuides as $guide){
+				try{
+				
+				$invoice=PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererStatementCodeHTML($guide,$payments),PDFInvoice::genererCodeCSS(), false);
+				$retour= MonMailer::envoyerMail(
+				 $guide->getEmail(),
+				 "Beneen Trip Statement",
+				 $this->renderView(
+                'BusinessModelBundle:Default:statement.html.twig',
+                array('guide' => $guide->getNomComplet(),
+                      'tourist'=> $payment->getUtilisateur()->getNomComplet(), 
+                      'phone' => $payment->getUtilisateur()->getTelephone(),
+                      'email' => $payment->getUtilisateur()->getEmail(), 
+                      'logo' => MonMailer::pathLogo())
+				 ),
+				 $invoice
+				 );
+				 
+				 if(!$retour)
+             $erreurs++;
+				}catch(\Exception $e){$erreurs++;}	
+				
+				}
+				
+				
+				if($erreurs>0)
+				$result['Sending']=$this->get('translator')->trans('SentMail.failure');
+				else 
+				$result['Sending']=$this->get('translator')->trans('SentMail.success');
+				
+				
+				return $result;
+				
+				} 	
+				
+				
+				
+				
+				
 				
 				
 }

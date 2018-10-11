@@ -64,15 +64,9 @@ class DefaultController extends Controller
 		 $result=array();
 		 $result['ValidationSuccess']=$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt));
 		 
-		 //On genere la facture pour mettre a jour le payment dans la BD
-		 $pdfInvoice= new PDFInvoice();
 		 
-		 $pathInvoice=$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererInvoiceCodeHTML($payment->getUtilisateur(),$payment),PDFInvoice::genererCodeCSS(), true);
-		 
-		 $payment->setInvoice($pathInvoice);
-		 $em->flush();
-		
-		 $result['Mails']=$this->gererMails($payment);
+		 //On appelle le service de la gestions de mails avec le payment
+		 $result['Mails']= $this->gererMails($payment);
 		 
 		 //On renvoit la reponse avec success
 		$response = new Response(json_encode($result));
@@ -129,7 +123,17 @@ class DefaultController extends Controller
 	   
 	   $em->persist($payment);
 		$em->flush();
-		$response = new Response(json_encode(array('paypalSuccess'=>$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt)))));
+		
+		$result=array();
+		 $result['paypalSuccess']=$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt));
+		 
+		 
+		 //On appelle le service de la gestions de mails avec le payment
+		 $result['Mails']= $this->gererMails($payment);
+		 
+		 //On renvoit la reponse avec success
+		$response = new Response(json_encode($result));
+		
 		}else
 		$response = new Response(json_encode(array('paypalFailure'=>$this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)))));
 		}
@@ -218,7 +222,18 @@ class DefaultController extends Controller
 	      
 	   $em->persist($payment);
 		$em->flush();
-		$response = new Response(json_encode(array('stripeSuccess'=>$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt)))));
+		
+		
+		 $result=array();
+		 $result['stripeSuccess']=$this->get('translator')->trans('Réservation.success',array('%elt%' => $elt));
+		 
+		 
+		 //On appelle le service de la gestions de mails avec le payment
+		 $result['Mails']= $this->gererMails($payment);
+		 
+		 //On renvoit la reponse avec success
+		$response = new Response(json_encode($result));
+		
 		}else
 		$response = new Response(json_encode(array('stripeFailure'=>$this->get('translator')->trans('Réservation.failure',array('%elt%' => $elt)))));
 		}
@@ -280,28 +295,38 @@ class DefaultController extends Controller
    			
    			
    			
-   	 //Pour la gestion des mails le payment seul suffit car il contient tous les infos 
-       public function gererMails($payment){
+   							
+		 //Pour la gestion des mails le payment seul suffit car il contient toutes les infos 
+       public function gererMails(\BusinessModelBundle\Entity\Payment $payment)
+       {
        
+       $em = $this->getDoctrine()->getManager();
+       
+      
+		 
+		 $pathInvoice=PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererInvoiceCodeHTML($payment->getUtilisateur(),$payment),PDFInvoice::genererCodeCSS(), true);
+		 
+		 $payment->setInvoice($pathInvoice);
+		 $em->flush();
+		 
        
        $result=array();
        $erreurs=0;
 		 
-		 $monMailer= new MonMailer();
-		 
-		 $pdfInvoice= new PDFInvoice();
+
 		 
 		 $invoice= $payment->getInvoice();
 		 //On doit arreter tous les exceptions et ne pas les laisser nous empecher de terminer l'envoi des mails
 		  
 		  //On commence par la facture du Touriste...
 		  try{
-		      $retour= $monMailer->envoyerMail(
+		      $retour= MonMailer::envoyerMail(
 				 $payment->getUtilisateur()->getEmail(),
 				 "Beneen Trip Invoice",
 				 $this->renderView(
                 'BusinessModelBundle:Default:invoice.html.twig',
-                array('user' => $payment->getUtilisateur()->getNomComplet(), 'logo' => MonMailer::pathLogo())
+                array('user' => $payment->getUtilisateur()->getNomComplet(), 
+                		 'logo' => MonMailer::pathLogo())
 				 ),
 				$invoice
 				 );
@@ -311,18 +336,19 @@ class DefaultController extends Controller
            }catch(\Exception $e){$erreurs++;}
            
             
-		//Ensuite on gere les factures des etats des Guides
+				//Ensuite on gere les factures des etats des Guides
 				$listeGuides= $payment->getReservation()->getListUtilisateurAuteurs();
-		//On construit notre liste de payments pour les statements des guides		
+				
+				
+		      //On construit notre liste de payments pour les statements des guides		
 				$payments=array();	
 				$payments[]=$payment;
 				
 				foreach($listeGuides as $guide){
 				try{
 				
-				//$pdfInvoice= new PDFInvoice();	
-				$invoice=$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererStatementCodeHTML($guide,$payments),PDFInvoice::genererCodeCSS(), false);
-				$retour= $monMailer->envoyerMail(
+				$invoice=PDFInvoice::genererPDFWithTCPDF(PDFInvoice::genererStatementCodeHTML($guide,$payments),PDFInvoice::genererCodeCSS(), false);
+				$retour= MonMailer::envoyerMail(
 				 $guide->getEmail(),
 				 "Beneen Trip Statement",
 				 $this->renderView(
@@ -351,8 +377,5 @@ class DefaultController extends Controller
 				
 				return $result;
 				
-				}
-				
-				
-				
+				} 			
 }

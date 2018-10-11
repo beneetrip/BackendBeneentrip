@@ -96,11 +96,16 @@ class ActivityController extends Controller
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
 			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -156,6 +161,12 @@ class ActivityController extends Controller
 			$row['lieuDestination'] = $elem->getLieuDestination();
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
+			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
@@ -677,11 +688,16 @@ class ActivityController extends Controller
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
 			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -722,11 +738,16 @@ class ActivityController extends Controller
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
 			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -770,11 +791,16 @@ class ActivityController extends Controller
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
 			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -827,11 +853,16 @@ class ActivityController extends Controller
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
 			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
+			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 			
-			$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
+			//$row['thumb400x350'] = $elem->getImagePrincipale()->linkThumb(400, 350);
 			
-			$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
+			//$row['thumb700x620'] = $elem->getImagePrincipale()->linkThumb(700, 620);
 			
 			$result[] = $row;
 			
@@ -881,6 +912,11 @@ class ActivityController extends Controller
 			$row['lieuDestination'] = $elem->getLieuDestination();
 			$row['devise'] = $elem->getDevise();
 			$row['duree'] = $elem->getDuree();
+			
+			if($elem->getCategorie()!=null)
+			$row['categorie'] = $elem->getCategorie()->getNom();
+			else 
+			$row['categorie'] = null;
 			
 			$row['image'] = $elem->getImagePrincipale()->getUrl();
 		

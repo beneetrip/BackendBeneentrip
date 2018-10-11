@@ -1,0 +1,174 @@
+<?php
+
+namespace BusinessModelBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use BusinessModelBundle\Entity\MonMailer;
+use BusinessModelBundle\Entity\PDFInvoice;
+use BusinessModelBundle\Entity\User;
+use BusinessModelBundle\Entity\Activite;
+
+
+class MailerController extends Controller
+{
+    public function indexAction($name)
+    {
+        return $this->render('BusinessModelBundle:Default:index.html.twig', array('name' => $name));
+    }   
+    
+    
+    
+    
+       static function reportSurActivite(\BusinessModelBundle\Entity\User $user, \BusinessModelBundle\Entity\Activite $activite){
+       
+       
+       $monMailer= new MonMailer();
+       
+       return $monMailer->envoyerMail(
+				 "beneentrip@gmail.com",
+				 'BeneenTrip Activity Report Problem '.$user->getId().''.$activite->getId(),
+				 $this->renderView(
+                'BusinessModelBundle:Default:reportActivite.html.twig',
+                array('user' => $user->getNomComplet(),
+                		'activity' => $activite->getLibelle(),
+			        		'phone' => $user->getTelephone(),
+			        		'email' => $user->getEmail(), 
+			        		'logo' => MonMailer::pathLogo())
+				 ),
+				 null
+				 );
+       
+       }
+       
+       
+       static function reportUser(\BusinessModelBundle\Entity\User $user, $title, $message){
+       
+       $monMailer= new MonMailer();
+       
+       return $monMailer->envoyerMail(
+				 "beneentrip@gmail.com",
+				 "BeneenTrip Report Problem: ".$title,
+				 $this->renderView(
+                'BusinessModelBundle:Default:report.html.twig',
+                array('user' => $user->getNomComplet(),
+                		 'message' => $message,
+			        		 'phone' => $user->getTelephone(),
+			        		 'email' => $user->getEmail(), 
+			        		 'logo' => MonMailer::pathLogo())
+				 ),
+				 null
+				 );
+       }
+       
+       
+       static function resetPassword(\BusinessModelBundle\Entity\User $user, $password){
+       
+       $monMailer= new MonMailer();
+       
+       return $monMailer->envoyerMail(
+				 $user->getEmail(),
+				 "BeneenTrip Password Reset",
+				 $this->renderView(
+                'BusinessModelBundle:Default:reset.html.twig',
+                array('user' => $user->getNomComplet(), 
+                		 'password' => $password, 
+                		 'logo' => MonMailer::pathLogo())
+				 ),
+				 null
+				 );
+       }
+       
+       
+       //Pour la gestion des mails le payment seul suffit car il contient tous les infos 
+       static function gererMails(\BusinessModelBundle\Entity\Payment $payment)
+       {
+       
+       $em = $this->getDoctrine()->getManager();
+       
+       //On genere la facture pour mettre a jour le payment dans la BD
+		 $pdfInvoice= new PDFInvoice();
+		 
+		 $pathInvoice=$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererInvoiceCodeHTML($payment->getUtilisateur(),$payment),PDFInvoice::genererCodeCSS(), true);
+		 
+		 $payment->setInvoice($pathInvoice);
+		 $em->flush();
+		 
+       
+       $result=array();
+       $erreurs=0;
+		 
+		 $monMailer= new MonMailer();
+		 
+		 $invoice= $payment->getInvoice();
+		 //On doit arreter tous les exceptions et ne pas les laisser nous empecher de terminer l'envoi des mails
+		  
+		  //On commence par la facture du Touriste...
+		  try{
+		      $retour= $monMailer->envoyerMail(
+				 $payment->getUtilisateur()->getEmail(),
+				 "Beneen Trip Invoice",
+				 $this->renderView(
+                'BusinessModelBundle:Default:invoice.html.twig',
+                array('user' => $payment->getUtilisateur()->getNomComplet(), 
+                		 'logo' => MonMailer::pathLogo())
+				 ),
+				$invoice
+				 );
+				 
+				 if(!$retour)
+             $erreurs++;
+           }catch(\Exception $e){$erreurs++;}
+           
+            
+				//Ensuite on gere les factures des etats des Guides
+				$listeGuides= $payment->getReservation()->getListUtilisateurAuteurs();
+				
+				
+		      //On construit notre liste de payments pour les statements des guides		
+				$payments=array();	
+				$payments[]=$payment;
+				
+				foreach($listeGuides as $guide){
+				try{
+				
+				//$pdfInvoice= new PDFInvoice();	
+				$invoice=$pdfInvoice->genererPDFWithTCPDF($pdfInvoice->genererStatementCodeHTML($guide,$payments),PDFInvoice::genererCodeCSS(), false);
+				$retour= $monMailer->envoyerMail(
+				 $guide->getEmail(),
+				 "Beneen Trip Statement",
+				 $this->renderView(
+                'BusinessModelBundle:Default:statement.html.twig',
+                array('guide' => $guide->getNomComplet(),
+                      'tourist'=> $payment->getUtilisateur()->getNomComplet(), 
+                      'phone' => $payment->getUtilisateur()->getTelephone(),
+                      'email' => $payment->getUtilisateur()->getEmail(), 
+                      'logo' => MonMailer::pathLogo())
+				 ),
+				 $invoice
+				 );
+				 
+				 if(!$retour)
+             $erreurs++;
+				}catch(\Exception $e){$erreurs++;}	
+				
+				}
+				
+				
+				if($erreurs>0)
+				$result['Sending']=$this->get('translator')->trans('SentMail.failure');
+				else 
+				$result['Sending']=$this->get('translator')->trans('SentMail.success');
+				
+				
+				return $result;
+				
+				} 
+    
+     
+}

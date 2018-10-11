@@ -8,7 +8,7 @@ class MonMailer
     {
     }
     
-    function envoyerMail($emailParam, $sujetParam, $messageParam, $fichierParam)
+    static function envoyerMail($emailParam, $sujetParam, $messageParam, $fichierParam)
 		{
 			
 			require_once(__DIR__."/../../../src/AdminBundle/Resources/public/PHPMailer-master/src/PHPMailer.php");
@@ -63,10 +63,11 @@ class MonMailer
 			}
 		}
 		
-		
-		//Cette fonction permet de nous renvoyer l'URL du logo Beneen Trip a inclure dans le mail lors des envois
-		static function pathLogo(){
-      //On construit les urls de retour
+		//Cette fonction permet d'avoir l'URL de base de notre projet pour gerer plus facilement les liens sur notre Site du projet
+		//estPath: true ce qui signifie qu'on veut un path URL pour les liens sinon c'est juste un lien web vers une ressource
+		static function baseURL($estPath)
+		{
+    	//On construit les urls de retour
 		
 		// output: BackendBeneentrip/web/app_dev.php/....
 		$currentPath = $_SERVER['PHP_SELF'];
@@ -83,11 +84,29 @@ class MonMailer
 			
 		$rootProject=$tab[$nbelts-4];
 		
-		if($rootProject!="www")
-		$logo=$protocol.$hostName.'/'.$rootProject.'/web/bundles/admin/img/logoBeneenTrip.png';
+		if($rootProject!="www"){
+	   //Si c'est un lien pour une ressource sur le site du projet...
+		if(!$estPath)
+		$baseUrl=$protocol.$hostName.'/'.$rootProject.'/web/';
 		else
-		$logo=$protocol.$hostName.'/web/bundles/admin/img/logoBeneenTrip.png';	
+		$baseUrl=$protocol.$hostName.'/'.$rootProject.'/web/app_dev.php/';
+	   }
+		else
+		$baseUrl=$protocol.$hostName.'/web/';	
 		
-		return $logo;
-    }
+		
+		return $baseUrl;
+		
+    	}
+    	
+    	
+		
+		//Cette fonction permet de nous renvoyer l'URL du logo Beneen Trip a inclure dans le mail lors des envois
+		static function pathLogo()
+		{     
+     	return self::baseURL(false).'bundles/admin/img/logoBeneenTrip.png';
+    	}
+    
+    		
+    
 }
